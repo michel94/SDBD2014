@@ -1,6 +1,8 @@
-public class ListenerThread() implements Runnable{
-	private ObjectInputStream ois;
+import java.net.*;
+import java.io.*;
 
+public class ListenerThread implements Runnable{
+	private ObjectInputStream ois;
 
 	public ListenerThread(ObjectInputStream ois){
 		this.ois = ois;
@@ -10,8 +12,14 @@ public class ListenerThread() implements Runnable{
 	public void run(){
 		while(true){
 			//Receive Updates from server
-			Object receiveObject = ois.readObject();
+			try{
+				Object receiveObject = ois.readObject();
+			}catch(IOException|ClassNotFoundException uhe){
+				System.out.println("Error! Could not connect to the server.");
+			}
+
 			
+
 		}
 	}
 }
