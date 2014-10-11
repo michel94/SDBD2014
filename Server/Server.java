@@ -1,5 +1,3 @@
-package Server;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -71,7 +69,7 @@ class NewThread implements Runnable {
 	  }
 	}
 
-public class Server implements ServerInterface {
+public class Server{
 	static int ClientNumber = 1;
 	protected Server() throws RemoteException {
 		super();

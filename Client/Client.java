@@ -32,7 +32,7 @@ public class Client{
 				String[] words = s.split(" ");
 				if(words[0].equals("meetings")){
 					Request r = new Request("meetings");
-					oos.writeObject(r);
+					oos.writeObject((Object)r);
 				}
 			}catch(IOException uhe){
 				System.out.println("end");
