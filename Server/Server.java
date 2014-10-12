@@ -12,118 +12,56 @@ import java.io.PipedOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
+import java.util.Hashtable;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.Calendar;
+import java.sql.Date;
+import java.util.*;
 
-
-class NewThread implements Runnable {
-	  String name;
-	  Thread t;
-	  Socket clientSocket;
-	  int cnumber;
-	  DataInputStream in;
-	  DataOutputStream out;
-	  ObjectInputStream oin,pipein;
-	  ObjectOutputStream oout,pipeout;	  
-	  
-	  NewThread(String threadname, Socket c, int n, ObjectOutputStream os, ObjectInputStream is) {
-	    name = threadname;
-	    t = new Thread(this, name);
-	    cnumber = n;    
-	    t.start(); // Start the thread
-	    clientSocket = c;
-	    pipein=is;
-	    pipeout = os;
-	  }
-	  
-	  public void run() {      // entry point
-		  Object data;
-		  System.out.println(name +" "+cnumber+" "+ "is running...");
-		  if(name.equals("ClientIN")){
-			  try {
-				  
-				in = new DataInputStream(clientSocket.getInputStream());
-				oin = new ObjectInputStream(in);
-				
-				while(true){
-					try {
-						data = oin.readObject();
-						System.out.println("Received some shit...");
-						pipeout.writeObject(data);
-						System.out.println("Wrote on pipe of client "+cnumber +"...");
-						
-					} catch (ClassNotFoundException e) {
-						System.out.println("Error: Class not found while reading request from client "+cnumber +".");
-					}
-				}
-			} catch (IOException e) {
-				System.out.println("Error:IO Exception while reading request of client "+cnumber +".");
-			}
-			  
-			  System.out.println("Closing connection from client "+cnumber +".");
-			 
-		  }
-		  else{
-			  
-			  try {
-				out = new DataOutputStream(clientSocket.getOutputStream());
-				oout = new ObjectOutputStream(out);
-			} catch (IOException e) {
-				System.out.println("Error:IO Exception while answering request of client "+cnumber +".");
-			}
-			
-			while(true){
-				try {
-					data = pipein.readObject();
-				} catch (ClassNotFoundException e) {
-					System.out.println("Error: Class not found while reading pipe of client "+cnumber +".");
-				} catch (IOException e) {
-					System.out.println("Error:IO Exception while reading pipe of client "+cnumber +". Please reset connection with server.");
-					break;
-				}
-				System.out.println("Reading from pipe of client "+cnumber +"... Sending request to DB...");
-			}
-			
-			System.out.println("Closing connection to client "+cnumber +".");
-			
-		  }
-		  
-	  }
-	}
 
 public class Server{
-	static int ClientNumber = 1;
-	protected Server() throws RemoteException {
-		super();
-	}
+	private int clientNumber = 0;
+	private int serverPort = 6000;
+	public Hashtable<Integer, ClientData> clients = new Hashtable<Integer, ClientData>();
 
-	public static void main(String[] args) throws RemoteException {
+	protected Server() throws RemoteException, MalformedURLException, NotBoundException {
+		super();
 
 		ObjectOutputStream opipeout;
 		ObjectInputStream opipein;
-		PipedOutputStream pipeout;
-		PipedInputStream pipein;
+		DatabaseInterface database = (DatabaseInterface) Naming.lookup("database");
+		
 		Socket clientSocket;
 		try{
-            int serverPort = 6000;
-            System.out.println("Listenning to port 6000");
-            ServerSocket listenSocket = new ServerSocket(serverPort);         
-            System.out.println("Server ready");
-            
-            while(true) {
-                 clientSocket = listenSocket.accept();
-                 pipeout = new PipedOutputStream();
-                 pipein = new PipedInputStream(pipeout);
-				opipeout =new ObjectOutputStream(new DataOutputStream(pipeout));
-                opipein = new ObjectInputStream(new DataInputStream(pipein));
-				
-                new NewThread("ClientIN",clientSocket,ClientNumber,opipeout,opipein);
-                new NewThread("ClientOUT",clientSocket,ClientNumber,opipeout,opipein);
-                ClientNumber++;    
-            }
-        }catch(IOException e)
+			
+			System.out.println("Listening to port 6000");
+			ServerSocket listenSocket = new ServerSocket(serverPort);         
+			System.out.println("Server ready");
+			
+			while(true){
+				clientSocket = listenSocket.accept();
+
+				// create communication between client thread and server thread
+				PipedOutputStream pipeout = new PipedOutputStream();
+				PipedInputStream pipein = new PipedInputStream(pipeout);
+				opipeout = new ObjectOutputStream(new DataOutputStream(pipeout));
+				opipein = new ObjectInputStream(new DataInputStream(pipein));
+
+				new InputThread(clientSocket, clientNumber, opipeout);
+				new OutputThread(clientSocket, clientNumber, opipein, database);
+				clientNumber++;
+			}
+		}catch(IOException e)
 		
-        {System.out.println("Listen:" + e.getMessage());}
-		
-		
+		{System.out.println("Listen:" + e.getMessage());}
+
+	}
+
+	public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
+		Server server = new Server();
 		
 	}
 

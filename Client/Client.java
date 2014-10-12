@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
 
 public class Client{
 	private int serverPort = 6000;
@@ -28,10 +29,13 @@ public class Client{
 		while(true){
 			try{
 				s = in.readLine();
-				System.out.println(s);
 				String[] words = s.split(" ");
+				Request r;
 				if(words[0].equals("meetings")){
-					Request r = new Request("meetings");
+					r = new Request("meetings");
+					oos.writeObject(r);
+				}else if(words[0].equals("meeting")){
+					r = new Request("meeting", Integer.parseInt(words[1]));
 					oos.writeObject((Object)r);
 				}
 			}catch(IOException uhe){
