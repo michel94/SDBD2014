@@ -1,4 +1,4 @@
--- phpMyAdmin SQL Dump
+d-- phpMyAdmin SQL Dump
 -- version 4.0.10deb1
 -- http://www.phpmyadmin.net
 --
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `action` (
   `idaction` int(11) NOT NULL,
   `description` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `dueto` datetime NOT NULL,
+  `due_to` datetime NOT NULL,
   `assigned_user` int(11) NOT NULL,
   `done` tinyint(4) NOT NULL DEFAULT '0',
   `created_datetime` datetime NOT NULL,
