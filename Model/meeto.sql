@@ -1,9 +1,9 @@
-d-- phpMyAdmin SQL Dump
+-- phpMyAdmin SQL Dump
 -- version 4.0.10deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 12, 2014 at 03:36 AM
+-- Generation Time: Oct 12, 2014 at 04:11 AM
 -- Server version: 5.5.38-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.3
 
@@ -57,10 +57,10 @@ CREATE TABLE IF NOT EXISTS `comment` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `group`
+-- Table structure for table `group_def`
 --
 
-CREATE TABLE IF NOT EXISTS `group` (
+CREATE TABLE IF NOT EXISTS `group_def` (
   `idgroup` int(11) NOT NULL,
   `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `created_datetime` datetime NOT NULL,
@@ -181,7 +181,7 @@ ALTER TABLE `comment`
 -- Constraints for table `group_user`
 --
 ALTER TABLE `group_user`
-  ADD CONSTRAINT `fk_group_user_1` FOREIGN KEY (`group`) REFERENCES `group` (`idgroup`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_group_user_1` FOREIGN KEY (`group`) REFERENCES `group_def` (`idgroup`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_group_user_2` FOREIGN KEY (`user`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
