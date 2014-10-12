@@ -1,10 +1,14 @@
-package Server;
+//package Server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
@@ -17,19 +21,21 @@ class NewThread implements Runnable {
 	  int cnumber;
 	  DataInputStream in;
 	  DataOutputStream out;
-	  ObjectInputStream oin;
-	  ObjectOutputStream oout;	  
-	  Object data;
+	  ObjectInputStream oin,pipein;
+	  ObjectOutputStream oout,pipeout;	  
 	  
-	  NewThread(String threadname, Socket c, int n) {
+	  NewThread(String threadname, Socket c, int n, ObjectOutputStream os, ObjectInputStream is) {
 	    name = threadname;
 	    t = new Thread(this, name);
 	    cnumber = n;    
 	    t.start(); // Start the thread
 	    clientSocket = c;
+	    pipein=is;
+	    pipeout = os;
 	  }
 	  
 	  public void run() {      // entry point
+		  Object data;
 		  System.out.println(name +" "+cnumber+" "+ "is running...");
 		  if(name.equals("ClientIN")){
 			  try {
@@ -41,6 +47,9 @@ class NewThread implements Runnable {
 					try {
 						data = oin.readObject();
 						System.out.println("Received some shit...");
+						pipeout.writeObject(data);
+						System.out.println("Wrote on pipe of client "+cnumber +"...");
+						
 					} catch (ClassNotFoundException e) {
 						System.out.println("Error: Class not found while reading request from client "+cnumber +".");
 					}
@@ -51,14 +60,23 @@ class NewThread implements Runnable {
 			 
 		  }
 		  else{
+			  
 			  try {
-				  
 				out = new DataOutputStream(clientSocket.getOutputStream());
 				oout = new ObjectOutputStream(out);
-				
-			
 			} catch (IOException e) {
 				System.out.println("Error:IO Exception while answering request of client "+cnumber +".");
+			}
+			
+			while(true){
+				try {
+					data = pipein.readObject();
+				} catch (ClassNotFoundException e) {
+					System.out.println("Error: Class not found while reading pipe of client "+cnumber +".");
+				} catch (IOException e) {
+					System.out.println("Error:IO Exception while reading pipe of client "+cnumber +".");
+				}
+				System.out.println("Reading from pipe of client "+cnumber +"... Sending request to DB...");
 			}
 		  }
 		  
@@ -72,7 +90,12 @@ public class Server{
 	}
 
 	public static void main(String[] args) throws RemoteException {
-		
+
+		ObjectOutputStream opipeout;
+		ObjectInputStream opipein;
+		PipedOutputStream pipeout;
+		PipedInputStream pipein;
+		Socket clientSocket;
 		try{
             int serverPort = 6000;
             System.out.println("Listenning to port 6000");
@@ -80,9 +103,14 @@ public class Server{
             System.out.println("Server ready");
             
             while(true) {
-                Socket clientSocket = listenSocket.accept();
-                new NewThread("ClientIN",clientSocket,ClientNumber);
-                new NewThread("ClientOUT",clientSocket,ClientNumber);
+                 clientSocket = listenSocket.accept();
+                 pipeout = new PipedOutputStream();
+                 pipein = new PipedInputStream(pipeout);
+				opipeout =new ObjectOutputStream(new DataOutputStream(pipeout));
+                opipein = new ObjectInputStream(new DataInputStream(pipein));
+				
+                new NewThread("ClientIN",clientSocket,ClientNumber,opipeout,opipein);
+                new NewThread("ClientOUT",clientSocket,ClientNumber,opipeout,opipein);
                 ClientNumber++;    
             }
         }catch(IOException e)
