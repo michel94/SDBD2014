@@ -1,3 +1,5 @@
+package Server;
+
 import java.io.*;
 
 public class Request implements Serializable{

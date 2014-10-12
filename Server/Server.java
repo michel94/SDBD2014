@@ -1,3 +1,5 @@
+package Server;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -22,14 +24,13 @@ class NewThread implements Runnable {
 	  NewThread(String threadname, Socket c, int n) {
 	    name = threadname;
 	    t = new Thread(this, name);
-	    cnumber = n;
-	    System.out.println("New thread: " + t +" "+ cnumber);
+	    cnumber = n;    
 	    t.start(); // Start the thread
 	    clientSocket = c;
 	  }
 	  
 	  public void run() {      // entry point
-		  System.out.println(name +" "+cnumber+ "is running...");
+		  System.out.println(name +" "+cnumber+" "+ "is running...");
 		  if(name.equals("ClientIN")){
 			  try {
 				  
@@ -41,14 +42,11 @@ class NewThread implements Runnable {
 						data = oin.readObject();
 						System.out.println("Received some shit...");
 					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("Error: Class not found while reading request from client "+cnumber +".");
 					}
-					
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Error:IO Exception while reading request of client "+cnumber +".");
 			}
 			 
 		  }
@@ -58,11 +56,9 @@ class NewThread implements Runnable {
 				out = new DataOutputStream(clientSocket.getOutputStream());
 				oout = new ObjectOutputStream(out);
 				
+			
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			while(true){
+				System.out.println("Error:IO Exception while answering request of client "+cnumber +".");
 			}
 		  }
 		  
@@ -80,29 +76,21 @@ public class Server{
 		try{
             int serverPort = 6000;
             System.out.println("Listenning to port 6000");
-            ServerSocket listenSocket = new ServerSocket(serverPort);
-            System.out.println("LISTEN SOCKET="+listenSocket);
-            
-            
-            //new NewThread("UDP"); // create threads
+            ServerSocket listenSocket = new ServerSocket(serverPort);         
+            System.out.println("Server ready");
             
             while(true) {
-                Socket clientSocket = listenSocket.accept(); // BLOQUEANTE
+                Socket clientSocket = listenSocket.accept();
                 new NewThread("ClientIN",clientSocket,ClientNumber);
                 new NewThread("ClientOUT",clientSocket,ClientNumber);
-                ClientNumber++;
-                System.out.println("CLIENT_SOCKET (created at accept())="+clientSocket);    
+                ClientNumber++;    
             }
         }catch(IOException e)
 		
         {System.out.println("Listen:" + e.getMessage());}
 		
 		
-		System.out.println("Server ready");
 		
-		while(true){
-			
-		}
 	}
 
 }
