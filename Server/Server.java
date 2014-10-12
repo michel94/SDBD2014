@@ -57,6 +57,8 @@ class NewThread implements Runnable {
 			} catch (IOException e) {
 				System.out.println("Error:IO Exception while reading request of client "+cnumber +".");
 			}
+			  
+			  System.out.println("Closing connection from client "+cnumber +".");
 			 
 		  }
 		  else{
@@ -74,10 +76,14 @@ class NewThread implements Runnable {
 				} catch (ClassNotFoundException e) {
 					System.out.println("Error: Class not found while reading pipe of client "+cnumber +".");
 				} catch (IOException e) {
-					System.out.println("Error:IO Exception while reading pipe of client "+cnumber +".");
+					System.out.println("Error:IO Exception while reading pipe of client "+cnumber +". Please reset connection with server.");
+					break;
 				}
 				System.out.println("Reading from pipe of client "+cnumber +"... Sending request to DB...");
 			}
+			
+			System.out.println("Closing connection to client "+cnumber +".");
+			
 		  }
 		  
 	  }
