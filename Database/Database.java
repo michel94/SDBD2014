@@ -34,6 +34,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 	}
 
+	@Override
 	public ArrayList<Meeting> getMeetings(){
 		ArrayList<Meeting> res = new ArrayList<Meeting>();
 		

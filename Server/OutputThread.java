@@ -50,7 +50,7 @@ public class OutputThread implements Runnable {
 					ArrayList<Meeting> r = database.getMeetings();
 					if(r != null){
 						out.writeObject(r);
-						System.out.println("Wrote meetings to client");
+						System.out.println("Wrote meetings to client "+clientId);
 					}else{
 						System.out.println("Error obtain meetings through RMI");
 					}

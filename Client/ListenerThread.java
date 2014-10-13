@@ -22,8 +22,11 @@ public class ListenerThread implements Runnable{
 				for(int i=0; i<r.size(); i++){
 					System.out.println(r.get(i).title + ", " + r.get(i).id);
 				}
-			}catch(IOException|ClassNotFoundException uhe){
-				System.out.println("Error! Could not connect to the server.");
+			}catch(IOException e){
+				System.out.println("Error! Connection to the server lost.");
+				break;
+			}catch(ClassNotFoundException e){
+				System.out.println("Error! Class not found.");
 			}
 
 			
