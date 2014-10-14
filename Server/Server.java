@@ -1,13 +1,4 @@
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
@@ -19,7 +10,6 @@ import java.rmi.RemoteException;
 import java.util.Calendar;
 import java.sql.Date;
 import java.util.*;
-
 
 public class Server{
 	private int clientNumber = 0;

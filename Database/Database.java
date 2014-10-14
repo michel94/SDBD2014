@@ -35,8 +35,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	@Override
-	public ArrayList<Meeting> getMeetings(){
-		ArrayList<Meeting> res = new ArrayList<Meeting>();
+	public Meetings getMeetings(){
+		Meetings res = new Meetings();
 		
 		ResultSet rs = executeQuery("SELECT idmeeting, title FROM meeting");
 		try{
@@ -51,6 +51,27 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		
 		return res;
 	}
+
+	public Meeting getMeeting(Request r){
+		Meeting m = new Meeting();
+
+		try{
+			ResultSet rs = executeQuery("select idmeeting,title from meeting where idmeeting=" + r.id + ";");
+			m.id = rs.getInt("idmeeting");
+			m.title = rs.getString("title");
+			System.out.println("title: " + m.title + " id: " + m.id);
+
+			rs = executeQuery("select title from item where user=1;");
+			while(rs.next()){
+				m.items.add(new Item(rs.getString("title"), rs.getInt("id")) );
+			}
+		}catch(SQLException e){
+
+		}
+		
+		return m;
+	}
+
 	public boolean addMeeting(String title, String description, Date t, String location, int leader) {
 		try{
 			String query = " insert into meeting(title, description, datetime, location, leader, created_datetime) values(\"" +

@@ -40,7 +40,7 @@ public class InputThread implements Runnable {
 					data = in.readObject();
 					System.out.println("Received some data");
 					threadOut.writeObject(data);
-					System.out.println("Wrote on pipe of client "+cnumber +"...");
+					System.out.println("Wrote on pipe of client " + cnumber + "...");
 					
 				} catch (ClassNotFoundException e) {
 					System.out.println("Error: Class not found while reading request from client " + cnumber + ".");
