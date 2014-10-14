@@ -60,7 +60,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			return false;
 		}
 		return true;
-
 		
 	}
 
@@ -68,7 +67,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		DatabaseInterface di = new Database();
 		LocateRegistry.createRegistry(1099).rebind("database", di);
 
-
+		
 		System.out.println("Database ready...");
 	}
 }

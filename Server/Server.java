@@ -1,4 +1,3 @@
-//package Server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -36,9 +35,9 @@ public class Server{
 		
 		Socket clientSocket;
 		try{
-			
+
 			System.out.println("Listening to port 6000");
-			ServerSocket listenSocket = new ServerSocket(serverPort);         
+			ServerSocket listenSocket = new ServerSocket(serverPort);
 			System.out.println("Server ready");
 			
 			while(true){
@@ -56,7 +55,9 @@ public class Server{
 			}
 		}catch(IOException e)
 		
-		{System.out.println("Listen:" + e.getMessage());}
+		{
+			System.out.println("Listen:" + e.getMessage());
+		}
 
 	}
 
