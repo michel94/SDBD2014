@@ -38,8 +38,8 @@ public class Client{
 					r = new Request("meeting", Integer.parseInt(words[1]));
 					oos.writeObject((Object)r);
 				}
-			}catch(IOException uhe){
-				System.out.println("end");
+			}catch(IOException e){
+				System.out.println("Error: No connection!");
 			}catch(NullPointerException e){
 				System.out.println("Connection Error");
 			}
