@@ -57,16 +57,22 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		try{
 			ResultSet rs = executeQuery("select idmeeting,title from meeting where idmeeting=" + r.id + ";");
+			rs.next();
 			m.id = rs.getInt("idmeeting");
 			m.title = rs.getString("title");
 			System.out.println("title: " + m.title + " id: " + m.id);
 
-			rs = executeQuery("select title from item where user=1;");
+			// A base de dados está broken!!
+			rs = executeQuery("select title,iditem from item where user=1;");
 			while(rs.next()){
-				m.items.add(new Item(rs.getString("title"), rs.getInt("id")) );
+				Item item = new Item(rs.getString("title"), rs.getInt("iditem"));
+				m.items = new ArrayList<Item>();
+
+				m.items.add(item);
 			}
 		}catch(SQLException e){
-
+			System.out.println("Mysql error");
+			e.printStackTrace();
 		}
 		
 		return m;

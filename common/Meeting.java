@@ -9,11 +9,14 @@ public class Meeting implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	public Meeting(){
-
+		items = new ArrayList<Item>();
+		actions = new ArrayList<String>();
 	}
 
 	public Meeting(String title, int id){
 		this.title = title;
 		this.id = id;
+		items = new ArrayList<Item>();
+		actions = new ArrayList<String>();
 	}
 }

@@ -13,5 +13,8 @@ public class Item implements Serializable{
 	public Item(String title, int id){
 		this.title = title;
 		this.id = id;
+		comments = new ArrayList<Comment>();
+		decisions = new ArrayList<KeyDecision>();
+		usersThatCommented = new ArrayList<User>();
 	}
 }
