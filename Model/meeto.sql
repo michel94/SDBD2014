@@ -26,6 +26,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `action`
 --
 
+ALTER DATABASE meeto CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `action` (
   `idaction` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(45) COLLATE utf8_unicode_ci NOT NULL,

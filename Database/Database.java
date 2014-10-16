@@ -18,8 +18,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String url = "jdbc:mysql://localhost:3306/meeto";
-        connection = DriverManager.getConnection(url,"root","");
+        String url = "jdbc:mysql://192.168.43.189:3306/meeto";
+        connection = DriverManager.getConnection(url,"root","toor");
         stmt = connection.createStatement();
         System.out.println("Connected");
 	}
@@ -35,8 +35,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	@Override
-	public ArrayList<Meeting> getMeetings(){
-		ArrayList<Meeting> res = new ArrayList<Meeting>();
+	public Meetings getMeetings(){
+		Meetings res = new Meetings();
 		
 		ResultSet rs = executeQuery("SELECT idmeeting, title FROM meeting");
 		try{
@@ -51,6 +51,33 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		
 		return res;
 	}
+
+	public Meeting getMeeting(Request r){
+		Meeting m = new Meeting();
+
+		try{
+			ResultSet rs = executeQuery("select idmeeting,title from meeting where idmeeting=" + r.id + ";");
+			rs.next();
+			m.id = rs.getInt("idmeeting");
+			m.title = rs.getString("title");
+			System.out.println("title: " + m.title + " id: " + m.id);
+
+			// A base de dados está broken!!
+			rs = executeQuery("select title,iditem from item where user=1;");
+			while(rs.next()){
+				Item item = new Item(rs.getString("title"), rs.getInt("iditem"));
+				m.items = new ArrayList<Item>();
+
+				m.items.add(item);
+			}
+		}catch(SQLException e){
+			System.out.println("Mysql error");
+			e.printStackTrace();
+		}
+		
+		return m;
+	}
+
 	public boolean addMeeting(String title, String description, Date t, String location, int leader) {
 		try{
 			String query = " insert into meeting(title, description, datetime, location, leader, created_datetime) values(\"" +
