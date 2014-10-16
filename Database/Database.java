@@ -57,16 +57,15 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		try{
 			ResultSet rs = executeQuery("select idmeeting,title from meeting where idmeeting=" + r.id + ";");
-			rs.next();
+			
 			m.id = rs.getInt("idmeeting");
 			m.title = rs.getString("title");
 			System.out.println("title: " + m.title + " id: " + m.id);
 
 			// A base de dados está broken!!
-			rs = executeQuery("select title,iditem from item where user=1;");
+			rs = executeQuery("select title,iditem from item where meeting=" + r.id);
 			while(rs.next()){
 				Item item = new Item(rs.getString("title"), rs.getInt("iditem"));
-				m.items = new ArrayList<Item>();
 
 				m.items.add(item);
 			}
@@ -78,7 +77,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return m;
 	}
 
-	public boolean addMeeting(String title, String description, Date t, String location, int leader) {
+	public boolean addMeeting(String title, String description, String t, String location, int leader) {
 		try{
 			String query = " insert into meeting(title, description, datetime, location, leader, created_datetime) values(\"" +
 				title + "\", \"" + description + "\", \"" + t + "\", \"" + location + "\", \"" + leader + "\", " + "now()" + ");";

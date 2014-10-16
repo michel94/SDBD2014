@@ -5,7 +5,7 @@ public class Meeting implements Serializable{
 	public String title;
 	public int id;
 	public ArrayList<Item> items;
-	public ArrayList<String> actions;
+	public ArrayList<Action> actions;
 	private static final long serialVersionUID = 1L;
 	
 	public Meeting(){
