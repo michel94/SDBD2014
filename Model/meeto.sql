@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 12, 2014 at 04:11 AM
+-- Generation Time: Oct 16, 2014 at 04:57 PM
 -- Server version: 5.5.38-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.3
 
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `action` (
-  `idaction` int(11) NOT NULL,
+  `idaction` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `due_to` datetime NOT NULL,
   `assigned_user` int(11) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idaction`),
   KEY `fk_action_1_idx` (`assigned_user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -45,14 +45,14 @@ CREATE TABLE IF NOT EXISTS `action` (
 --
 
 CREATE TABLE IF NOT EXISTS `comment` (
-  `idcomment` int(11) NOT NULL,
+  `idcomment` int(11) NOT NULL AUTO_INCREMENT,
   `comment` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `user` int(11) NOT NULL,
   `created_datetime` datetime NOT NULL,
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idcomment`),
   KEY `fk_comment_1_idx` (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -61,12 +61,12 @@ CREATE TABLE IF NOT EXISTS `comment` (
 --
 
 CREATE TABLE IF NOT EXISTS `group_def` (
-  `idgroup` int(11) NOT NULL,
+  `idgroup` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `created_datetime` datetime NOT NULL,
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idgroup`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -88,15 +88,17 @@ CREATE TABLE IF NOT EXISTS `group_user` (
 --
 
 CREATE TABLE IF NOT EXISTS `item` (
-  `iditem` int(11) NOT NULL,
+  `iditem` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user` int(11) NOT NULL,
   `created_datetime` datetime NOT NULL,
+  `meeting` int(11) NOT NULL,
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`iditem`),
-  KEY `fk_item_1_idx` (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `fk_item_1_idx` (`user`),
+  KEY `fk_item_2_idx` (`meeting`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -105,14 +107,14 @@ CREATE TABLE IF NOT EXISTS `item` (
 --
 
 CREATE TABLE IF NOT EXISTS `keydecision` (
-  `idkeydecision` int(11) NOT NULL,
+  `idkeydecision` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `item` int(11) NOT NULL,
   `created_datetime` datetime NOT NULL,
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idkeydecision`),
   KEY `fk_keydecision_1_idx` (`item`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -136,6 +138,19 @@ CREATE TABLE IF NOT EXISTS `meeting` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `meeting_group`
+--
+
+CREATE TABLE IF NOT EXISTS `meeting_group` (
+  `meeting` int(11) NOT NULL,
+  `group` int(11) NOT NULL,
+  PRIMARY KEY (`meeting`,`group`),
+  KEY `fk_meeting_group_2_idx` (`group`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `meeting_user`
 --
 
@@ -153,13 +168,13 @@ CREATE TABLE IF NOT EXISTS `meeting_user` (
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `iduser` int(11) NOT NULL,
+  `iduser` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
   `created_datetime` datetime NOT NULL,
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`iduser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 --
 -- Constraints for dumped tables
@@ -188,6 +203,7 @@ ALTER TABLE `group_user`
 -- Constraints for table `item`
 --
 ALTER TABLE `item`
+  ADD CONSTRAINT `fk_item_2` FOREIGN KEY (`meeting`) REFERENCES `meeting` (`idmeeting`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_item_1` FOREIGN KEY (`user`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
@@ -201,6 +217,13 @@ ALTER TABLE `keydecision`
 --
 ALTER TABLE `meeting`
   ADD CONSTRAINT `fk_meeting_1` FOREIGN KEY (`leader`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `meeting_group`
+--
+ALTER TABLE `meeting_group`
+  ADD CONSTRAINT `fk_meeting_group_1` FOREIGN KEY (`meeting`) REFERENCES `meeting` (`idmeeting`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_meeting_group_2` FOREIGN KEY (`group`) REFERENCES `group_def` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `meeting_user`
