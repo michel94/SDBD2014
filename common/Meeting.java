@@ -10,13 +10,13 @@ public class Meeting implements Serializable{
 	
 	public Meeting(){
 		items = new ArrayList<Item>();
-		actions = new ArrayList<String>();
+		actions = new ArrayList<Action>();
 	}
 
 	public Meeting(String title, int id){
 		this.title = title;
 		this.id = id;
 		items = new ArrayList<Item>();
-		actions = new ArrayList<String>();
+		actions = new ArrayList<Action>();
 	}
 }

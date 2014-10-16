@@ -11,17 +11,20 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	protected Database() throws RemoteException, SQLException {
 		super();
+		
 		//initialize JDBC
 		try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            System.out.println("Found Driver");
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        String url = "jdbc:mysql://192.168.43.189:3306/meeto";
-        connection = DriverManager.getConnection(url,"root","toor");
-        stmt = connection.createStatement();
-        System.out.println("Connected");
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			System.out.println("Found Driver");
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		String url = "jdbc:mysql://localhost:3306/meeto";
+		connection = DriverManager.getConnection(url,"root","");
+		stmt = connection.createStatement();
+		System.out.println("Connected");
+		
+		//addMeeting("asd", "asdad", "2014-03-03 00:00:00", "coimbra", 1);
 	}
 
 	private ResultSet executeQuery(String q){
@@ -58,6 +61,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		try{
 			ResultSet rs = executeQuery("select idmeeting,title from meeting where idmeeting=" + r.id + ";");
 			
+			//if(!rs.next()) return false;
+
 			m.id = rs.getInt("idmeeting");
 			m.title = rs.getString("title");
 			System.out.println("title: " + m.title + " id: " + m.id);
@@ -77,13 +82,14 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return m;
 	}
 
-	public boolean addMeeting(String title, String description, String t, String location, int leader) {
+	public boolean addMeeting(String title, String description, String datetime, String location, int leader) {
 		try{
-			String query = " insert into meeting(title, description, datetime, location, leader, created_datetime) values(\"" +
-				title + "\", \"" + description + "\", \"" + t + "\", \"" + location + "\", \"" + leader + "\", " + "now()" + ");";
+			String query = "insert into meeting(title, description, datetime, location, leader, created_datetime) values('" +
+				title + "', '" + description + "', '" + datetime + "', '" + location + "', '" + leader + "', " + "now()" + ");";
 			System.out.println(query);
 			stmt.executeUpdate(query);
 		}catch(SQLException e){
+			e.printStackTrace();
 			return false;
 		}
 		return true;
