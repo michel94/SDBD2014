@@ -37,6 +37,10 @@ public class Client{
 				}else if(words[0].equals("meeting")){
 					r = new Request("meeting", Integer.parseInt(words[1]));
 					oos.writeObject((Object)r);
+				}else if(words[0].equals("item")){
+					r = new Request("item", Integer.parseInt(words[1]));
+				}else if(words[0].equals("comments")){
+					r = new Request("comments", Integer.parseInt(words[1]));
 				}
 			}catch(IOException e){
 				System.out.println("Error: No connection!");
