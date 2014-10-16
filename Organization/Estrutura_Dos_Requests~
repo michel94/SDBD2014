@@ -1,0 +1,51 @@
+Get
+Update
+Delete
+Insert
+
+
+
+Metodo  |  Classes | Conteudo
+
+Get: 
+           Meetings  - ArrayList("Title,Data,Location,Leader")
+     
+           Meeting   - Title
+            	     - ArrayList("Items")
+            	     - ArrayList("Groups")
+            	     - ArrayList("Users")
+                     - ArrayList("Actions")
+             	     - Description String
+            	     - Location String
+                     - Leader
+                     - Status
+             
+     
+           Item      - Title
+                     - Description
+                     - User
+                     - Comments
+                     - Key Decisions
+                     
+
+           Group     - Name
+                     - Users
+
+           Action    - Description
+                     - Due-to
+                     - Assigned User
+                     - Status (Done or not)
+
+Update:
+           Update    - Type (Meeting,Item,Action,Group)
+                     - ID
+                     - Title (Meeting:Title,Item:Title,Group:Name)
+		     - Date (Meeting:Date,Actions:DueDate)
+                     - Status(Meeting: Status,Action:Status)
+                     - Description(Meeting:Description,Item:Description)
+
+Update e Insert: Identicos, abrimos a classe e alteramos o que queremos, enviamos para o servidor.
+
+
+
+	     
