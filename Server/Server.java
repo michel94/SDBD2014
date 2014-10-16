@@ -2,7 +2,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
-import java.util.Hashtable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -14,7 +13,6 @@ import java.util.*;
 public class Server{
 	private int clientNumber = 0;
 	private int serverPort = 6000;
-	public Hashtable<Integer, ClientData> clients = new Hashtable<Integer, ClientData>();
 
 	protected Server() throws RemoteException, MalformedURLException, NotBoundException {
 		super();
@@ -36,6 +34,8 @@ public class Server{
 				// create communication between client thread and server thread
 				PipedOutputStream pipeout = new PipedOutputStream();
 				PipedInputStream pipein = new PipedInputStream(pipeout);
+				
+				
 				opipeout = new ObjectOutputStream(new DataOutputStream(pipeout));
 				opipein = new ObjectInputStream(new DataInputStream(pipein));
 

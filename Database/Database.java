@@ -18,8 +18,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String url = "jdbc:mysql://localhost:3306/meeto";
-        connection = DriverManager.getConnection(url,"root","");
+        String url = "jdbc:mysql://192.168.43.189:3306/meeto";
+        connection = DriverManager.getConnection(url,"root","toor");
         stmt = connection.createStatement();
         System.out.println("Connected");
 	}
