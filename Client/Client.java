@@ -9,9 +9,10 @@ public class Client{
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private ListenerThread listenerThread;
-
+	
 	public Client(){
 		System.out.println("Client started");
+		
 		try{
 			socket = new Socket(serverIp, serverPort);
 			DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -24,8 +25,20 @@ public class Client{
 		}
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		String s;
 		
+		inputHandler(in);
+		
+		
+		
+	}
+	public static void main(String[] args){
+		Client client = new Client();
+		
+	}
+	
+	protected void inputHandler(BufferedReader in){
+		String s;
+
 		while(true){
 			try{
 				s = in.readLine();
@@ -48,10 +61,7 @@ public class Client{
 				System.out.println("Connection Error");
 			}
 		}
-		
 	}
-	public static void main(String[] args){
-		Client client = new Client();
-		
-	}
+	
+	
 }
