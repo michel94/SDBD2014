@@ -50,7 +50,9 @@ public class OutputThread implements Runnable {
 				System.out.println(req.type);
 				
 				if(req.type.equals("meetings")){
+					System.out.println("Getting meetings");
 					r = database.getMeetings();
+					System.out.println("Obtained meetings");
 				}else if(req.type.equals("meeting")){
 					r = database.getMeeting(req);
 					System.out.println( ((Meeting)r).title);

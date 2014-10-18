@@ -39,6 +39,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	@Override
 	public Meetings getMeetings(){
+		System.out.println("OK");
 		Meetings res = new Meetings();
 		
 		ResultSet rs = executeQuery("SELECT idmeeting, title FROM meeting");
@@ -60,15 +61,14 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		try{
 			ResultSet rs = executeQuery("select idmeeting,title from meeting where idmeeting=" + r.id + ";");
+			rs.next(); //Isto tem mesmo de estar aqui!!
 			
-			//if(!rs.next()) return false;
-
 			m.id = rs.getInt("idmeeting");
 			m.title = rs.getString("title");
 			System.out.println("title: " + m.title + " id: " + m.id);
-
-			// A base de dados está broken!!
+			
 			rs = executeQuery("select title,iditem from item where meeting=" + r.id);
+			
 			while(rs.next()){
 				Item item = new Item(rs.getString("title"), rs.getInt("iditem"));
 

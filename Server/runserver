@@ -1,1 +1,1 @@
-java -cp ".:../common/" Server
+java -cp ".:../common/" Server $@
