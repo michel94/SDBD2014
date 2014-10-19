@@ -9,6 +9,11 @@ public class ListenerThread implements Runnable{
     private AtomicBoolean loggedIn;
     private WaitClient wait;
 
+    public String context = "";
+    public Meetings meetings;
+
+
+
 	public ListenerThread(ObjectInputStream ois, AtomicBoolean l, WaitClient w){
 		this.ois = ois;
         loggedIn = l;
@@ -34,11 +39,8 @@ public class ListenerThread implements Runnable{
 
 
 				if(r instanceof Meetings){
-					Meetings m = (Meetings) r;
-					println("Meetings");
-					for(int i=0; i<m.size(); i++){
-						println(m.get(i).id + ": " + m.get(i).title);
-					}
+					meetings = (Meetings) r;
+                    wait.notifyMeetings();
 				}else if(r instanceof Meeting){
 					Meeting m = (Meeting) r;
 					println("Meeting " + m.title);
