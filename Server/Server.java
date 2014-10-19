@@ -10,18 +10,21 @@ import java.util.Calendar;
 import java.sql.Date;
 import java.util.*;
 import java.lang.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Server{
 	private int clientNumber = 0;
 	private int serverPort = 6000;
 	private Boolean second;
-	DatabaseInterface database = null;
+	private DatabaseInterface database = null;
+	private ConcurrentHashMap<Integer, ClientData> clients;
 
 
 	protected Server(boolean s, int port){
 		super();
 		
 
+		clients = new ConcurrentHashMap<Integer, ClientData>();
 
 		serverPort = port;
 		second = s;
@@ -99,8 +102,10 @@ public class Server{
 				opipein = new ObjectInputStream(new DataInputStream(pipein));
 
 				new InputThread(clientSocket, clientNumber, opipeout);
-				new OutputThread(clientSocket, clientNumber, opipein, database);
+				new OutputThread(clientSocket, clientNumber, opipein, database, clients);
 				clientNumber++;
+				
+				clients.put(clientNumber, new ClientData(opipeout, opipein));
 			}
 		}catch(IOException e)
 		

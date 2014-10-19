@@ -7,6 +7,7 @@ public class UdpConnection implements Runnable {
 	private Boolean secondary;
 	private boolean sec;
 	private int losses=0;
+	private final int ACCEPTED_LOSSES = 3;
 
 	public UdpConnection(Boolean s){
 		secondary = s;
@@ -31,10 +32,11 @@ public class UdpConnection implements Runnable {
 					byte[] buffer = new byte[1000]; 			
 					DatagramPacket request = new DatagramPacket(buffer, buffer.length);
 					socket.receive(request);
-					s = new String(request.getData(), 0, request.getLength());	
+					s = new String(request.getData(), 0, request.getLength());
 					System.out.println("Server Received: " + s);
 
-					DatagramPacket reply = new DatagramPacket(request.getData(), request.getLength(), request.getAddress(), request.getPort());
+					buffer = (new String("pong")).getBytes();
+					DatagramPacket reply = new DatagramPacket(buffer, buffer.length, request.getAddress(), request.getPort());
 					socket.send(reply);
 				}
 			}catch (SocketException e){
@@ -51,7 +53,7 @@ public class UdpConnection implements Runnable {
 
 				while(true){
 					
-					if(losses > 3){
+					if(losses > ACCEPTED_LOSSES){
 						
 						synchronized(secondary){
 							System.out.println("synchronized");

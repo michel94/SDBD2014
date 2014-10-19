@@ -11,6 +11,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Iterator;
 
 public class OutputThread implements Runnable {
 	Thread t;
@@ -20,13 +22,15 @@ public class OutputThread implements Runnable {
 	
 	ObjectInputStream threadIn;
 	ObjectOutputStream out;
+	ConcurrentHashMap<Integer, ClientData> clients;
 
-	public OutputThread(Socket c, int n, ObjectInputStream is, DatabaseInterface database){
+	public OutputThread(Socket c, int n, ObjectInputStream is, DatabaseInterface database, ConcurrentHashMap<Integer, ClientData> clients){
 		t = new Thread(this, "out");
 		clientId = n;
 		clientSocket = c;
 		threadIn = is;
 		this.database = database;
+		this.clients = clients;
 
 		t.start();
 	}
@@ -44,25 +48,32 @@ public class OutputThread implements Runnable {
 		
 		while(true){
 			try {
-				Request req = (Request) threadIn.readObject();
+				Object req = (Object) threadIn.readObject();
 
 				Object r = null;
-				System.out.println(req.type);
 				
-				if(req.type.equals("meetings")){
-					System.out.println("Getting meetings");
-					r = database.getMeetings();
-					System.out.println("Obtained meetings");
-				}else if(req.type.equals("meeting")){
-					r = database.getMeeting(req);
-					System.out.println( ((Meeting)r).title);
+				if(req instanceof Request){
+					Request rq = (Request) req;
+					if(rq.type.equals("meetings")){
+						System.out.println("Getting meetings");
+						r = database.getMeetings();
+						System.out.println("Obtained meetings");
+					}else if(rq.type.equals("meeting")){
+						r = database.getMeeting((Request)rq);
+						System.out.println( ((Meeting)r).title);
+					}
+				}
+				if(req instanceof Authentication){
+					System.out.println("Trying to login");
+					r = database.login((Authentication)req);
 				}
 
 				if(r != null){
 					out.writeObject(r);
-					System.out.println("Wrote " + req.type + " to client " + clientId);
+					if(req instanceof Request)
+						System.out.println("Wrote " + ((Request)req).type + " to client " + clientId);
 				}else{
-					System.out.println("Error obtain meetings through RMI");
+					System.out.println("Error accessing RMI");
 				}
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error: Class not found while reading pipe of client "+clientId +".");
@@ -74,5 +85,27 @@ public class OutputThread implements Runnable {
 		
 		System.out.println("Closing connection to client "+clientId +".");
 		
+	}
+
+	public void parseRequest(){
+		
+	}
+
+	public void broadcastMessage(Object message, String context){
+		broadcastMessage(message, context, 0);
+	}	
+
+	public void broadcastMessage(Object message, String context, int contextId){
+		Iterator it = clients.keySet().iterator();
+		ClientData cd;
+
+		try{
+			while(it.hasNext()){
+				Integer key = (Integer) it.next();
+				cd = clients.get(key);
+				if(cd.context.equals(context) && cd.contextId == contextId)
+					cd.out.writeObject(message);
+			}
+		}catch(IOException e){System.out.println("IO Exception"); e.printStackTrace();}
 	}
 }

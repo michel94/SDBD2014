@@ -1,6 +1,7 @@
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Client{
 	private int serverPort = 6000;
@@ -9,6 +10,9 @@ public class Client{
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private ListenerThread listenerThread;
+	private AtomicBoolean loggedIn = new AtomicBoolean(false);
+	public WaitClient wait = new WaitClient();
+
 	
 	public Client(){
 		System.out.println("Client started");
@@ -19,16 +23,22 @@ public class Client{
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			ois = new ObjectInputStream(in);
 			oos = new ObjectOutputStream(out);
-			listenerThread = new ListenerThread(ois);
+			listenerThread = new ListenerThread(ois, loggedIn, wait);
 		}catch(IOException uhe){
 			System.out.println("Error! Could not connect to the server.");
 		}
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		
+
+		System.out.println(loggedIn.get());
+
+		while(!loggedIn.get()){
+			System.out.println(loggedIn.get());
+			login(in);
+		}
+
 		inputHandler(in);
-		
-		
 		
 	}
 	public static void main(String[] args){
@@ -61,6 +71,25 @@ public class Client{
 				System.out.println("Connection Error");
 			}
 		}
+	}
+
+	protected void login(BufferedReader in){
+		String s=null;
+		System.out.println("Welcome. Please write your username and password separated by a space.");
+		try{
+			s = in.readLine();
+		}catch(IOException e){
+			System.out.println("IO Exception while reading authentication input.");
+		}
+
+		String[] words = s.split(" ");
+		Authentication auth = new Authentication(words[0],words[1]);
+		try{
+			oos.writeObject((Object)auth);
+		}catch(IOException e){
+			System.out.println("IO Exception while sending authentication input.");
+		}
+		wait.waitForAuth();
 	}
 	
 	

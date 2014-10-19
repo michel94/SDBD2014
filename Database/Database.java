@@ -8,6 +8,8 @@ import java.sql.*;
 public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	public Connection connection;
 	public Statement stmt;
+	public String host;
+	public boolean banned;
 
 	protected Database() throws RemoteException, SQLException {
 		super();
@@ -25,6 +27,12 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		System.out.println("Connected");
 		
 		//addMeeting("asd", "asdad", "2014-03-03 00:00:00", "coimbra", 1);
+	}
+
+	public void register(){
+		try{
+			host = getClientHost();
+		}catch(Exception e){;}
 	}
 
 	private ResultSet executeQuery(String q){
@@ -96,6 +104,11 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		
 	}
 
+	public boolean stonith(){
+		banned = true;
+		return true;
+	}
+
 	public static void main(String[] args) throws RemoteException, SQLException {
 		DatabaseInterface di = new Database();
 		LocateRegistry.createRegistry(1099).rebind("database", di);
@@ -103,4 +116,22 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		
 		System.out.println("Database ready...");
 	}
+
+	public Authentication login(Authentication aut){
+		System.out.println("Here");
+		try{
+			String query = "select iduser from user where username='" + aut.username + "' and password='" + aut.password + "'";
+
+			ResultSet rs = executeQuery(query);
+			if(rs.next())
+				aut.confirm(rs.getInt("iduser"));
+
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		System.out.println("Done");
+		return aut;
+
+	}
+
 }
