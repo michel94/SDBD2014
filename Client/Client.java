@@ -131,26 +131,6 @@ public class Client{
 				sel = getInt(1, m.size());
 			}
 
-			/*try{
-				s = in.readLine();
-				String[] words = s.split(" ");
-				Request r;
-				if(words[0].equals("meetings")){
-					r = new Request("meetings");
-					oos.writeObject(r);
-				}else if(words[0].equals("meeting")){
-					r = new Request("meeting", Integer.parseInt(words[1]));
-					oos.writeObject((Object)r);
-				}else if(words[0].equals("item")){
-					r = new Request("item", Integer.parseInt(words[1]));
-				}else if(words[0].equals("comments")){
-					r = new Request("comments", Integer.parseInt(words[1]));
-				}
-			}catch(IOException e){
-				System.out.println("Error: No connection!");
-			}catch(NullPointerException e){
-				System.out.println("Connection Error");
-			}*/
 		}
 	}
 
