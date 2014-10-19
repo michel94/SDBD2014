@@ -35,7 +35,7 @@ public class Server{
 			while(retries<5){
 				try{
 				 	database = (DatabaseInterface) Naming.lookup("database");
-					retries = 5;
+					break;
 				}catch(NotBoundException e){
 					System.out.println("Database could not be reached. Failed connection. Retrying connection in 10 seconds.");
 					retries++;

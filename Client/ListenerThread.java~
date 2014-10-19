@@ -4,12 +4,18 @@ import java.util.ArrayList;
 
 public class ListenerThread implements Runnable{
 	private ObjectInputStream ois;
+	private ArrayList<String> historic;
 
 	public ListenerThread(ObjectInputStream ois){
 		this.ois = ois;
 		Thread t = new Thread(this, "ListenerThread");
 		t.start();
 	}
+	
+	public void println(String s){
+		System.out.println(s);
+	}
+
 	public void run(){
 		
 		while(true){
@@ -17,10 +23,14 @@ public class ListenerThread implements Runnable{
 			System.out.println("Listener Thread waiting...");
 			try{
 				//Implement mechanism to recognize type of input
-				ArrayList<Meeting> r = (ArrayList<Meeting>) ois.readObject();
-				System.out.println(">>> Receive answer"); //Not exactly and answer, this will be fixed later
-				for(int i=0; i<r.size(); i++){
-					System.out.println(r.get(i).title + ", " + r.get(i).id);
+				Object r = ois.readObject();
+
+
+				if(r instanceof Authentication){
+					Authentication auth = (Authentication)r;
+					if(r.confirmation == 0){
+						System.out.println("Login failed. Try again.");
+					}
 				}
 			}catch(IOException e){
 				System.out.println("Error! Connection to the server lost.");

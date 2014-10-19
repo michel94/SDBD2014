@@ -1,0 +1,18 @@
+import java.io.*;
+
+public class Authentication implements Serializable {
+	private static final long serialVersionUID = 1L;
+	protected static String username,password;
+	public static int confirmation = 0;
+	public static int clientID = 0;
+	
+	public  Authentication(String usr, String pass){
+		username = usr;
+		password = pass;
+	}
+	
+	public void confirm(int c){
+		confirmation = 1;
+		clientID = c;
+	}
+}

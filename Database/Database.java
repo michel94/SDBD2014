@@ -103,4 +103,19 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		
 		System.out.println("Database ready...");
 	}
+
+	public Authentication login(Authentication aut){
+		System.out.println("Here");
+		try{
+			String query = "";
+			System.out.println(query);
+			stmt.executeUpdate(query);
+		}catch(SQLException e){
+			e.printStackTrace();
+			
+		}
+		System.out.println("Done");
+		return aut;
+		
+	}
 }

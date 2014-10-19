@@ -1,0 +1,13 @@
+public class Autentication {
+	String username,password;
+	int confirmation = 0;
+	
+	public static Autentication(String usr, String pass){
+		username = usr;
+		password = pass;
+	}
+	
+	public void confirm(){
+		confirmation = 1;
+	}
+}

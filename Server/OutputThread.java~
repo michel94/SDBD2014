@@ -28,10 +28,10 @@ public class OutputThread implements Runnable {
 		threadIn = is;
 		this.database = database;
 
-		t.start();
+		t.start(database);
 	}
 
-	public void run() {
+	public void run(DatabaseInterface database) {
 		
 		System.out.println("Client in " + clientId + " " + "is running...");
 		
@@ -43,18 +43,23 @@ public class OutputThread implements Runnable {
 		}
 		
 		while(true){
-			try {
+			try {	
 
-				Request req = (Request) threadIn.readObject();
-				if(req.type.equals("meetings")){
-					ArrayList<Meeting> r = database.getMeetings();
-					if(r != null){
-						out.writeObject(r);
-						System.out.println("Wrote meetings to client "+clientID);
-					}else{
-						System.out.println("Error obtain meetings through RMI");
-					}
+				Object req = threadIn.readObject();
+				Object ans = null;
+				
+				if(req instanceof Authentication){
+					System.out.println("Trying to login");
+					ans = database.login((Authentication)req);				
 				}
+
+				if(ans != null){
+					out.writeObject(ans);
+					System.out.println("Wrote auth to client " + clientId);
+				}else{
+					System.out.println("Error obtain answer through RMI");
+				}
+
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error: Class not found while reading pipe of client "+clientId +".");
 			} catch (IOException e) {

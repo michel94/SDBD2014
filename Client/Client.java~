@@ -9,7 +9,7 @@ public class Client{
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private ListenerThread listenerThread;
-	
+	private static int loggedIn = 0;
 	public Client(){
 		System.out.println("Client started");
 		
@@ -22,10 +22,13 @@ public class Client{
 			listenerThread = new ListenerThread(ois);
 		}catch(IOException uhe){
 			System.out.println("Error! Could not connect to the server.");
+			//Implementar rotina de reconexão aqui.
 		}
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		
+		while(loggedIn==0){
+			login(in);
+		}
 		inputHandler(in);
 		
 		
@@ -36,7 +39,7 @@ public class Client{
 		
 	}
 	
-	protected inputHandler(BufferedReader in){
+	protected void inputHandler(BufferedReader in){
 		String s;
 
 		while(true){
@@ -61,6 +64,25 @@ public class Client{
 				System.out.println("Connection Error");
 			}
 		}
+	}
+
+	protected void login(BufferedReader in){
+		String s=null;
+		System.out.println("Welcome. Please write your username and password separated by a space.");
+		try{
+			s = in.readLine();
+		}catch(IOException e){
+			System.out.println("IO Exception while reading authentication input.");
+		}
+
+		String[] words = s.split(" ");
+		Authentication auth = new Authentication(words[0],words[1]);
+		try{
+			oos.writeObject((Object)auth);
+		}catch(IOException e){
+			System.out.println("IO Exception while sending authentication input.");
+		}
+		
 	}
 	
 	

@@ -43,25 +43,23 @@ public class OutputThread implements Runnable {
 		}
 		
 		while(true){
-			try {
-				Request req = (Request) threadIn.readObject();
+			try {	
 
-				Object r = null;
-				System.out.println(req.type);
+				Object req = threadIn.readObject();
+				Object ans = null;
 				
-				if(req.type.equals("meetings")){
-					r = database.getMeetings();
-				}else if(req.type.equals("meeting")){
-					r = database.getMeeting(req);
-					System.out.println( ((Meeting)r).title);
+				if(req instanceof Authentication){
+					System.out.println("Trying to login");
+					ans = database.login((Authentication)req);				
 				}
 
-				if(r != null){
-					out.writeObject(r);
-					System.out.println("Wrote " + req.type + " to client " + clientId);
+				if(ans != null){
+					out.writeObject(ans);
+					System.out.println("Wrote auth to client " + clientId);
 				}else{
-					System.out.println("Error obtain meetings through RMI");
+					System.out.println("Error obtain answer through RMI");
 				}
+
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error: Class not found while reading pipe of client "+clientId +".");
 			} catch (IOException e) {

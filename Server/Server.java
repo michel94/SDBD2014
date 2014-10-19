@@ -14,13 +14,14 @@ import java.lang.*;
 public class Server{
 	private int clientNumber = 0;
 	private int serverPort = 6000;
+	DatabaseInterface database = null;
 
 	protected Server() {
 		super();
 		DatabaseInterface database = null;
 				
-		connectDatabase(database);
-		clientListener(database);
+		connectDatabase();
+		clientListener();
 	}
 
 	public static void main(String[] args) {
@@ -28,7 +29,7 @@ public class Server{
 		
 	}
 
-	public void connectDatabase(DatabaseInterface database){
+	public void connectDatabase(){
 		int retries = 0;
 		
 		try{
@@ -61,7 +62,7 @@ public class Server{
 		System.out.println("Connection to database established.");
 	}
 	
-	public void clientListener(DatabaseInterface database){
+	public void clientListener(){
 		ObjectOutputStream opipeout;
 		ObjectInputStream opipein;
 		Socket clientSocket;
