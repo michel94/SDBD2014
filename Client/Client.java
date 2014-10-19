@@ -53,10 +53,10 @@ public class Client{
 		System.out.println(s);
 	}
 	
-	public int getInt(int inf, int sup){
+	public int readInt(int inf, int sup){
 		while(true){
 			try{
-				String s = in.readLine();
+				String s = readString();
 				int r = Integer.parseInt(s);
 				if(r >= inf && r <= sup)
 					return r;
@@ -64,6 +64,16 @@ public class Client{
 					print("Insert your selection, a number between " + inf + " and " + sup + ":");	
 			}catch(Exception e){
 				print("Insert your selection, a number between " + inf + " and " + sup + ":");
+			}
+		}
+	}
+
+	public String readString(){
+		while(true){
+			try{
+				return in.readLine();
+			}catch(Exception e){
+				print("Exception: keep trying :>");
 			}
 		}
 	}
@@ -108,7 +118,7 @@ public class Client{
 				print("1 - Consult meetings");
 				print("2 - Consult groups");
 				print("3 - Quit");
-				sel = getInt(1, 3);
+				sel = readInt(1, 3);
 
 				switch(sel){
 					case 1:
@@ -118,30 +128,61 @@ public class Client{
 						lt.context = "Groups";
 						break;
 					case 3:
-						return;
+						System.exit(0);
 				}
 			
 			}else if(lt.context.equals("Meetings")){
-				print("Which meeting do you want to consult?");
+				print("What do you want to do?");
+				print("1 - Schedule new meeting");
+				print("2 - Consult your current meetings");
+				print("3 - Delete one of your meetings");
+				print("4 - Back");
+				sel = readInt(1, 4);
 
-				Meetings m  = lt.meetings;
+				switch(sel){
+					case 1:
+						lt.context = "NewMeeting";
+						break;
+					case 2:
+						lt.context = "ConsultMeeting";
+						break;
+					case 3:
+						lt.context = "DeleteMeeting";
+						break;
+					case 4:
+						lt.context = "Main";
+				}
+				/*Meetings m  = lt.meetings;
 				for(int i=0; i<m.size(); i++){
 					print(m.get(i).id + ": " + m.get(i).title);
-				}
-				sel = getInt(1, m.size());
+				}*/
+			}else if(lt.context.equals("NewMeeting")){
+				Meeting m = new Meeting();
+
+				print("Creating new meeting. Fill the following form:");
+				print("Title: ");
+				m.title = readString();
+				print("Description: ");
+				m.description = readString();
+				print("Date: ");
+				String date = readString();
+				print("Time: ");
+				m.datetime = date + " " + readString();
+				print("Location: ");
+				m.location = readString();
+				
+				writeObject(m);
+				lt.context = "Meetings";
 			}
 
 		}
 	}
 
 	protected void login(){
-		String s=null;
+		String s = null;
 		System.out.println("Welcome. Please write your username and password separated by a space.");
-		try{
-			s = in.readLine();
-		}catch(IOException e){
-			System.out.println("IO Exception while reading authentication input.");
-		}
+		
+		s = readString();
 
 		String[] words = s.split(" ");
 		Authentication auth = new Authentication(words[0],words[1]);

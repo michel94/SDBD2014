@@ -2,8 +2,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Meeting implements Serializable{
-	public String title;
+	public String title, description, datetime, location;
 	public int id;
+
 	public ArrayList<Item> items;
 	public ArrayList<Action> actions;
 	private static final long serialVersionUID = 1L;

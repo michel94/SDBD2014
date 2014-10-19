@@ -32,11 +32,9 @@ public class ListenerThread implements Runnable{
 		
 		while(true){
 			//Receive Updates from server
-			System.out.println("Listener Thread waiting...");
 			try{
 				//Implement mechanism to recognize type of input
 				Object r = ois.readObject();
-
 
 				if(r instanceof Meetings){
 					meetings = (Meetings) r;
@@ -48,7 +46,7 @@ public class ListenerThread implements Runnable{
 						println(m.items.get(i).id + ": " + m.items.get(i).title);
 					}
 				}else if(r instanceof Authentication){
-					Authentication auth = (Authentication)r;
+					Authentication auth = (Authentication) r;
 					if(auth.confirmation == 0){
 						System.out.println("Login failed. Try again.");
 					}else{
