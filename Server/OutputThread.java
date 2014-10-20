@@ -42,6 +42,7 @@ public class OutputThread implements Runnable {
 		try {
 			DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 			out = new ObjectOutputStream(dos);
+			clients.get(clientId).out = out;
 		} catch (IOException e) {
 			System.out.println("Error:IO Exception while answering request of client "+clientId +".");
 		}
@@ -63,18 +64,31 @@ public class OutputThread implements Runnable {
 						System.out.println( ((Meeting)r).title);
 					}
 				}
-				if(req instanceof Authentication){
+				if(req instanceof Authentication){ //A ideia do Rui de devolver a classe com um campo alterado pode ser usada no resto, por exemplo ao fazer um add, completa-se os campos
 					System.out.println("Trying to login");
 					r = database.login((Authentication)req);
+					clients.get(clientId).userData = ((Authentication)r).userData;
+				}
+
+				
+				if(req instanceof Meeting){
+					Meeting m = (Meeting) req;
+					if(m.id == 0){
+						Meeting result = database.insertMeeting(m, clients.get(clientId).userData);
+						if(result != null)
+							broadcastMessage(result, "meetings", 0);
+					}else{
+						//boolean result = database.updateMeeting(m);
+					}
 				}
 
 				if(r != null){
 					out.writeObject(r);
 					if(req instanceof Request)
 						System.out.println("Wrote " + ((Request)req).type + " to client " + clientId);
-				}else{
+				}/*else{
 					System.out.println("Error accessing RMI");
-				}
+				}*/
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error: Class not found while reading pipe of client "+clientId +".");
 			} catch (IOException e) {
@@ -99,13 +113,18 @@ public class OutputThread implements Runnable {
 		Iterator it = clients.keySet().iterator();
 		ClientData cd;
 
-		try{
-			while(it.hasNext()){
-				Integer key = (Integer) it.next();
-				cd = clients.get(key);
-				if(cd.context.equals(context) && cd.contextId == contextId)
+		System.out.println("Broadcast");
+		while(it.hasNext()){
+			Integer key = (Integer) it.next();
+			System.out.println("Key: " + key);
+			cd = clients.get(key);
+			if(cd.userData != null)
+				try{
 					cd.out.writeObject(message);
-			}
-		}catch(IOException e){System.out.println("IO Exception"); e.printStackTrace();}
+				}catch(IOException e){System.out.println("IO Exception"); e.printStackTrace();}
+			/*if(cd.context.equals(context) && cd.contextId == contextId)
+				cd.out.writeObject(message);*/
+		}
+
 	}
 }

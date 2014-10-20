@@ -90,18 +90,19 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return m;
 	}
 
-	public boolean addMeeting(String title, String description, String datetime, String location, int leader) {
+	public Meeting insertMeeting(Meeting m, User u) {
 		try{
-			String query = "insert into meeting(title, description, datetime, location, leader, created_datetime) values('" +
-				title + "', '" + description + "', '" + datetime + "', '" + location + "', '" + leader + "', " + "now()" + ");";
+			String query = "insert into meeting(title, description, datetime, location, leader, created_datetime) values('" + 
+				m.title + "', '" + m.description + "', '" + m.datetime + "', '" + m.location + "', '" + u.id + "', " + "now()" + ");";
 			System.out.println(query);
 			stmt.executeUpdate(query);
+			u.password = "";
+			m.leader = u;
+			return m;
 		}catch(SQLException e){
 			e.printStackTrace();
-			return false;
+			return null;
 		}
-		return true;
-		
 	}
 
 	public boolean stonith(){
@@ -117,19 +118,28 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		System.out.println("Database ready...");
 	}
 
-	public Authentication login(Authentication aut){
-		System.out.println("Here");
+	private User readUser(ResultSet rs){
+		User u = null;
 		try{
-			String query = "select iduser from user where username='" + aut.username + "' and password='" + aut.password + "'";
-
-			ResultSet rs = executeQuery(query);
-			if(rs.next())
-				aut.confirm(rs.getInt("iduser"));
+			rs.next();
+			u = new User(rs.getInt("iduser"), rs.getString("username"));
+			u.password = rs.getString("password");
 
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-		System.out.println("Done");
+		return u;
+	}
+
+	public Authentication login(Authentication aut){
+		String query = "select * from user where username='" + aut.username + "' and password='" + aut.password + "'";
+
+		ResultSet rs = executeQuery(query);
+		aut.userData = readUser(rs);
+		System.out.println(aut.userData.username);
+
+		aut.confirm(aut.userData.id);
+
 		return aut;
 
 	}
