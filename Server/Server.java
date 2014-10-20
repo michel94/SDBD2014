@@ -13,7 +13,7 @@ import java.lang.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Server{
-	private int clientNumber = 0;
+	private int clientNumber = 1;
 	private int serverPort = 6000;
 	private Boolean second;
 	private DatabaseInterface database = null;
@@ -101,11 +101,13 @@ public class Server{
 				opipeout = new ObjectOutputStream(new DataOutputStream(pipeout));
 				opipein = new ObjectInputStream(new DataInputStream(pipein));
 
-				new InputThread(clientSocket, clientNumber, opipeout);
+				new InputThread(clientSocket, clientNumber, opipeout, clients);
 				new OutputThread(clientSocket, clientNumber, opipein, database, clients);
 				clients.put(clientNumber, new ClientData(opipeout, opipein));
 
 				clientNumber++;
+
+				//debugClients();
 				
 				
 			}
@@ -115,6 +117,19 @@ public class Server{
 			System.out.println("Listen:" + e.getMessage());
 		}
 
+	}
+
+	private void debugClients(){
+		ClientData cd;
+		Iterator it = clients.keySet().iterator();
+
+		System.out.println("Debug Clients");
+		while(it.hasNext()){
+			Integer key = (Integer) it.next();
+			System.out.println("key: " + key);
+			/*cd = clients.get(key);
+			System.out.println(cd.userData.username);*/
+		}
 	}
 
 	public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {

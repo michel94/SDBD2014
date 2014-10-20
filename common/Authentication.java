@@ -5,6 +5,7 @@ public class Authentication implements Serializable {
 	public String username,password;
 	public int confirmation = 0;
 	public int clientID = 0;
+	public User userData;
 	
 	public  Authentication(String usr, String pass){
 		username = usr;

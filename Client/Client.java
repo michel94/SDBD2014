@@ -2,6 +2,9 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.gnome.gtk.Gtk;
+import org.gnome.notify.Notify;
+import org.gnome.notify.Notification;
 
 public class Client{
 	private int serverPort = 6000;
@@ -15,9 +18,13 @@ public class Client{
 	
 	public WaitClient wait = new WaitClient();
 
-
 	
 	public Client(){
+
+		Notify.init("Hello World");
+		Notification hello = new Notification("Hello world!", "This is an example notification.", "dialog-information");
+        hello.show();
+
 		System.out.println("Client started");
 		
 		try{
@@ -45,6 +52,8 @@ public class Client{
 		
 	}
 	public static void main(String[] args){
+		String[] a = new String[0];
+		Gtk.init(a);
 		Client client = new Client();
 		
 	}

@@ -13,7 +13,7 @@ getMeetings - gets all meetings
 
 	deleteMeeting - deletes a meeting
 
-getMyGroups - gets all groups which I belong to
+getGroups - gets all groups which I belong to
 	addUserToGroup - add user to a group that I created
 	removeUserFromGroup - remove user from group
 	deleteGroup - delete group

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class Meeting implements Serializable{
 	public String title, description, datetime, location;
 	public int id;
+	public User leader;
 
 	public ArrayList<Item> items;
 	public ArrayList<Action> actions;

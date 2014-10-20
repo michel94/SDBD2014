@@ -1,1 +1,1 @@
-javac *.java ../common/*.java -Xlint
+javac -cp /usr/lib64/java-gnome/gtk.jar *.java ../common/*.java -Xlint
