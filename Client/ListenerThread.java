@@ -38,22 +38,13 @@ public class ListenerThread implements Runnable{
 
 				if(r instanceof Meetings){
 					meetings = (Meetings) r;
-                    wait.notifyMeetings();
+                   			wait.notifyMeetings();
 				}else if(r instanceof Meeting){
 					Meeting m = (Meeting) r;
-					println("Meeting " + m.title);
-					for(int i=0; i<m.items.size(); i++){
-						println(m.items.get(i).id + ": " + m.items.get(i).title);
-					}
+					wait.notifyMeeting();
 				}else if(r instanceof Authentication){
 					Authentication auth = (Authentication) r;
-					if(auth.confirmation == 0){
-						System.out.println("Login failed. Try again.");
-					}else{
-                        System.out.println("Authentication successful");
-                        loggedIn.getAndSet(true);
-                    }
-                    wait.notifyAuth();
+                    			wait.notifyAuth();
 				}
 
 			}catch(IOException e){

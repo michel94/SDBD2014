@@ -34,10 +34,9 @@ public class Client{
 		in = new BufferedReader(new InputStreamReader(System.in));
 		
 
-		System.out.println(loggedIn.get());
+		System.out.println("Welcome.");
 
 		while(!loggedIn.get()){
-			System.out.println(loggedIn.get());
 			login();
 		}
 
@@ -93,21 +92,12 @@ public class Client{
 
 		while(true){
 			if(lt.context.equals("Main")){
-				print("Meeto");
+				print("\n|   Meeto   |\n");
 				print("");
 				print("Main Menu");
 				print("");
 
-				print("Your Meetings");
-				r = new Request("meetings");
-				writeObject(r);
-				wait.waitForMeetings();
-				Meetings m = lt.meetings;
-				for(int i=0; i<m.size(); i++){
-					print(m.get(i).id + ": " + m.get(i).title);
-				}
-				print("");
-
+				
 				/*print("Your Groups");
 				r = new Request("groups");
 				oos.writeObject(r);
@@ -132,9 +122,19 @@ public class Client{
 				}
 			
 			}else if(lt.context.equals("Meetings")){
+				print("Your Meetings:");
+				r = new Request("meetings");
+				writeObject(r);
+				wait.waitForMeetings();
+				Meetings m = lt.meetings;
+				for(int i=0; i<m.size(); i++){
+					print(m.get(i).id + ": " + m.get(i).title + ": "+m.get(i).datetime);
+				}
+				print("");
+
 				print("What do you want to do?");
 				print("1 - Schedule new meeting");
-				print("2 - Consult your current meetings");
+				print("2 - Consult meeting details");
 				print("3 - Delete one of your meetings");
 				print("4 - Back");
 				sel = readInt(1, 4);
@@ -173,6 +173,14 @@ public class Client{
 				
 				writeObject(m);
 				lt.context = "Meetings";
+			}else if(lt.context.equals("ConsultMeeting"){
+				print("Which meeting do you want to consult? Write its id:");
+				Meetings m = lt.meetings;
+				r = new Request("meeting",m.get(i).id);
+
+				
+				wait.waitMeeting();
+				
 			}
 
 		}
@@ -180,7 +188,7 @@ public class Client{
 
 	protected void login(){
 		String s = null;
-		System.out.println("Welcome. Please write your username and password separated by a space.");
+		System.out.println("Please write your username and password separated by a space.");
 		
 		s = readString();
 
@@ -192,6 +200,12 @@ public class Client{
 			System.out.println("IO Exception while sending authentication input.");
 		}
 		wait.waitForAuth();
+		if(auth.confirmation == 0){
+			System.out.println("Login failed. Try again.");
+		}else{
+                        System.out.println("Authentication successful");
+                        loggedIn.getAndSet(true);
+                }
 	}
 	
 	
