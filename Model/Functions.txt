@@ -1,0 +1,29 @@
+getMeetings - gets all meetings
+	addMeeting - creates new meeting, with all its data
+		getAllUsers - list all users
+		addUser - adds user to the meeting
+	getMeeting - get meeting information, including users and groups
+		getItem - gets item from the meeting and its comments
+			addComment - adds a new comment to that item
+			updateItem - updates title, description, etc
+		addUser - *
+		addGroup - adds group to the meeting
+			getAllGroups - gets all groups, to be added to the meeting
+		updateInformation - updates modifiable information about the meeting, including finish the meeting
+
+	deleteMeeting - deletes a meeting
+
+getMyGroups - gets all groups which I belong to
+	addUserToGroup - add user to a group that I created
+	removeUserFromGroup - remove user from group
+	deleteGroup - delete group
+
+getInvites - gets all your meeting invites
+	acceptInvite - accept invite
+	declineInvite - decline invite
+
+getFinishedMeetings - gets all finished meetings
+
+
+-> add invites to the database
+
