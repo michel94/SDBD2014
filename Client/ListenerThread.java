@@ -6,11 +6,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ListenerThread implements Runnable{
 	private ObjectInputStream ois;
 	private ArrayList<String> historic;
-    private AtomicBoolean loggedIn;
-    private WaitClient wait;
+    	private AtomicBoolean loggedIn;
+    	private WaitClient wait;
 
-    public String context = "";
-    public Meetings meetings;
+    	public String context = "";
+    	public Meetings meetings;
+    	public Meeting meeting;
+    	public Authentication auth;
+    	public Item item;
+    	public Action action;
 
 
 
@@ -38,22 +42,19 @@ public class ListenerThread implements Runnable{
 
 				if(r instanceof Meetings){
 					meetings = (Meetings) r;
-                    wait.notifyMeetings();
+                   			wait.notifyMeetings();
 				}else if(r instanceof Meeting){
-					Meeting m = (Meeting) r;
-					println("Meeting " + m.title);
-					for(int i=0; i<m.items.size(); i++){
-						println(m.items.get(i).id + ": " + m.items.get(i).title);
-					}
+				        meeting = (Meeting) r;
+					wait.notifyMeeting();
 				}else if(r instanceof Authentication){
-					Authentication auth = (Authentication) r;
-					if(auth.confirmation == 0){
-						System.out.println("Login failed. Try again.");
-					}else{
-                        System.out.println("Authentication successful");
-                        loggedIn.getAndSet(true);
-                    }
-                    wait.notifyAuth();
+					auth = (Authentication) r;
+                    			wait.notifyAuth();
+				}else if(r instanceof Item){
+					item = (Item) r;
+					wait.notifyItem();
+				}else if(r instanceof Action){
+					action = (Action) r;
+					wait.notifyAction();
 				}
 
 			}catch(IOException e){

@@ -6,7 +6,6 @@ public class Item implements Serializable{
 	public int id;
 	public ArrayList<Comment> comments;
 	public ArrayList<KeyDecision> decisions;
-	public ArrayList<User> usersThatCommented;
 
 	private static final long serialVersionUID = 1L;
 	
@@ -15,6 +14,5 @@ public class Item implements Serializable{
 		this.id = id;
 		comments = new ArrayList<Comment>();
 		decisions = new ArrayList<KeyDecision>();
-		usersThatCommented = new ArrayList<User>();
 	}
 }
