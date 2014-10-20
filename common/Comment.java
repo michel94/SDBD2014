@@ -4,14 +4,14 @@ import java.util.Date;
 public class Comment implements Serializable{
 	public String text;
 	public int commentId;
-	public Date date;
-	public User user;
+	public String datetime;
+	public String user;
 	private static final long serialVersionUID = 1L;
 	
-	public Comment(String text, User user, int commentId, Date date){
+	public Comment(String text, String user, int commentId, String date){
 		this.text = text;
 		this.user= user;
 		commentId = commentId;
-		this.date = date;
+		this.datetime = date;
 	}
 }

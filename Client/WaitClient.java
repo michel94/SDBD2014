@@ -1,9 +1,11 @@
 public class WaitClient{
-	Object auth, meetings;
+	Object auth, meetings, meeting, item, action;
 	public WaitClient(){
 		auth = new Object();
 		meetings = new Object();
 		meeting = new Object();
+		item = new Object();
+		action = new Object();
 	}
 	private void wait(Object o){
 		synchronized(o) {
@@ -33,11 +35,23 @@ public class WaitClient{
 		notify(meetings);
 	}
 	
-	public void waitForMeeting(){
+	public void waitMeeting(){
 		wait(meeting);
 	}
 	public void notifyMeeting(){
 		notify(meeting);
+	}
+	public void waitItem(){
+		wait(item);
+	}
+	public void notifyItem(){
+		notify(item);
+	}
+	public void waitAction(){
+		wait(action);
+	}
+	public void notifyAction(){
+		notify(action);
 	}
 	
 
