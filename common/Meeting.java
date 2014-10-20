@@ -12,6 +12,7 @@ public class Meeting implements Serializable{
 	public Meeting(){
 		items = new ArrayList<Item>();
 		actions = new ArrayList<Action>();
+		id = 0;
 	}
 
 	public Meeting(String title, int id){

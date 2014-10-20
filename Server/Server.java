@@ -103,9 +103,11 @@ public class Server{
 
 				new InputThread(clientSocket, clientNumber, opipeout);
 				new OutputThread(clientSocket, clientNumber, opipein, database, clients);
+				clients.put(clientNumber, new ClientData(opipeout, opipein));
+
 				clientNumber++;
 				
-				clients.put(clientNumber, new ClientData(opipeout, opipein));
+				
 			}
 		}catch(IOException e)
 		

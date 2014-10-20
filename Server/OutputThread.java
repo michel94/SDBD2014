@@ -63,9 +63,20 @@ public class OutputThread implements Runnable {
 						System.out.println( ((Meeting)r).title);
 					}
 				}
-				if(req instanceof Authentication){
+				if(req instanceof Authentication){ //A ideia do Rui de devolver a classe com um campo alterado pode ser usada no resto, por exemplo ao fazer um add, completa-se os campos
 					System.out.println("Trying to login");
 					r = database.login((Authentication)req);
+				}
+				if(req instanceof Meeting){
+					Meeting m = (Meeting) req;
+					if(m.id == 0){
+						boolean result = database.insertMeeting(m);
+						if(!result)
+							return false;
+						broadcastMessage(m, "meetings");
+					}else{
+						boolean result = database.updateMeeting(m);
+					}
 				}
 
 				if(r != null){
