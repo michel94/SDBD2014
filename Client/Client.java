@@ -26,9 +26,6 @@ public class Client{
 
 		Notify.init("Hello World");
 
-		/*Notification hello = new Notification("Hello world!", "This is an example notification.", "dialog-information");
-		hello.show();*/
-
 		System.out.println("Client started");
 		
 		connect();
@@ -273,7 +270,7 @@ public class Client{
 
 		print("Which meeting do you want to consult? Write its number:");
 		
-		r = new Request("meeting",ms.get( readInt(1,ms.size())-1 ).id);
+		r = new Request("meeting",ms.get(readInt(0,ms.size())).idmeeting);
 		writeObject(r);
 		wait.waitMeeting();
 		Meeting m = lt.meeting;
@@ -347,7 +344,7 @@ public class Client{
 
 		print("Which action do you want to consult? Write its number:");
 	
-		r = new Request("action",m.actions.get(readInt(0,m.actions.size())).id);
+		r = new Request("action",m.actions.get(readInt(0,m.actions.size())).idaction);
 		writeObject(r);
 		wait.waitAction();
 	}

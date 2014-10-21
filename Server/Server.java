@@ -32,7 +32,7 @@ public class Server{
 
 		UdpConnection u = new UdpConnection(second);
 
-		
+
 		if(second){
 			try{
 				System.out.println("Waiting");
@@ -66,7 +66,7 @@ public class Server{
 				}catch(RemoteException e){
 					System.out.println("Remote exception. Retrying connection in 10 seconds.");
 					retries++;
-					Thread.sleep(10000);	
+					Thread.sleep(10000);
 				}
 			}
 		}catch(InterruptedException ex) {
@@ -101,8 +101,7 @@ public class Server{
 				opipeout = new ObjectOutputStream(new DataOutputStream(pipeout));
 				opipein = new ObjectInputStream(new DataInputStream(pipein));
 
-				new InputThread(clientSocket, clientNumber, opipeout, clients);
-				new OutputThread(clientSocket, clientNumber, opipein, database, clients);
+				new ClientThread(clientSocket, clientNumber, database, clients);
 				clients.put(clientNumber, new ClientData(opipeout, opipein));
 
 				clientNumber++;
