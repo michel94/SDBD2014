@@ -22,30 +22,81 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","");
-		stmt = connection.createStatement();
+		connection = DriverManager.getConnection(url,"root","toor");
 		System.out.println("Connected");
 		
 		//addMeeting("asd", "asdad", "2014-03-03 00:00:00", "coimbra", 1);
-	}
-
-	public void register(){
-		try{
-			host = getClientHost();
-		}catch(Exception e){;}
+		/*Meeting meeting = getMeeting(1);
+		System.out.println(meeting.items.get(1).title);*/
 	}
 
 	private ResultSet executeQuery(String q){
 		try{
 			System.out.println(q);
-			return stmt.executeQuery(q);
+			Statement st = connection.createStatement();
+			return st.executeQuery(q);
 		}catch(SQLException e){
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	@Override
+
+	public Meeting getMeeting(int idmeeting)
+	{
+		Meeting meeting = null;
+		try
+		{
+			ResultSet rs = executeQuery("SELECT * FROM meeting WHERE idmeeting="+idmeeting+" AND active=1;");
+			if(rs.next())
+			{
+				meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
+				meeting.description = rs.getString("description");
+				meeting.created_datetime = rs.getString("created_datetime");
+
+				//--- Obter user do leader ---
+				rs = executeQuery("SELECT iduser, username FROM user WHERE iduser="+rs.getInt("leader")+" AND active=1;");
+				if(rs.next())
+				{
+					User user = new User(rs.getInt("iduser"), rs.getString("username"));
+					meeting.leader = user;
+				}
+
+				//--- Obter items ---
+				rs = executeQuery("SELECT iditem, title, description FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");	
+				while(rs.next())
+				{
+					Item item = new Item(rs.getInt("iditem"), rs.getString("title"));
+					meeting.items.add(item);
+				}
+
+				//--- Obter actions ---
+				rs = executeQuery("SELECT * FROM action WHERE meeting="+meeting.idmeeting+" AND active=1;");	
+				while(rs.next())
+				{
+					Action action = new Action(rs.getInt("idaction"), rs.getString("due_to"), null, rs.getInt("done"), meeting, rs.getInt("active"));
+
+					ResultSet subrs = executeQuery("SELECT iduser, username FROM user WHERE iduser="+rs.getInt("assigned_user")+" AND active=1;");
+					if(subrs.next())
+					{
+						User user_of_action = new User(subrs.getInt("iduser"), subrs.getString("username"));
+						action.assigned_user = user_of_action;
+					}
+
+					meeting.actions.add(action);
+				}
+			}
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Mysql error");
+			e.printStackTrace();
+		}
+		
+		return meeting;
+	}
+
+@Override
 	public Meetings getMeetings(){
 		System.out.println("OK");
 		Meetings res = new Meetings();
@@ -62,32 +113,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 		
 		return res;
-	}
-
-	public Meeting getMeeting(Request r){
-		Meeting m = new Meeting();
-
-		try{
-			ResultSet rs = executeQuery("select idmeeting,title from meeting where idmeeting=" + r.id + ";");
-			rs.next(); //Isto tem mesmo de estar aqui!!
-			
-			m.id = rs.getInt("idmeeting");
-			m.title = rs.getString("title");
-			System.out.println("title: " + m.title + " id: " + m.id);
-			
-			rs = executeQuery("select title,iditem from item where meeting=" + r.id);
-			
-			while(rs.next()){
-				Item item = new Item(rs.getString("title"), rs.getInt("iditem"));
-
-				m.items.add(item);
-			}
-		}catch(SQLException e){
-			System.out.println("Mysql error");
-			e.printStackTrace();
-		}
-		
-		return m;
 	}
 
 	public Meeting insertMeeting(Meeting m, User u) {
@@ -110,26 +135,19 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return true;
 	}
 
-	public static void main(String[] args) throws RemoteException, SQLException {
-		DatabaseInterface di = new Database();
-		LocateRegistry.createRegistry(1099).rebind("database", di);
 
-		
-		System.out.println("Database ready...");
-	}
+		private User readUser(ResultSet rs){
+			User u = null;
+			try{
+				rs.next();
+				u = new User(rs.getInt("iduser"), rs.getString("username"));
+				u.password = rs.getString("password");
 
-	private User readUser(ResultSet rs){
-		User u = null;
-		try{
-			rs.next();
-			u = new User(rs.getInt("iduser"), rs.getString("username"));
-			u.password = rs.getString("password");
-
-		}catch(SQLException e){
-			e.printStackTrace();
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+			return u;
 		}
-		return u;
-	}
 
 	public Authentication login(Authentication aut){
 		String query = "select * from user where username='" + aut.username + "' and password='" + aut.password + "'";
@@ -144,4 +162,17 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	}
 
+	public static void main(String[] args) throws RemoteException, SQLException {
+		DatabaseInterface di = new Database();
+		LocateRegistry.createRegistry(1099).rebind("database", di);
+
+		
+		System.out.println("Database ready...");
+	}
+
+	/*public void register(){
+		try{
+			host = getClientHost();
+		}catch(Exception e){;}
+	}*/
 }

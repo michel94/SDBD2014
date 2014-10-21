@@ -2,9 +2,9 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.gnome.gtk.Gtk;
-import org.gnome.notify.Notify;
-import org.gnome.notify.Notification;
+//import org.gnome.gtk.Gtk;
+//import org.gnome.notify.Notify;
+//import org.gnome.notify.Notification;
 
 public class Client{
 	private int serverPort = 6000, clientID=0;
@@ -21,9 +21,9 @@ public class Client{
 	
 	public Client(){
 
-		Notify.init("Hello World");
-		Notification hello = new Notification("Hello world!", "This is an example notification.", "dialog-information");
-        hello.show();
+		//Notify.init("Hello World");
+		//Notification hello = new Notification("Hello world!", "This is an example notification.", "dialog-information");
+        //hello.show();
 
 		System.out.println("Client started");
 		
@@ -52,7 +52,7 @@ public class Client{
 	}
 	public static void main(String[] args){
 		String[] a = new String[0];
-		Gtk.init(a);
+		//Gtk.init(a);
 		Client client = new Client();
 		
 	}
@@ -189,7 +189,7 @@ public class Client{
 				Meetings ms = lt.meetings;
 				print("Which meeting do you want to consult? Write its number:");
 				
-				r = new Request("meeting",ms.get(readInt(0,ms.size())).id);
+				r = new Request("meeting",ms.get(readInt(0,ms.size())).idmeeting);
 				writeObject(r);
 				wait.waitMeeting();
 				Meeting m = lt.meeting;
@@ -204,7 +204,7 @@ public class Client{
 				print("\nAction:");
 				for(int i=0; i<m.actions.size();i++){
 					System.out.print(i + ": " + m.actions.get(i).description);
-					if(m.actions.get(i).status==0){
+					if(m.actions.get(i).done==0){
 						print(" Status: Pending");				
 					}else print(" Status: Done");
 				}
@@ -252,7 +252,7 @@ public class Client{
 				else if(lt.context.equals("ConsultAction")){
 					print("Which action do you want to consult? Write its number:");
 				
-					r = new Request("action",m.actions.get(readInt(0,m.actions.size())).id);
+					r = new Request("action",m.actions.get(readInt(0,m.actions.size())).idaction);
 					writeObject(r);
 					wait.waitAction();
 				}

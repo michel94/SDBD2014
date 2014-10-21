@@ -60,7 +60,7 @@ public class OutputThread implements Runnable {
 						r = database.getMeetings();
 						System.out.println("Obtained meetings");
 					}else if(rq.type.equals("meeting")){
-						r = database.getMeeting((Request)rq);
+						r = database.getMeeting(((Request)rq).id);
 						System.out.println( ((Meeting)r).title);
 					}
 				}
@@ -73,7 +73,7 @@ public class OutputThread implements Runnable {
 				
 				if(req instanceof Meeting){
 					Meeting m = (Meeting) req;
-					if(m.id == 0){
+					if(m.idmeeting == 0){
 						Meeting result = database.insertMeeting(m, clients.get(clientId).userData);
 						if(result != null)
 							broadcastMessage(result, "meetings", 0);
