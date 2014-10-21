@@ -99,6 +99,7 @@ public class ClientThread implements Runnable {
 				}else if(data instanceof Comment){
 					Comment com = (Comment) data;
 					if(com.commentId == 0){
+						System.out.println("Received Comment");
 						Comment result = database.insertComment(com, userData);
 						if(result != null){
 							broadcastMessage(result, "comment", com.item.id);
@@ -149,6 +150,7 @@ public class ClientThread implements Runnable {
 			if(cd.userData != null)
 				try{
 					cd.out.writeObject(message);
+					System.out.println("Wrote to client");
 				}catch(IOException e){System.out.println("IO Exception"); e.printStackTrace();}
 			/*if(cd.context.equals(context) && cd.contextId == contextId)
 				cd.out.writeObject(message);*/

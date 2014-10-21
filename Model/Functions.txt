@@ -1,5 +1,5 @@
 getMeetings - gets all meetings
-	addMeeting - creates new meeting, with all its data
+	ainsertMeeting - creates new meeting, with all its data
 		getAllUsers - list all users
 		addUser - adds user to the meeting
 	getMeeting - get meeting information, including users and groups
@@ -9,7 +9,7 @@ getMeetings - gets all meetings
 		addUser - *
 		addGroup - adds group to the meeting
 			getAllGroups - gets all groups, to be added to the meeting
-		updateInformation - updates modifiable information about the meeting, including finish the meeting
+		updateMeeting - updates modifiable information about the meeting, including finish the meeting
 
 	deleteMeeting - deletes a meeting
 
@@ -26,4 +26,11 @@ getFinishedMeetings - gets all finished meetings
 
 
 -> add invites to the database
+
+
+MEETINGS
+	insertMeeting
+	getMeeting
+	updateMeeting
+	deleteMeeting
 

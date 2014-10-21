@@ -7,34 +7,26 @@ import org.gnome.notify.Notify;
 import org.gnome.notify.Notification;
 
 public class Client{
-	private ServerData server1, server2, serverData;
+	private ListenerThread lt;
 
 	private int clientID=0;
-	private Socket socket;
-	private ObjectInputStream ois;
-	private ObjectOutputStream oos;
 	private BufferedReader in;
-	private ListenerThread lt;
-	private AtomicBoolean loggedIn = new AtomicBoolean(false);
-	
-	public WaitClient wait = new WaitClient();
+	private boolean loggedIn = false;
+	public WaitClient wait;
 	
 	public Client(){
-		server1 = new ServerData("127.0.0.1", 6000);
-		server2 = new ServerData("127.0.0.1", 6001);
-		serverData = server1;
-
+		
 		Notify.init("Hello World");
 
-		System.out.println("Client started");
 		
-		connect();
+		print("Welcome.");
 
 		in = new BufferedReader(new InputStreamReader(System.in));
-		
-		System.out.println("Welcome.");
+		lt = new ListenerThread();
 
-		while(!loggedIn.get()){
+		wait = lt.wait;
+
+		while(!loggedIn){
 			login();
 		}
 
@@ -71,65 +63,19 @@ public class Client{
 		}
 	}
 
-	public void connect(){
-		
-		int tries = 0;
-		while(tries < 3){
-			print("Try: "+tries);
-			try{
-				socket = new Socket(serverData.ip, serverData.port);
-				DataInputStream in = new DataInputStream(socket.getInputStream());
-				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-				ois = new ObjectInputStream(in);
-				oos = new ObjectOutputStream(out);
-				lt = new ListenerThread(ois, loggedIn, wait);
-				return;
-			}catch(IOException e){
-				tries++;
-				try{Thread.sleep(2000);
-				}catch(InterruptedException ex){;}
-			}
-			
-		}
-
-		Notification error = new Notification("Connection error", "The main server is down. Connecting to secondary server.", "dialog-information");
-		error.show();
-		
-		if(serverData == server1)
-			serverData = server2;
-		else
-			serverData = server1;
-
-		tries = 0;
-		while(tries < 3){
-			try{
-				socket = new Socket(serverData.ip, serverData.port);
-				DataInputStream in = new DataInputStream(socket.getInputStream());
-				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-				ois = new ObjectInputStream(in);
-				oos = new ObjectOutputStream(out);
-				lt = new ListenerThread(ois, loggedIn, wait);
-				return;
-			}catch(IOException e){
-				tries++;
-				try{Thread.sleep(2000);
-				}catch(InterruptedException ex){;}
-			}
-			
-		}
-
-		error = new Notification("Connection error", "Both servers are down. Try again later", "dialog-information");
-		error.show();
-
-		System.out.println("Error! Could not connect to the server.");
-		System.exit(0);
-				
-	}
-
 	public void writeObject(Object r){
-		try{
-			oos.writeObject(r);
-		}catch(IOException e){;}
+		while(true){
+			try{
+				lt.oos.writeObject(r);
+				return;
+			}catch(IOException e){
+				Notification error = new Notification("Socket error", "Broken pipe.", "error-information");
+				error.show();
+
+				wait.notifyReconnect();
+				wait.waitForAuth();
+			}
+		}
 	}
 
 	protected void inputHandler(){
@@ -267,6 +213,7 @@ public class Client{
 		int sel;
 		Request r;
 		Meetings ms=lt.meetings;
+
 		Meeting m = lt.meeting;
 		clear();
 		print("Title: "+m.title);
@@ -397,6 +344,7 @@ public class Client{
 				break;
 
 		}
+
 		
 	}
 
@@ -432,56 +380,54 @@ public class Client{
 	protected void login(){
 		int sel;
 		clear();
-		while(true){
-			try{
-				String s = null;
-				print("Welcome to Meeto! Would you like to:");
-				print("1-Login");
-				print("2-Register account");
-				print("3-Exit");
-				
-				sel = readInt(1,3);
-				switch(sel){
-					case 1:
-						System.out.println("Please write your username and password separated by a space.");
-				
-						s = readString();
-
-						String[] words = s.split(" ");
-						Authentication auth = new Authentication(words[0],words[1]);
-						try{
-							oos.writeObject((Object)auth);
-						}catch(IOException e){
-							connect();
-							System.out.println("IO Exception while sending authentication input.");
-						}
-						wait.waitForAuth();
-						auth=lt.auth;
-						if(auth.confirmation == 0){
-							clear();
-							System.out.println("Login failed. Try again.");
-						}else{
-							clear();
-							System.out.println("Authentication successful");
-							clientID = auth.clientID;
-							loggedIn.getAndSet(true);
-							return;
-						}
-					break;
-					case 2:
-						print("Not yet implemented");
-					break;
-					case 3:
-						System.exit(0);
-					break;
-				}
-					
-			}catch(Exception ex){;}
-				
+		try{
+			String s = null;
+			print("Welcome to Meeto! Would you like to:");
+			print("1-Login");
+			print("2-Register account");
+			print("3-Exit");
 			
-		}
+			sel = readInt(1,3);
+			switch(sel){
+				case 1:
+					System.out.println("Please write your username and password separated by a space.");
+			
+					s = readString();
 
+					String[] words = s.split(" ");
+					lt.auth = new Authentication(words[0],words[1]);
+					try{
+						lt.oos.writeObject((Object)lt.auth);
+					}catch(IOException e){
+						System.out.println("IO Exception while sending authentication input.");
+					}
+					wait.waitForAuth();
+
+					if(lt.auth.confirmation == 0){
+						//clear();
+						System.out.println("Login failed. Try again.");
+					}else{
+						//clear();
+						System.out.println("Authentication successful");
+						clientID = lt.auth.clientID;
+						loggedIn = true;
+						//return;
+					}
+					break;
+				case 2:
+					print("Not yet implemented");
+					break;
+				case 3:
+					System.exit(0);
+					break;
+			}
+				
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}				
+		
 	}
+
 	public void groupsMenu(){
 		int sel;
 		Request r;
@@ -529,6 +475,7 @@ public class Client{
 		}
 			
 	}
+
 	public void clear(){
 		System.out.print("\033[H\033[2J");
 	}
