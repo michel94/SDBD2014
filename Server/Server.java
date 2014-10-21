@@ -94,15 +94,8 @@ public class Server{
 			while(true){
 				clientSocket = listenSocket.accept();
 
-				// create communication between client thread and server thread
-				PipedOutputStream pipeout = new PipedOutputStream();
-				PipedInputStream pipein = new PipedInputStream(pipeout);
-				
-				opipeout = new ObjectOutputStream(new DataOutputStream(pipeout));
-				opipein = new ObjectInputStream(new DataInputStream(pipein));
-
+				clients.put(clientNumber, new ClientData(null, null));
 				new ClientThread(clientSocket, clientNumber, database, clients);
-				clients.put(clientNumber, new ClientData(opipeout, opipein));
 
 				clientNumber++;
 
