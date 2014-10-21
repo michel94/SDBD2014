@@ -32,7 +32,7 @@ public class Server{
 
 		UdpConnection u = new UdpConnection(second);
 
-
+		
 		if(second){
 			try{
 				System.out.println("Waiting");
