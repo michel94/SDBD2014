@@ -23,13 +23,16 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","");
+		connection = DriverManager.getConnection(url,"root","toor");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 
 		//addMeeting("asd", "asdad", "2014-03-03 00:00:00", "coimbra", 1);
 		/*Meeting meeting = getMeeting(1);
 		System.out.println(meeting.items.get(1).title);*/
+
+		Meetings teste = getMeetings(3);
+		System.out.println(teste.get(1).title);
 	}
 
 	private ResultSet executeQuery(String q){
@@ -52,21 +55,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 			return 0;
 		}
-	}
-
-	public Item getItem(int id){
-		Item it = null;
-		
-		try{
-			ResultSet rs = executeQuery("SELECT * FROM item where iditem=" + id);
-			if(rs.next())
-				it = new Item(rs.getInt("iditem"), rs.getString("title"), rs.getString("description"), rs.getInt("user"), rs.getInt("meeting"));
-			
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-
-		return it;
 	}
 
 	public Meeting getMeeting(int idmeeting){
@@ -118,28 +106,28 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		{
 			System.out.println("Mysql error");
 			e.printStackTrace();
+			return null;
 		}
 		
 		return meeting;
 	}
 
-	public Meetings getMeetings(){
-		System.out.println("OK");
-		Meetings res = new Meetings();
-		
-		ResultSet rs = executeQuery("SELECT idmeeting, title, datetime FROM meeting");
+	public Meetings getMeetings(int iduser){
+		Meetings meetings = new Meetings();
+
 		try{
-			while(rs.next()){
-				Meeting m = new Meeting(rs.getString("title"), rs.getInt("idmeeting"));
-				m.datetime = rs.getTimestamp("datetime").toString();
-				res.add(m);
+			ResultSet rs = executeQuery("SELECT m.* FROM meeting as m, meeting_user as mu WHERE mu.user = "+ iduser +" AND mu.meeting = m.idmeeting AND m.active = 1");
+			while(rs.next())
+			{
+				Meeting meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
+				meetings.add(meeting);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
 			return null;
 		}
 		
-		return res;
+		return meetings;
 	}
 
 	public Meeting insertMeeting(Meeting m, User u) {
@@ -179,6 +167,21 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		executeUpdate(query);
 
 		return com;
+	}
+
+	public Item getItem(int id){
+		Item it = null;
+		
+		try{
+			ResultSet rs = executeQuery("SELECT * FROM item where iditem=" + id);
+			if(rs.next())
+				it = new Item(rs.getInt("iditem"), rs.getString("title"), rs.getString("description"), rs.getInt("user"), rs.getInt("meeting"));
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+
+		return it;
 	}
 
 	/*public Comment updateComment(Comment com, User u){

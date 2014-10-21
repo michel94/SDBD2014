@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.Calendar;
 
 public interface DatabaseInterface extends Remote{
-	public Meetings getMeetings() throws RemoteException;
+	public Meetings getMeetings(int iduser) throws RemoteException;
 	public Meeting getMeeting(int idmeeting) throws RemoteException;
 	public Item getItem(int id) throws RemoteException;
 	
