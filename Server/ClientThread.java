@@ -14,21 +14,22 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Iterator;
 
-public class OutputThread implements Runnable {
+public class ClientThread implements Runnable {
 	Thread t;
 	Socket clientSocket;
 	int clientId;
 	DatabaseInterface database;
 	
-	ObjectInputStream threadIn;
+	ObjectInputStream in;
 	ObjectOutputStream out;
 	ConcurrentHashMap<Integer, ClientData> clients;
 
-	public OutputThread(Socket c, int n, ObjectInputStream is, DatabaseInterface database, ConcurrentHashMap<Integer, ClientData> clients){
-		t = new Thread(this, "out");
+	public ClientThread(Socket socket, int n, DatabaseInterface database, ConcurrentHashMap<Integer, ClientData> cl){
+		t = new Thread(this, "clientThread");
+
+		clientSocket = socket;
 		clientId = n;
-		clientSocket = c;
-		threadIn = is;
+		clients = cl;
 		this.database = database;
 		this.clients = clients;
 
@@ -43,13 +44,18 @@ public class OutputThread implements Runnable {
 			DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 			out = new ObjectOutputStream(dos);
 			clients.get(clientId).out = out;
+
+			DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
+			in = new ObjectInputStream(dis);
+			clients.get(clientId).in = in;
+
 		} catch (IOException e) {
 			System.out.println("Error:IO Exception while answering request of client "+clientId +".");
 		}
 		
 		while(true){
 			try {
-				Object req = (Object) threadIn.readObject();
+				Object req = (Object) in.readObject();
 
 				Object r = null;
 				
@@ -60,7 +66,8 @@ public class OutputThread implements Runnable {
 						r = database.getMeetings();
 						System.out.println("Obtained meetings");
 					}else if(rq.type.equals("meeting")){
-						r = database.getMeeting(((Request)rq).id);
+						int id = ((Request)rq).id;
+						r = database.getMeeting(id);
 						System.out.println( ((Meeting)r).title);
 					}
 				}

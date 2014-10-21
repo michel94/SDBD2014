@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 public class Action implements Serializable{
+
 	public String due_to, description, created_datetime;
 	public int done,idaction, active; // 1-done, 0-not done
 	public Meeting meeting;

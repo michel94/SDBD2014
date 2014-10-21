@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 16, 2014 at 05:52 PM
+-- Generation Time: Oct 21, 2014 at 12:37 AM
 -- Server version: 5.5.38-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.3
 
@@ -32,18 +32,20 @@ CREATE TABLE IF NOT EXISTS `action` (
   `due_to` datetime NOT NULL,
   `assigned_user` int(11) NOT NULL,
   `done` tinyint(4) NOT NULL DEFAULT '0',
+  `meeting` int(11) NOT NULL,
   `created_datetime` datetime NOT NULL,
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idaction`),
-  KEY `fk_action_1_idx` (`assigned_user`)
+  KEY `fk_action_1_idx` (`assigned_user`),
+  KEY `fk_action_2_idx` (`meeting`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `action`
 --
 
-INSERT INTO `action` (`idaction`, `description`, `due_to`, `assigned_user`, `done`, `created_datetime`, `active`) VALUES
-(1, 'descricao da acçao', '2015-02-12 00:00:00', 6, 0, '2014-10-16 16:27:55', 1);
+INSERT INTO `action` (`idaction`, `description`, `due_to`, `assigned_user`, `done`, `meeting`, `created_datetime`, `active`) VALUES
+(1, 'descricao da acçao', '2015-02-12 00:00:00', 6, 0, 1, '2014-10-16 16:27:55', 1);
 
 -- --------------------------------------------------------
 
@@ -179,14 +181,17 @@ CREATE TABLE IF NOT EXISTS `meeting` (
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idmeeting`),
   KEY `fk_meeting_1_idx` (`leader`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `meeting`
 --
 
 INSERT INTO `meeting` (`idmeeting`, `title`, `description`, `datetime`, `location`, `leader`, `created_datetime`, `active`) VALUES
-(1, 'Reunião A', 'descricao da reuniao a', '2014-12-10 00:00:00', 'DEI', 3, '2014-10-14 00:00:00', 1);
+(1, 'Reunião A', 'descricao da reuniao a', '2014-12-10 00:00:00', 'DEI', 3, '2014-10-14 00:00:00', 1),
+(2, 'hjjhgh', 'jhgjhghg', '2014-10-16 00:00:00', 'dei', 4, '2014-10-16 17:38:54', 1),
+(3, 'asd', 'asdad', '2014-03-03 00:00:00', 'coimbra', 1, '2014-10-20 21:47:00', 1),
+(4, 'asd', 'asdad', '2014-03-03 00:00:00', 'coimbra', 1, '2014-10-20 21:54:00', 1);
 
 -- --------------------------------------------------------
 
@@ -266,14 +271,15 @@ INSERT INTO `user` (`iduser`, `username`, `password`, `created_datetime`, `activ
 -- Constraints for table `action`
 --
 ALTER TABLE `action`
-  ADD CONSTRAINT `fk_action_1` FOREIGN KEY (`assigned_user`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_action_1` FOREIGN KEY (`assigned_user`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_action_2` FOREIGN KEY (`meeting`) REFERENCES `meeting` (`idmeeting`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `comment`
 --
 ALTER TABLE `comment`
-  ADD CONSTRAINT `fk_comment_2` FOREIGN KEY (`item`) REFERENCES `item` (`iditem`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_comment_1` FOREIGN KEY (`user`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_comment_1` FOREIGN KEY (`user`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_comment_2` FOREIGN KEY (`item`) REFERENCES `item` (`iditem`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `group_user`
@@ -286,8 +292,8 @@ ALTER TABLE `group_user`
 -- Constraints for table `item`
 --
 ALTER TABLE `item`
-  ADD CONSTRAINT `fk_item_2` FOREIGN KEY (`meeting`) REFERENCES `meeting` (`idmeeting`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_item_1` FOREIGN KEY (`user`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_item_1` FOREIGN KEY (`user`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_item_2` FOREIGN KEY (`meeting`) REFERENCES `meeting` (`idmeeting`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `keydecision`
