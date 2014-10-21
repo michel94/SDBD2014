@@ -55,47 +55,68 @@ public class ClientThread implements Runnable {
 		
 		while(true){
 			try {
-				Object req = (Object) in.readObject();
+				Object data = (Object) in.readObject();
 
 				Object r = null;
-				
-				if(req instanceof Request){
-					Request rq = (Request) req;
-					if(rq.type.equals("meetings")){
-						System.out.println("Getting meetings");
+				User userData = clients.get(clientId).userData;
+
+				if(data instanceof Request){
+					Request req = (Request) data;
+					int id = ((Request)req).id;
+
+					if(req.type.equals("meetings")){
 						r = database.getMeetings();
-						System.out.println("Obtained meetings");
-					}else if(rq.type.equals("meeting")){
-						int id = ((Request)rq).id;
+					}else if(req.type.equals("meeting")){
 						r = database.getMeeting(id);
 						System.out.println( ((Meeting)r).title);
+					}else if(req.type.equals("item")){
+						r = database.getItem(id);
 					}
 				}
-				if(req instanceof Authentication){ //A ideia do Rui de devolver a classe com um campo alterado pode ser usada no resto, por exemplo ao fazer um add, completa-se os campos
-					System.out.println("Trying to login");
-					r = database.login((Authentication)req);
+				else if(data instanceof Authentication){ //A ideia do Rui de devolver a classe com um campo alterado pode ser usada no resto, por exemplo ao fazer um add, completa-se os campos
+					r = database.login((Authentication)data);
 					clients.get(clientId).userData = ((Authentication)r).userData;
 				}
-
-				
-				if(req instanceof Meeting){
-					Meeting m = (Meeting) req;
+				else if(data instanceof Meeting){
+					Meeting m = (Meeting) data;
 					if(m.idmeeting == 0){
-						Meeting result = database.insertMeeting(m, clients.get(clientId).userData);
+						Meeting result = database.insertMeeting(m, userData);
 						if(result != null)
-							broadcastMessage(result, "meetings", 0);
+							broadcastMessage(result, "meeting", 0);
 					}else{
-						//boolean result = database.updateMeeting(m);
+						//Meeting result = database.updateMeeting(m, userData);
+					}
+				}else if(data instanceof Item){
+					Item it = (Item) data;
+					if(it.id == 0){
+						Item result = database.insertItem(it, userData);
+						if(result != null){
+							broadcastMessage(result, "item", it.meeting);
+						}
+					}else{
+						//Item result = database.updateItem(it, userData);
+					}
+				}else if(data instanceof Comment){
+					Comment com = (Comment) data;
+					if(com.commentId == 0){
+						Comment result = database.insertComment(com, userData);
+						if(result != null){
+							broadcastMessage(result, "comment", com.item.id);
+						}
+					}else{
+						//Comment result = database.updateComment(com, userData);
 					}
 				}
+
 
 				if(r != null){
 					out.writeObject(r);
-					if(req instanceof Request)
+					if(data instanceof Request){
+						Request req = (Request) data;
 						System.out.println("Wrote " + ((Request)req).type + " to client " + clientId);
-				}/*else{
-					System.out.println("Error accessing RMI");
-				}*/
+					}
+				}
+
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error: Class not found while reading pipe of client "+clientId +".");
 			} catch (IOException e) {

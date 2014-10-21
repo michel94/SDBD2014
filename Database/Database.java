@@ -41,9 +41,22 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 	}
 
+	public Item getItem(int id){
+		Item it = null;
+		
+		try{
+			ResultSet rs = executeQuery("SELECT * FROM item where iditem=" + id);
+			if(rs.next())
+				it = new Item(rs.getInt("iditem"), rs.getString("title"), rs.getString("description"), rs.getInt("user"), rs.getInt("meeting"));
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 
-	public Meeting getMeeting(int idmeeting)
-	{
+		return it;
+	}
+
+	public Meeting getMeeting(int idmeeting){
 		Meeting meeting = null;
 		try
 		{
@@ -68,6 +81,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				{
 					Item item = new Item(rs.getInt("iditem"), rs.getString("title"));
 					meeting.items.add(item);
+					System.out.println("item");
 				}
 
 				//--- Obter actions ---
@@ -96,7 +110,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return meeting;
 	}
 
-@Override
 	public Meetings getMeetings(){
 		System.out.println("OK");
 		Meetings res = new Meetings();
@@ -130,6 +143,31 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 	}
 
+	public Meeting updateMeeting(Meeting m, User u){
+
+
+		return m;
+	}
+
+	public Item insertItem(Item it, User u){
+
+		return it;
+	}
+
+	public Item updateItem(Item it, User u){
+
+		return it;
+	}
+
+	public Comment insertComment(Comment com, User u){
+
+		return com;
+	}
+
+	/*public Comment updateComment(Comment com, User u){
+		
+	}*/
+
 	public boolean stonith(){
 		banned = true;
 		return true;
@@ -138,8 +176,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		private User readUser(ResultSet rs){
 			User u = null;
+			
 			try{
-				rs.next();
 				u = new User(rs.getInt("iduser"), rs.getString("username"));
 				u.password = rs.getString("password");
 
@@ -153,13 +191,18 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		String query = "select * from user where username='" + aut.username + "' and password='" + aut.password + "'";
 
 		ResultSet rs = executeQuery(query);
-		aut.userData = readUser(rs);
-		System.out.println(aut.userData.username);
 
-		aut.confirm(aut.userData.id);
+		try{
+			if(rs.next()){
+				aut.userData = readUser(rs);
+				System.out.println(aut.userData.username);
+				aut.confirm(aut.userData.id);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 
 		return aut;
-
 	}
 
 	public static void main(String[] args) throws RemoteException, SQLException {

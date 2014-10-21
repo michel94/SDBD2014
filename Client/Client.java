@@ -270,7 +270,7 @@ public class Client{
 
 		print("Which meeting do you want to consult? Write its number:");
 		
-		r = new Request("meeting",ms.get(readInt(0,ms.size())).idmeeting);
+		r = new Request("meeting",ms.get(readInt(1,ms.size())-1 ).idmeeting);
 		writeObject(r);
 		wait.waitMeeting();
 		Meeting m = lt.meeting;
@@ -280,14 +280,14 @@ public class Client{
 		print("Location: "+m.location);
 		print("\nItems:");
 		for(int i=0; i<m.items.size();i++){
-			print(i + ": " + m.items.get(i).title);
+			print(i+1 + " - " + m.items.get(i).title);
 		}
 		print("\nAction:");
 		for(int i=0; i<m.actions.size();i++){
-			System.out.print(i + ": " + m.actions.get(i).description);
+			System.out.print(i+1 + " - " + m.actions.get(i).description);
 			if(m.actions.get(i).done == 0){
-				print(" Status: Pending");				
-			}else print(" Status: Done");
+				System.out.print(" Status: Pending");
+			}else System.out.print(" Status: Done");
 		}
 		print("");
 
@@ -317,7 +317,7 @@ public class Client{
 
 		print("Which item do you want to consult? Write its number:");
 		
-		r = new Request("item",m.items.get(readInt(0,m.items.size())).id);
+		r = new Request("item",m.items.get(readInt(1,m.items.size())-1 ).id);
 		writeObject(r);
 		wait.waitItem();
 		Item it = lt.item;
@@ -330,6 +330,24 @@ public class Client{
 		for (int i=0;i<it.comments.size();i++){
 			print(it.comments.get(i).datetime+" "+ it.comments.get(i).user+": "+ it.comments.get(i).text);
 		}
+
+		print("What do you want to do?");
+		print("1 - Comment on this item");
+		print("2 - Delete this item");
+		print("3 - Add Key Decision");
+
+		sel = readInt(1,3);
+
+		switch(sel){
+			case 1:
+				String s = readString();
+				Object com = new Comment(s, lt.item);
+				writeObject(com);
+				break;
+
+		}
+
+		
 		
 		//Comentar
 		//Apagar item||decision
@@ -344,7 +362,7 @@ public class Client{
 
 		print("Which action do you want to consult? Write its number:");
 	
-		r = new Request("action",m.actions.get(readInt(0,m.actions.size())).idaction);
+		r = new Request("action",m.actions.get(readInt(1,m.actions.size())-1 ).idaction);
 		writeObject(r);
 		wait.waitAction();
 	}
