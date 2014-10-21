@@ -14,14 +14,15 @@ public class ListenerThread implements Runnable{
 	public ObjectOutputStream oos;
 	
 	public String context = "";
-	
+		
+	public WaitClient wait;
 	public Authentication auth;
 	public Meetings meetings;
 	public Meeting meeting;
 	public Item item;
 	public Action action;
 	public Groups groups;
-	public Group group;	
+	public Group group;
 	
 
 	public ListenerThread(){

@@ -1,5 +1,4 @@
 public class WaitClient{
-<<<<<<< HEAD
 	Object auth, meetings, meeting, item, action, group, groups, reconnect;
 
 	public WaitClient(){
@@ -27,14 +26,14 @@ public class WaitClient{
 		}
 	}
 
-	public void waitForAuth(){
+	public void waitAuth(){
 		wait(auth);
 	}
 	public void notifyAuth(){
 		notify(auth);
 	}
 
-	public void waitForMeetings(){
+	public void waitMeetings(){
 		wait(meetings);
 	}
 	public void notifyMeetings(){
@@ -71,8 +70,9 @@ public class WaitClient{
 	}
 	public void notifyGroups(){
 		notify(groups);
+	}
 
-	public void waitForReconnect(){
+	public void waitReconnect(){
 		wait(reconnect);
 	}
 	public void notifyReconnect(){

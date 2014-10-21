@@ -73,7 +73,7 @@ public class Client{
 				error.show();
 
 				wait.notifyReconnect();
-				wait.waitForAuth();
+				wait.waitAuth();
 			}
 		}
 	}
@@ -142,7 +142,7 @@ public class Client{
 
 		r = new Request("meetings");
 		writeObject(r);
-		wait.waitForMeetings();
+		wait.waitMeetings();
 		Meetings ms = lt.meetings;
 		clear();
 		print("Meetings:");
@@ -401,7 +401,7 @@ public class Client{
 					}catch(IOException e){
 						System.out.println("IO Exception while sending authentication input.");
 					}
-					wait.waitForAuth();
+					wait.waitAuth();
 
 					if(lt.auth.confirmation == 0){
 						//clear();
@@ -434,7 +434,7 @@ public class Client{
 
 		r = new Request("groups");
 		writeObject(r);
-		wait.waitForGroups();
+		wait.waitGroups();
 		Groups gs = lt.groups;
 		clear();
 		print("Groups:");
