@@ -164,7 +164,7 @@ public class Client{
 	public void mainMenu(){
 		int sel;
 		Request r;
-
+		clear();
 		print("\n|   Meeto   |\n");
 		print("");
 		print("Main Menu");
@@ -199,10 +199,16 @@ public class Client{
 		int sel;
 		Request r;
 
-		/*for(int i=0; i<m.size(); i++){
-			print(i + ": " + m.get(i).title + ": "+m.get(i).datetime);
+		r = new Request("meetings");
+		writeObject(r);
+		wait.waitForMeetings();
+		Meetings ms = lt.meetings;
+		clear();
+		print("Meetings:");
+		for(int i=0; i<ms.size(); i++){
+			print(i+1 + " - "+ms.get(i).datetime + "  " + ms.get(i).title);
 		}
-		print("");*/
+		print("");
 
 		print("What do you want to do?");
 		print("1 - Schedule new meeting");
@@ -236,7 +242,7 @@ public class Client{
 		int sel;
 		Request r;
 		Meeting m = new Meeting();
-
+		clear();
 		print("Creating new meeting. Fill the following form:");
 		print("Title: ");
 		m.title = readString();
@@ -248,33 +254,25 @@ public class Client{
 		m.datetime = date + " " + readString();
 		print("Location: ");
 		m.location = readString();
-		
 		writeObject(m);
+		
 		lt.context = "Meetings";
 	}
 
 	public void consultMeetingMenu(){
 		int sel;
 		Request r;
+		Meetings ms=lt.meetings;
 		
 
-		r = new Request("meetings");
-		writeObject(r);
-		wait.waitForMeetings();
-		Meetings ms = lt.meetings;
-
-		print("Meetings:");
-		for(int i=0; i<ms.size(); i++){
-			print(i+1 + " - " + ms.get(i).title + ": "+ms.get(i).datetime);
-		}
-		print("");
-
+		if(ms.size() != 0){
 		print("Which meeting do you want to consult? Write its number:");
 		
 		r = new Request("meeting",ms.get(readInt(1,ms.size())-1 ).idmeeting);
 		writeObject(r);
 		wait.waitMeeting();
 		Meeting m = lt.meeting;
+		clear();
 		print("Title: "+m.title);
 		print("Description: "+m.description);
 		print("Date/Time: "+m.datetime);
@@ -291,7 +289,6 @@ public class Client{
 			}else System.out.print(" Status: Done");
 		}
 		print("");
-
 		print("What do you want to do?");
 		print("1 - Consult item details");
 		print("2 - Consult action details");
@@ -322,7 +319,7 @@ public class Client{
 		writeObject(r);
 		wait.waitItem();
 		Item it = lt.item;
-		
+		clear();
 		print("Key Decisions:");
 		for (int i=0;i<it.decisions.size();i++){
 			print(it.decisions.get(i).date+" "+ it.decisions.get(i).description);
@@ -368,6 +365,7 @@ public class Client{
 
 	protected void login(){
 		int sel;
+		clear();
 		while(true){
 			try{
 				String s = null;
@@ -376,7 +374,6 @@ public class Client{
 				print("2-Register account");
 				print("3-Exit");
 				
-
 				sel = readInt(1,3);
 				switch(sel){
 					case 1:
@@ -395,8 +392,10 @@ public class Client{
 						wait.waitForAuth();
 						auth=lt.auth;
 						if(auth.confirmation == 0){
+							clear();
 							System.out.println("Login failed. Try again.");
 						}else{
+							clear();
 							System.out.println("Authentication successful");
 							clientID = auth.clientID;
 							loggedIn.getAndSet(true);
@@ -416,6 +415,9 @@ public class Client{
 			
 		}
 
+	}
+	public void clear(){
+		System.out.print("\033[H\033[2J");
 	}
 	
 	public static void main(String[] args){

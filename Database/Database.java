@@ -26,7 +26,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		connection = DriverManager.getConnection(url,"root","");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
-		
+
 		//addMeeting("asd", "asdad", "2014-03-03 00:00:00", "coimbra", 1);
 		/*Meeting meeting = getMeeting(1);
 		System.out.println(meeting.items.get(1).title);*/
@@ -127,10 +127,11 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		System.out.println("OK");
 		Meetings res = new Meetings();
 		
-		ResultSet rs = executeQuery("SELECT idmeeting, title FROM meeting");
+		ResultSet rs = executeQuery("SELECT idmeeting, title, datetime FROM meeting");
 		try{
 			while(rs.next()){
 				Meeting m = new Meeting(rs.getString("title"), rs.getInt("idmeeting"));
+				m.datetime = rs.getTimestamp("datetime").toString();
 				res.add(m);
 			}
 		}catch(SQLException e){
