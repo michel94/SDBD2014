@@ -156,6 +156,8 @@ public class Client{
 			}else if(lt.context.equals("ConsultAction")){
 				consultActionMenu();
 
+			}else if(lt.context.equals("Groups")){
+				groupsMenu();
 			}
 
 		}
@@ -169,13 +171,6 @@ public class Client{
 		print("");
 		print("Main Menu");
 		print("");
-
-		
-		/*print("Your Groups");
-		r = new Request("groups");
-		oos.writeObject(r);
-		waitForMeetings();
-		print("");*/
 
 		print("What do you want to do?");
 		print("1 - Consult meetings");
@@ -211,31 +206,40 @@ public class Client{
 		print("");
 
 		print("What do you want to do?");
-		print("1 - Schedule new meeting");
-		print("2 - Consult meeting details");
+		print("1 - Consult meeting details");
+		print("2 - Schedule new meeting");
 		print("3 - Delete one of your meetings");
-		print("4 - Back");
-		sel = readInt(1, 4);
+		print("4 - Pending meeting invites");
+		print("5 - Back");
+		sel = readInt(1, 5);
 
 		switch(sel){
 			case 1:
-				lt.context = "NewMeeting";
+				if(ms.size()!=0){
+					print("Which meeting do you want to consult? Write its number:");
+		
+					r = new Request("meeting",ms.get(readInt(1,ms.size())-1 ).idmeeting);
+					writeObject(r);
+					wait.waitMeeting();
+					lt.context = "ConsultMeeting";
+				}
 				break;
 			case 2:
-				lt.context = "ConsultMeeting";
+				lt.context = "NewMeeting";
 				break;
 			case 3:
-				lt.context = "DeleteMeeting";
+				if(ms.size()!=0){
+					lt.context = "DeleteMeeting";
+				}
 				break;
 			case 4:
+				print("Not working yet");
+				lt.context = "Meetings";
+				break;
+			case 5:
 				lt.context = "Main";
 
-			//Edit meeting
 		}
-		/*Meetings m  = lt.meetings;
-		for(int i=0; i<m.size(); i++){
-			print(m.get(i).id + ": " + m.get(i).title);
-		}*/
 	}
 
 	public void newMeetingMenu(){
@@ -263,14 +267,6 @@ public class Client{
 		int sel;
 		Request r;
 		Meetings ms=lt.meetings;
-		
-
-		if(ms.size() != 0){
-		print("Which meeting do you want to consult? Write its number:");
-		
-		r = new Request("meeting",ms.get(readInt(1,ms.size())-1 ).idmeeting);
-		writeObject(r);
-		wait.waitMeeting();
 		Meeting m = lt.meeting;
 		clear();
 		print("Title: "+m.title);
@@ -285,24 +281,63 @@ public class Client{
 		for(int i=0; i<m.actions.size();i++){
 			System.out.print(i+1 + " - " + m.actions.get(i).description);
 			if(m.actions.get(i).done == 0){
-				System.out.print(" Status: Pending");
-			}else System.out.print(" Status: Done");
+				print(" Status: Pending");
+			}else print(" Status: Done");
 		}
 		print("");
 		print("What do you want to do?");
 		print("1 - Consult item details");
 		print("2 - Consult action details");
-		print("3 - Back");
-		sel = readInt(1, 3);
+		print("3 - Add item");
+		print("4 - Add action");
+		print("5 - Edit meeting details");
+		print("6 - Add user to meeting");
+		print("7 - Add group to meeting");
+		print("8 - Back");
+		sel = readInt(1, 8);
 
 		switch(sel){
 			case 1:
-				lt.context = "ConsultItem";
+				if(m.items.size()!=0){
+					print("Which item do you want to consult? Write its number:");
+		
+					r = new Request("item",m.items.get(readInt(1,m.items.size())-1 ).id);
+					writeObject(r);
+					wait.waitItem();
+					lt.context = "ConsultItem";
+				}
 				break;
-			case 2:
-				lt.context = "ConsultAction";
+			case 2:	
+				if(m.actions.size()!=0){
+					print("Which action do you want to consult? Write its number:");
+	
+					r = new Request("action",m.actions.get(readInt(1,m.actions.size())-1 ).idaction);
+					writeObject(r);
+					wait.waitAction();
+					lt.context = "ConsultAction";
+				}
 				break;
 			case 3:
+				print("Not working yet");
+				lt.context = "ConsultMeeting";
+				break;
+			case 4:
+				print("Not working yet");
+				lt.context = "ConsultMeeting";
+				break;
+			case 5: 
+				print("Not working yet");
+				lt.context = "ConsultMeeting";
+				break;
+			case 6: 
+				print("Not working yet");
+				lt.context = "ConsultMeeting";
+				break;
+			case 7: 
+				print("Not working yet");
+				lt.context = "ConsultMeeting";
+				break;
+			case 8:
 				lt.context = "Meetings";
 				break;
 		}
@@ -313,11 +348,7 @@ public class Client{
 		Request r;
 		Meeting m = lt.meeting;
 
-		print("Which item do you want to consult? Write its number:");
 		
-		r = new Request("item",m.items.get(readInt(1,m.items.size())-1 ).id);
-		writeObject(r);
-		wait.waitItem();
 		Item it = lt.item;
 		clear();
 		print("Key Decisions:");
@@ -333,8 +364,11 @@ public class Client{
 		print("1 - Comment on this item");
 		print("2 - Delete this item");
 		print("3 - Add Key Decision");
+		print("4 - Confirm Key Decision");
+		print("5 - Edit item description");
+		print("6 - Back");
 
-		sel = readInt(1,3);
+		sel = readInt(1,6);
 
 		switch(sel){
 			case 1:
@@ -342,14 +376,27 @@ public class Client{
 				Object com = new Comment(s, lt.item);
 				writeObject(com);
 				break;
+			case 2:
+				print("Not working yet.");
+				lt.context="ConsultItem";
+				break;
+			case 3:
+				print("Not working yet.");
+				lt.context="ConsultItem";
+				break;
+			case 4:
+				print("Not working yet.");
+				lt.context="ConsultItem";
+				break;
+			case 5:
+				print("Not working yet");
+				lt.context="ConsultItem";
+				break;			
+			case 6:
+				lt.context="ConsultMeeting";
+				break;
 
 		}
-
-		
-		
-		//Comentar
-		//Apagar item||decision
-		//update description||item||decision
 		
 	}
 
@@ -357,12 +404,29 @@ public class Client{
 		int sel;
 		Request r;
 		Meeting m = lt.meeting;
+		
+		print("What do you want to do?");
+		print("1 - Edit this action");
+		print("2 - Delete this action");
+		print("3 - Back");
 
-		print("Which action do you want to consult? Write its number:");
-	
-		r = new Request("action",m.actions.get(readInt(1,m.actions.size())-1 ).idaction);
-		writeObject(r);
-		wait.waitAction();
+		sel = readInt(1,3);
+
+		switch(sel){
+			case 1:
+				print("Not working yet.");
+				lt.context="ConsultAction";
+				break;
+			case 2:
+				print("Not working yet.");
+				lt.context="ConsultAction";
+				break;
+			case 3:
+				lt.context="ConsultMeeting";
+				break;
+		}
+
+
 	}
 
 	protected void login(){
@@ -417,6 +481,53 @@ public class Client{
 			
 		}
 
+	}
+	public void groupsMenu(){
+		int sel;
+		Request r;
+
+		r = new Request("groups");
+		writeObject(r);
+		wait.waitForGroups();
+		Groups gs = lt.groups;
+		clear();
+		print("Groups:");
+		for(int i=0; i<gs.size(); i++){
+			print(i+1 + " - "+gs.get(i).name);
+		print("");
+
+		print("What do you want to do?");
+		print("1 - Consult group users");
+		print("2 - Add new group");
+		print("3 - Delete one of your groups");
+		print("4 - Back");
+		sel = readInt(1, 4);
+
+		switch(sel){
+			case 1:
+				if(gs.size()!=0){
+					print("Which group do you want to consult? Write its number:");
+		
+					r = new Request("group",gs.get(readInt(1,gs.size())-1 ).idgroup);
+					writeObject(r);
+					wait.waitGroup();
+					lt.context = "ConsultGroup";
+				}
+				break;
+			case 2:
+				lt.context = "NewGroup";
+				break;
+			case 3:
+				if(gs.size()!=0){
+					lt.context = "DeleteGroup";
+				}
+				break;
+			case 4:
+				lt.context = "Main";
+
+			}
+		}
+			
 	}
 	public void clear(){
 		System.out.print("\033[H\033[2J");

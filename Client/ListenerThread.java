@@ -15,6 +15,8 @@ public class ListenerThread implements Runnable{
     	public Authentication auth;
     	public Item item;
     	public Action action;
+	public Groups groups;
+	public Group group;
 
 
 
