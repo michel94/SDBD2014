@@ -1,1 +1,1 @@
-java -cp ".:../common/:/usr/lib64/java-gnome/gtk.jar" Client
+java -cp ".:../common/:/usr/lib64/java-gnome/gtk.jar:/usr/share/java/gtk.jar" Client

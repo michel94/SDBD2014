@@ -75,6 +75,7 @@ public class Client{
 		
 		int tries = 0;
 		while(tries < 3){
+			print("Try: "+tries);
 			try{
 				socket = new Socket(serverData.ip, serverData.port);
 				DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -350,32 +351,52 @@ public class Client{
 	}
 
 	protected void login(){
+		int sel;
 		while(true){
 			try{
 				String s = null;
-				System.out.println("Please write your username and password separated by a space.");
-				
-				s = readString();
+				print("Welcome to Meeto! Would you like to:");
+				print("1-Login");
+				print("2-Register account");
+				print("3-Exit");
 
-				String[] words = s.split(" ");
-				Authentication auth = new Authentication(words[0],words[1]);
-				try{
-					oos.writeObject((Object)auth);
-				}catch(IOException e){
-					connect();
-					System.out.println("IO Exception while sending authentication input.");
+				sel = readInt(1,3);
+				switch(sel){
+					case 1:
+						System.out.println("Please write your username and password separated by a space.");
+				
+						s = readString();
+
+						String[] words = s.split(" ");
+						Authentication auth = new Authentication(words[0],words[1]);
+						try{
+							oos.writeObject((Object)auth);
+						}catch(IOException e){
+							connect();
+							System.out.println("IO Exception while sending authentication input.");
+						}
+						wait.waitForAuth();
+						auth=lt.auth;
+						if(auth.confirmation == 0){
+							System.out.println("Login failed. Try again.");
+						}else{
+							System.out.println("Authentication successful");
+							clientID = auth.clientID;
+							loggedIn.getAndSet(true);
+							return;
+						}
+					break;
+					case 2:
+						print("Not yet implemented");
+					break;
+					case 3:
+						System.exit(0);
+					break;
 				}
-				wait.waitForAuth();
-				auth=lt.auth;
-				if(auth.confirmation == 0){
-					System.out.println("Login failed. Try again.");
-				}else{
-					System.out.println("Authentication successful");
-					clientID = auth.clientID;
-					loggedIn.getAndSet(true);
-					return;
-				}
+					
 			}catch(Exception ex){;}
+				
+			
 		}
 
 	}
