@@ -31,8 +31,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		/*Meeting meeting = getMeeting(1);
 		System.out.println(meeting.items.get(1).title);*/
 
-		Meetings teste = getMeetings(3);
-		System.out.println(teste.get(1).title);
+		Meetings teste = getFinishedMeetings(3);
+		System.out.println(teste.get(0).title);
 	}
 
 	private ResultSet executeQuery(String q){
@@ -130,6 +130,23 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return meetings;
 	}
 
+	public Meetings getFinishedMeetings(int iduser){
+		Meetings meetings = new Meetings();
+
+		try{
+			ResultSet rs = executeQuery("SELECT m.* FROM meeting as m, meeting_user as mu WHERE mu.user = "+ iduser +" AND mu.meeting = m.idmeeting AND m.datetime < NOW() AND m.active = 1");
+			while(rs.next())
+			{
+				Meeting meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
+				meetings.add(meeting);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+		return meetings;
+	}
 	public Meeting insertMeeting(Meeting m, User u) {
 		try{
 			String query = "insert into meeting(title, description, datetime, location, leader, created_datetime) values('" + 
