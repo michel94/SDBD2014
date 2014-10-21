@@ -27,7 +27,7 @@ public class WaitClient{
 	public void notifyAuth(){
 		notify(auth);
 	}
-
+	
 	public void waitForMeetings(){
 		wait(meetings);
 	}

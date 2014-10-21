@@ -347,8 +347,6 @@ public class Client{
 				break;
 
 		}
-
-		
 		
 		//Comentar
 		//Apagar item||decision
@@ -377,6 +375,7 @@ public class Client{
 				print("1-Login");
 				print("2-Register account");
 				print("3-Exit");
+				
 
 				sel = readInt(1,3);
 				switch(sel){

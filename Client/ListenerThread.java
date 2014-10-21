@@ -2,26 +2,29 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.gnome.gtk.Gtk;
+import org.gnome.notify.Notify;
+import org.gnome.notify.Notification;
 
 public class ListenerThread implements Runnable{
 	private ObjectInputStream ois;
 	private ArrayList<String> historic;
-    	private AtomicBoolean loggedIn;
-    	private WaitClient wait;
+		private AtomicBoolean loggedIn;
+		private WaitClient wait;
 
-    	public String context = "";
-    	public Meetings meetings;
-    	public Meeting meeting;
-    	public Authentication auth;
-    	public Item item;
-    	public Action action;
+		public String context = "";
+		public Meetings meetings;
+		public Meeting meeting;
+		public Authentication auth;
+		public Item item;
+		public Action action;
 
 
 
 	public ListenerThread(ObjectInputStream ois, AtomicBoolean l, WaitClient w){
 		this.ois = ois;
-        loggedIn = l;
-        wait = w;
+		loggedIn = l;
+		wait = w;
 
 		Thread t = new Thread(this, "ListenerThread");
 		t.start();
@@ -42,19 +45,25 @@ public class ListenerThread implements Runnable{
 
 				if(r instanceof Meetings){
 					meetings = (Meetings) r;
-                   			wait.notifyMeetings();
+					wait.notifyMeetings();
 				}else if(r instanceof Meeting){
-				        meeting = (Meeting) r;
+					meeting = (Meeting) r;
+					Notification nmeet = new Notification("New Meeting", meeting.title, "dialog-information");
+					nmeet.show();
 					wait.notifyMeeting();
 				}else if(r instanceof Authentication){
 					auth = (Authentication) r;
-                    			wait.notifyAuth();
+					wait.notifyAuth();
 				}else if(r instanceof Item){
 					item = (Item) r;
 					wait.notifyItem();
 				}else if(r instanceof Action){
 					action = (Action) r;
 					wait.notifyAction();
+				}else if(r instanceof Comment){
+					Comment comment = (Comment) r;
+					Notification ncom = new Notification("New Comment on item " + comment.item.id, comment.text, "dialog-information");
+					ncom.show();
 				}
 
 			}catch(IOException e){

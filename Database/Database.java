@@ -12,8 +12,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	public boolean banned;
 
 	protected Database() throws RemoteException, SQLException {
+
 		super();
-		
+
 		//initialize JDBC
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -24,6 +25,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		String url = "jdbc:mysql://localhost:3306/meeto";
 		connection = DriverManager.getConnection(url,"root","");
 		System.out.println("Connected");
+		stmt = connection.createStatement();
 		
 		//addMeeting("asd", "asdad", "2014-03-03 00:00:00", "coimbra", 1);
 		/*Meeting meeting = getMeeting(1);
@@ -38,6 +40,17 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}catch(SQLException e){
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	private int executeUpdate(String q){
+		try{
+			System.out.println(q);
+			Statement st = connection.createStatement();
+			return st.executeUpdate(q);
+		}catch(SQLException e){
+			e.printStackTrace();
+			return 0;
 		}
 	}
 
@@ -160,6 +173,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public Comment insertComment(Comment com, User u){
+		String query = "INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.id + ", " + u.id + ",  now() )";
+		
+		executeUpdate(query);
 
 		return com;
 	}
@@ -174,18 +190,18 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 
-		private User readUser(ResultSet rs){
-			User u = null;
-			
-			try{
-				u = new User(rs.getInt("iduser"), rs.getString("username"));
-				u.password = rs.getString("password");
+	private User readUser(ResultSet rs){
+		User u = null;
+		
+		try{
+			u = new User(rs.getInt("iduser"), rs.getString("username"));
+			u.password = rs.getString("password");
 
-			}catch(SQLException e){
-				e.printStackTrace();
-			}
-			return u;
+		}catch(SQLException e){
+			e.printStackTrace();
 		}
+		return u;
+	}
 
 	public Authentication login(Authentication aut){
 		String query = "select * from user where username='" + aut.username + "' and password='" + aut.password + "'";
