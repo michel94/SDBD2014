@@ -84,7 +84,7 @@ public class ClientThread implements Runnable {
 				else if(data instanceof Meeting){
 					Meeting m = (Meeting) data;
 					if(m.idmeeting == 0){
-						qres = database.insertMeeting(m, userData.iduser);
+						qres = database.insertMeeting(m);
 					}else{
 						//Meeting result = database.updateMeeting(m, userData);
 					}

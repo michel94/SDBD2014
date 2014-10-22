@@ -20,6 +20,6 @@ public interface DatabaseInterface extends Remote{
 	public int insertItem(Item it, User u) throws RemoteException;
 	public int insertComment(Comment com, User u) throws RemoteException;
 	
-	public Item updateItem(Item it, User u) throws RemoteException;
+	public int updateItem(Item it, User u) throws RemoteException;
 	//public Comment updateComment(Comment com, User u) throws RemoteException;
 }

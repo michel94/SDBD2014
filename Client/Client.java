@@ -243,7 +243,8 @@ public class Client{
 		print("5 - Edit meeting details");
 		print("6 - Add user to meeting");
 		print("7 - Add group to meeting");
-		print("8 - Back");
+		print("8 - Close this meeting");
+		print("9 - Back");
 		sel = readInt(1, 8);
 
 		switch(sel){
@@ -287,7 +288,12 @@ public class Client{
 				print("Not working yet");
 				lt.context = "ConsultMeeting";
 				break;
-			case 8:
+			case 8: 
+				print("Not working yet");
+				lt.context = "ConsultMeeting";
+				break;
+
+			case 9:
 				lt.context = "Meetings";
 				break;
 		}
