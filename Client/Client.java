@@ -15,12 +15,8 @@ public class Client{
 	public WaitClient wait;
 	
 	public Client(){
-		
-		Notify.init("Hello World");
-
-		
-		print("Welcome.");
-
+		clear();
+		print("Client started");
 		in = new BufferedReader(new InputStreamReader(System.in));
 		lt = new ListenerThread();
 
@@ -205,6 +201,7 @@ public class Client{
 		print("Time: ");
 		m.datetime = date + " " + readString();
 		print("Location: ");
+		m.leader = lt.user;
 		m.location = readString();
 		writeObject(m);
 		wait.waitDefault();
@@ -388,7 +385,7 @@ public class Client{
 
 	protected void login(){
 		int sel;
-		clear();
+		
 		try{
 			String s = null;
 			print("Welcome to Meeto! Would you like to:");
@@ -413,14 +410,13 @@ public class Client{
 					wait.waitAuth();
 
 					if(lt.auth.confirmation == 0){
-						//clear();
+						clear();
 						System.out.println("Login failed. Try again.");
 					}else{
-						//clear();
+						clear();
 						System.out.println("Authentication successful");
 						clientID = lt.auth.clientID;
 						loggedIn = true;
-						//return;
 					}
 					break;
 				case 2:

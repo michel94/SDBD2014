@@ -23,7 +23,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","toor");
+		connection = DriverManager.getConnection(url,"root","");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 
