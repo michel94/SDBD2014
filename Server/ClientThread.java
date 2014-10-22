@@ -66,6 +66,7 @@ public class ClientThread implements Runnable {
 
 					if(req.type.equals("meetings")){
 						r = database.getMeetings(userData.iduser);
+
 					}else if(req.type.equals("meeting")){
 						r = database.getMeeting(id);
 						System.out.println( ((Meeting)r).title);
@@ -104,9 +105,11 @@ public class ClientThread implements Runnable {
 						if(result != null){
 							broadcastMessage(result, "comment", com.item.id);
 						}
-					}else{
-						//Comment result = database.updateComment(com, userData);
 					}
+				}else if(data instanceof Action){
+					
+				}else if(data instanceof KeyDecision){
+
 				}
 
 

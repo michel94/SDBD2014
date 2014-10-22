@@ -1,11 +1,16 @@
 public class WaitClient{
-	Object auth, meetings, meeting, item, action;
+	Object auth, meetings, meeting, item, action, group, groups, reconnect;
+
 	public WaitClient(){
 		auth = new Object();
 		meetings = new Object();
 		meeting = new Object();
 		item = new Object();
 		action = new Object();
+		groups = new Object();
+		group = new Object();
+		reconnect = new Object();
+
 	}
 	private void wait(Object o){
 		synchronized(o) {
@@ -21,14 +26,14 @@ public class WaitClient{
 		}
 	}
 
-	public void waitForAuth(){
+	public void waitAuth(){
 		wait(auth);
 	}
 	public void notifyAuth(){
 		notify(auth);
 	}
-	
-	public void waitForMeetings(){
+
+	public void waitMeetings(){
 		wait(meetings);
 	}
 	public void notifyMeetings(){
@@ -52,6 +57,27 @@ public class WaitClient{
 	}
 	public void notifyAction(){
 		notify(action);
+	}
+
+	public void waitGroup(){
+		wait(group);
+	}
+	public void notifyGroup(){
+		notify(group);
+	}
+	public void waitGroups(){
+		wait(groups);
+	}
+	public void notifyGroups(){
+		notify(groups);
+	}
+
+	public void waitReconnect(){
+		wait(reconnect);
+	}
+	public void notifyReconnect(){
+		notify(reconnect);
+
 	}
 	
 
