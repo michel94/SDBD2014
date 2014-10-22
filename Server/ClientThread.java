@@ -58,7 +58,10 @@ public class ClientThread implements Runnable {
 				Object data = (Object) in.readObject();
 
 				Object r = null;
+				Confirmation conf = new Confirmation();
 				User userData = clients.get(clientId).userData;
+
+				int qres = -2;
 
 				if(data instanceof Request){
 					Request req = (Request) data;
@@ -66,13 +69,13 @@ public class ClientThread implements Runnable {
 
 					if(req.type.equals("meetings")){
 						r = database.getMeetings(userData.iduser);
-
 					}else if(req.type.equals("meeting")){
 						r = database.getMeeting(id);
 						System.out.println( ((Meeting)r).title);
 					}else if(req.type.equals("item")){
 						r = database.getItem(id);
 					}
+
 				}
 				else if(data instanceof Authentication){ //A ideia do Rui de devolver a classe com um campo alterado pode ser usada no resto, por exemplo ao fazer um add, completa-se os campos
 					r = database.login((Authentication)data);
@@ -81,29 +84,24 @@ public class ClientThread implements Runnable {
 				else if(data instanceof Meeting){
 					Meeting m = (Meeting) data;
 					if(m.idmeeting == 0){
-						Meeting result = database.insertMeeting(m, userData.iduser);
-						if(result != null)
-							broadcastMessage(result, "meeting", 0);
+						qres = database.insertMeeting(m, userData.iduser);
 					}else{
 						//Meeting result = database.updateMeeting(m, userData);
 					}
 				}else if(data instanceof Item){
 					Item it = (Item) data;
 					if(it.id == 0){
-						Item result = database.insertItem(it, userData);
-						if(result != null){
-							broadcastMessage(result, "item", it.meeting);
-						}
+						qres = database.insertItem(it, userData);
 					}else{
 						//Item result = database.updateItem(it, userData);
 					}
 				}else if(data instanceof Comment){
+					System.out.println("Received Comment");
 					Comment com = (Comment) data;
 					if(com.commentId == 0){
-						System.out.println("Received Comment");
-						Comment result = database.insertComment(com, userData);
-						if(result != null){
-							broadcastMessage(result, "comment", com.item.id);
+						qres = database.insertComment(com, userData);
+						if(qres != -1){
+							broadcastMessage(com, "comment", com.item.id);
 						}
 					}
 				}else if(data instanceof Action){
@@ -112,13 +110,24 @@ public class ClientThread implements Runnable {
 
 				}
 
-
 				if(r != null){
 					out.writeObject(r);
 					if(data instanceof Request){
 						Request req = (Request) data;
 						System.out.println("Wrote " + ((Request)req).type + " to client " + clientId);
 					}
+				}
+				if(qres != -2){
+					if(qres == -1){
+						conf.error = 1;
+					}else{
+						conf.error = 0;
+					}
+					
+					System.out.println("Sending Confirmation");
+					out.writeObject(conf);
+					System.out.println("OK");
+					
 				}
 
 			} catch (ClassNotFoundException e) {

@@ -157,28 +157,28 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return executeUpdate(query);
 	}
 
-	public Meeting updateMeeting(Meeting m, User u){
+	public int updateMeeting(Meeting m, User u){
 
 
-		return m;
+		return 0;
 	}
 
-	public Item insertItem(Item it, User u){
+	public int insertItem(Item it, User u){
 
-		return it;
+		return 0;
 	}
 
-	public Item updateItem(Item it, User u){
+	public int updateItem(Item it, User u){
 
-		return it;
+		return 0;
 	}
 
-	public Comment insertComment(Comment com, User u){
+	public int insertComment(Comment com, User u){
 		String query = "INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.id + ", " + u.iduser + ",  now() )";
 		
 		executeUpdate(query);
 
-		return com;
+		return 0;
 	}
 
 	public Item getItem(int id){

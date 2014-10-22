@@ -72,7 +72,7 @@ public class Client{
 				Notification error = new Notification("Socket error", "Broken pipe.", "error-information");
 				error.show();
 
-				wait.notifyReconnect();
+				wait.waitReconnect();
 				wait.waitAuth();
 			}
 		}
@@ -207,6 +207,7 @@ public class Client{
 		print("Location: ");
 		m.location = readString();
 		writeObject(m);
+		wait.waitDefault();
 		
 		lt.context = "Meetings";
 	}

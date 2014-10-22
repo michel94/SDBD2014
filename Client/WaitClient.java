@@ -1,8 +1,9 @@
 public class WaitClient{
-	Object auth, meetings, meeting, item, action, group, groups, reconnect;
+	Object auth, meetings, meeting, item, action, group, groups, reconnect, def;
 
 	public WaitClient(){
 		auth = new Object();
+		def = new Object();
 		meetings = new Object();
 		meeting = new Object();
 		item = new Object();
@@ -80,5 +81,12 @@ public class WaitClient{
 
 	}
 	
+	public void waitDefault(){
+		wait(def);
+	}
+
+	public void notifyDefault(){
+		notify(def);
+	}
 
 }

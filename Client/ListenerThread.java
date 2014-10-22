@@ -110,8 +110,8 @@ public class ListenerThread implements Runnable{
 					wait.notifyMeetings();
 				}else if(r instanceof Meeting){
 					meeting = (Meeting) r;
-					Notification nmeet = new Notification("New Meeting", meeting.title, "dialog-information");
-					nmeet.show();
+					//Notification nmeet = new Notification("New Meeting", meeting.title, "dialog-information");
+					//nmeet.show();
 					wait.notifyMeeting();
 				}else if(r instanceof Authentication){
 					auth = (Authentication) r;
@@ -126,6 +126,10 @@ public class ListenerThread implements Runnable{
 					Comment comment = (Comment) r;
 					Notification ncom = new Notification("New Comment on item " + comment.item.id, comment.text, "dialog-information");
 					ncom.show();
+				}else if(r instanceof Confirmation){
+					if( ((Confirmation) r).error > 0)
+						print("Sorry, we could not process your request due to conflicts with other accesses. Try again");
+					wait.notifyDefault();
 				}
 
 			}catch(IOException ex){
