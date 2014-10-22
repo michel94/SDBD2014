@@ -33,12 +33,9 @@ MEETINGS
 	*getMeetings
 	*getFinishedMeetings
 	*insertMeeting
-	updateMeeting
-	deleteMeeting
-	persistentDeleteMeeting
-	getAllUsersFromMeeting
-
-
-	getUser
+	*updateMeeting
+	*getAllUsersFromMeeting
+	
+	*getUser
 
 

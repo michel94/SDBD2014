@@ -34,10 +34,13 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		//Meetings teste = getFinishedMeetings(3);
 		//System.out.println(teste.get(0).title);
 
-		User user = getUser(1);
+		/*User user = getUser(1);
 
 		Meeting meeting = new Meeting(5, "Reuniao y", "descricao da reuniao y", "2014-05-23 07:03:00", "DEI", user, 1);
-		updateMeeting(meeting);
+		updateMeeting(meeting);*/
+		/*Users users = new Users();
+		users = getAllUsersFromMeeting(1);
+		System.out.println(users.get(2).username);*/
 
 	}
 
@@ -176,6 +179,24 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		String query = "UPDATE meeting SET title='" + meeting.title + "', description='" + meeting.description + "', datetime='" + meeting.datetime + "', location='" + meeting.location + "', leader='" + meeting.leader.iduser + "', active='" + meeting.active + "' WHERE idmeeting="+meeting.idmeeting+" AND active=1;";
 		return executeUpdate(query);
+	}
+
+	public Users getAllUsersFromMeeting(int idmeeting){
+		Users users = new Users();
+
+		try{
+			ResultSet rs = executeQuery("SELECT u.iduser, u.username FROM user as u, meeting_user as mu WHERE mu.meeting="+idmeeting+" AND u.iduser=mu.user AND u.active=1;");
+			while(rs.next())
+			{
+				User user = new User(rs.getInt("iduser"), rs.getString("username"));
+				users.add(user);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+		return users;
 	}
 
 	public Item insertItem(Item it, User u){
