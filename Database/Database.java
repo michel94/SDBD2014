@@ -34,8 +34,10 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		//Meetings teste = getFinishedMeetings(3);
 		//System.out.println(teste.get(0).title);
 
-		/*Meeting meeting = new Meeting(-1, "Reuniao Z", "descricao da reuniao Z", "2014-05-23 07:03:00", "DEI", 1);
-		insertMeeting(meeting, 2);*/
+		User user = getUser(1);
+
+		Meeting meeting = new Meeting(5, "Reuniao y", "descricao da reuniao y", "2014-05-23 07:03:00", "DEI", user, 1);
+		updateMeeting(meeting);
 
 	}
 
@@ -172,8 +174,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public int updateMeeting(Meeting meeting){
 
-
-		return 1;
+		String query = "UPDATE meeting SET title='" + meeting.title + "', description='" + meeting.description + "', datetime='" + meeting.datetime + "', location='" + meeting.location + "', leader='" + meeting.leader.iduser + "', active='" + meeting.active + "' WHERE idmeeting="+meeting.idmeeting+" AND active=1;";
+		return executeUpdate(query);
 	}
 
 	public Item insertItem(Item it, User u){
