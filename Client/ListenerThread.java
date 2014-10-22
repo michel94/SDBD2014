@@ -24,6 +24,7 @@ public class ListenerThread implements Runnable{
 	public Groups groups;
 	public Group group;
 	public Users users;
+	public User user;
 	
 
 	public ListenerThread(){
@@ -47,7 +48,7 @@ public class ListenerThread implements Runnable{
 		
 		int tries = 0;
 		while(tries < 3){
-			print("Try: "+tries);
+			print("Connecting to server, attempt number: "+tries);
 			try{
 				Socket socket = new Socket(serverData.ip, serverData.port);
 				DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -115,7 +116,9 @@ public class ListenerThread implements Runnable{
 					//nmeet.show();
 					wait.notifyMeeting();
 				}else if(r instanceof Authentication){
+					
 					auth = (Authentication) r;
+					user = auth.userData;
 					wait.notifyAuth();
 				}else if(r instanceof Item){
 					item = (Item) r;
