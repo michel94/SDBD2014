@@ -84,9 +84,10 @@ public class ClientThread implements Runnable {
 				else if(data instanceof Meeting){
 					Meeting m = (Meeting) data;
 					if(m.idmeeting == 0){
-						qres = database.insertMeeting(m, userData.iduser);
+						m.leader = userData;
+						qres = database.insertMeeting(m);
 					}else{
-						//Meeting result = database.updateMeeting(m, userData);
+						qres = database.updateMeeting(m);
 					}
 				}else if(data instanceof Item){
 					Item it = (Item) data;
@@ -127,7 +128,7 @@ public class ClientThread implements Runnable {
 					System.out.println("Sending Confirmation");
 					out.writeObject(conf);
 					System.out.println("OK");
-					
+
 				}
 
 			} catch (ClassNotFoundException e) {

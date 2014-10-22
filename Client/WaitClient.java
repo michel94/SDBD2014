@@ -1,5 +1,5 @@
 public class WaitClient{
-	Object auth, meetings, meeting, item, action, group, groups, reconnect, def;
+	Object auth, meetings, meeting, item, action, group, groups, reconnect, def, users;
 
 	public WaitClient(){
 		auth = new Object();
@@ -11,7 +11,7 @@ public class WaitClient{
 		groups = new Object();
 		group = new Object();
 		reconnect = new Object();
-
+		users = new Object();
 	}
 	private void wait(Object o){
 		synchronized(o) {
@@ -87,6 +87,14 @@ public class WaitClient{
 
 	public void notifyDefault(){
 		notify(def);
+	}
+
+	public void waitUsers(){
+		wait(users);
+	}
+
+	public void notifyUsers(){
+		notify(users);
 	}
 
 }

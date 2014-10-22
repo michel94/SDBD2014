@@ -208,8 +208,33 @@ public class Client{
 		m.location = readString();
 		writeObject(m);
 		wait.waitDefault();
+		print("Invite users to the meeting:");
+		
+		/*r = new Request("users");
+		wait.waitUsers();
+		for(int i=0; i<lt.users.size(); i++){
+			print(lt.users.get(i).username);
+		}*/
 		
 		lt.context = "Meetings";
+	}
+
+	public void newItemMenu(){
+		int sel;
+		Item it = new Item();
+
+		print("Adding new meeting. Fill the following form:");
+		print("Title: ");
+		it.title = readString();
+		print("Description: ");
+		it.description = readString();
+		it.meeting = lt.meeting.idmeeting;
+
+		writeObject(it);
+		wait.waitDefault();
+
+		lt.context = "ConsultMeeting";
+
 	}
 
 	public void consultMeetingMenu(){
@@ -268,8 +293,8 @@ public class Client{
 				}
 				break;
 			case 3:
-				print("Not working yet");
-				lt.context = "ConsultMeeting";
+				//print("Not working yet");
+				lt.context = "newItemMenu";
 				break;
 			case 4:
 				print("Not working yet");
@@ -277,6 +302,7 @@ public class Client{
 				break;
 			case 5: 
 				print("Not working yet");
+
 				lt.context = "ConsultMeeting";
 				break;
 			case 6: 

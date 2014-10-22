@@ -23,6 +23,7 @@ public class ListenerThread implements Runnable{
 	public Action action;
 	public Groups groups;
 	public Group group;
+	public Users users;
 	
 
 	public ListenerThread(){
