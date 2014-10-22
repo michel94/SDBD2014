@@ -13,10 +13,10 @@ public interface DatabaseInterface extends Remote{
 	public Item getItem(int id) throws RemoteException;
 	
 	public Authentication login(Authentication auth) throws RemoteException;
-		public Item insertItem(Item it, User u) throws RemoteException;
-	public Comment insertComment(Comment com, User u) throws RemoteException;
+	public int insertItem(Item it, User u) throws RemoteException;
+	public int insertComment(Comment com, User u) throws RemoteException;
 	
-	public Meeting updateMeeting(Meeting m, User u) throws RemoteException;
-	public Item updateItem(Item it, User u) throws RemoteException;
+	public int updateMeeting(Meeting m, User u) throws RemoteException;
+	public int updateItem(Item it, User u) throws RemoteException;
 	//public Comment updateComment(Comment com, User u) throws RemoteException;
 }
