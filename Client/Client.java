@@ -108,7 +108,6 @@ public class Client{
 	public void mainMenu(){
 		int sel;
 		Request r;
-		clear();
 		print("\n|   Meeto   |\n");
 		print("");
 		print("Main Menu");
@@ -123,10 +122,11 @@ public class Client{
 		switch(sel){
 			case 1:
 				lt.context = "Meetings";
+				clear();
 				break;
 			case 2:	
-				print("Not working yet");
-				lt.context = "Main";
+				lt.context = "Groups";
+				clear();
 				break;
 			case 3:
 				System.exit(0);
@@ -141,7 +141,6 @@ public class Client{
 		writeObject(r);
 		wait.waitMeetings();
 		Meetings ms = lt.meetings;
-		clear();
 		print("Meetings:");
 		for(int i=0; i<ms.size(); i++){
 			print(i+1 + " - "+ms.get(i).datetime + "  " + ms.get(i).title);
@@ -151,7 +150,7 @@ public class Client{
 		print("What do you want to do?");
 		print("1 - Consult meeting details");
 		print("2 - Schedule new meeting");
-		print("3 - Delete one of your meetings");
+		print("3 - Leave one of your meetings");
 		print("4 - Pending meeting invites");
 		print("5 - Back");
 		sel = readInt(1, 5);
@@ -165,22 +164,31 @@ public class Client{
 					writeObject(r);
 					wait.waitMeeting();
 					lt.context = "ConsultMeeting";
+					clear();
 				}
 				break;
 			case 2:
+				clear();
 				lt.context = "NewMeeting";
 				break;
 			case 3:
 				if(ms.size()!=0){
-					print("Not working yet");
-					lt.context = "Meetings";
+					print("Which meeting do you want to leave? Write its number:");
+		
+					r = new Request("leavemeeting",ms.get(readInt(1,ms.size())-1 ).idmeeting);
+					writeObject(r);
+					wait.waitLeaveMeeting();
+					clear();
+					print("Left meeting successfully");
 				}
 				break;
 			case 4:
+				clear();
 				print("Not working yet");
 				lt.context = "Meetings";
 				break;
 			case 5:
+				clear();
 				lt.context = "Main";
 
 		}
@@ -205,7 +213,8 @@ public class Client{
 		m.location = readString();
 		writeObject(m);
 		wait.waitDefault();
-		
+		clear();
+		print("Meeting created successfully");
 		lt.context = "Meetings";
 	}
 
@@ -215,7 +224,6 @@ public class Client{
 		Meetings ms=lt.meetings;
 
 		Meeting m = lt.meeting;
-		clear();
 		print("Title: "+m.title);
 		print("Description: "+m.description);
 		print("Date/Time: "+m.datetime);
@@ -253,6 +261,7 @@ public class Client{
 					writeObject(r);
 					wait.waitItem();
 					lt.context = "ConsultItem";
+					clear();
 				}
 				break;
 			case 2:	
@@ -263,34 +272,42 @@ public class Client{
 					writeObject(r);
 					wait.waitAction();
 					lt.context = "ConsultAction";
+					clear();
 				}
 				break;
 			case 3:
+				clear();
 				print("Not working yet");
 				lt.context = "ConsultMeeting";
 				break;
 			case 4:
+				clear();
 				print("Not working yet");
 				lt.context = "ConsultMeeting";
 				break;
 			case 5: 
+				clear();
 				print("Not working yet");
 				lt.context = "ConsultMeeting";
 				break;
 			case 6: 
+				clear();
 				print("Not working yet");
 				lt.context = "ConsultMeeting";
 				break;
 			case 7: 
+				clear();
 				print("Not working yet");
 				lt.context = "ConsultMeeting";
 				break;
 			case 8: 
+				clear();
 				print("Not working yet");
 				lt.context = "ConsultMeeting";
 				break;
 
 			case 9:
+				clear();
 				lt.context = "Meetings";
 				break;
 		}
@@ -303,7 +320,6 @@ public class Client{
 
 		
 		Item it = lt.item;
-		clear();
 		print("Key Decisions:");
 		for (int i=0;i<it.decisions.size();i++){
 			print(it.decisions.get(i).date+" "+ it.decisions.get(i).description);
@@ -328,20 +344,25 @@ public class Client{
 				String s = readString();
 				Object com = new Comment(s, lt.item);
 				writeObject(com);
+				clear();
 				break;
 			case 2:
+				clear();
 				print("Not working yet.");
 				lt.context="ConsultItem";
 				break;
 			case 3:
+				clear();
 				print("Not working yet.");
 				lt.context="ConsultItem";
 				break;
 			case 4:
+				clear();
 				print("Not working yet.");
 				lt.context="ConsultItem";
 				break;
 			case 5:
+				clear();
 				print("Not working yet");
 				lt.context="ConsultItem";
 				break;			
@@ -368,14 +389,17 @@ public class Client{
 
 		switch(sel){
 			case 1:
+				clear();
 				print("Not working yet.");
 				lt.context="ConsultAction";
 				break;
 			case 2:
+				clear();
 				print("Not working yet.");
 				lt.context="ConsultAction";
 				break;
 			case 3:
+				clear();
 				lt.context="ConsultMeeting";
 				break;
 		}
@@ -396,6 +420,7 @@ public class Client{
 			sel = readInt(1,3);
 			switch(sel){
 				case 1:
+					clear();
 					System.out.println("Please write your username and password separated by a space.");
 			
 					s = readString();
@@ -405,6 +430,7 @@ public class Client{
 					try{
 						lt.oos.writeObject((Object)lt.auth);
 					}catch(IOException e){
+						clear();
 						System.out.println("IO Exception while sending authentication input.");
 					}
 					wait.waitAuth();
@@ -420,7 +446,8 @@ public class Client{
 					}
 					break;
 				case 2:
-					print("Not yet implemented");
+					clear();
+					//print("Write your desired username:");
 					break;
 				case 3:
 					System.exit(0);
@@ -466,11 +493,11 @@ public class Client{
 				}
 				break;
 			case 2:
-				lt.context = "NewGroup";
+				//lt.context = "NewGroup";
 				break;
 			case 3:
 				if(gs.size()!=0){
-					lt.context = "DeleteGroup";
+					//lt.context = "DeleteGroup";
 				}
 				break;
 			case 4:
@@ -479,6 +506,49 @@ public class Client{
 			}
 		}
 			
+	}
+	public void consultGroupMenu(){
+		int sel;
+		Request r;
+		Groups gs=lt.groups;
+
+		Group g = lt.group;
+		clear();
+		print("Group name: "+g.name);
+		
+		print("\nUsers:");
+		for(int i=0; i<g.users.size();i++){
+			print(i+1 + " - " + g.users.get(i).username);
+		}
+
+		print("");
+		print("What do you want to do?");
+		print("1 - Add user to group");
+		print("2 - Remove user from group");
+		print("3 - Back");
+		sel = readInt(1, 3);
+
+		switch(sel){
+			case 1:
+				clear();
+				print("Not yet working");
+				break;
+			case 2:	
+				if(g.users.size()!=0){
+					print("Which user do you want to remove? Write its number:");
+					r = new Request("deleteuser",g.users.get(readInt(1,g.users.size())-1 ).iduser);
+					writeObject(r);
+					wait.waitDeleteUser();
+					clear();
+					print("User deleted successfully");
+					lt.context = "ConsultGroup";
+				}
+				break;
+			case 3:
+				clear();
+				lt.context = "Main";
+				break;
+		}
 	}
 
 	public void clear(){

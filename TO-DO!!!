@@ -2,3 +2,6 @@ Meter na tabela dos grupos o id do user que o criou (Para só ser possível ser 
 
 Meter na tabela hora de logout
 
+Ao registar um user confirmar se já existe um user com o mesmo nome, para nao haver conflitos. Se já existir, devolvem a classe user originalmente enviada, mas com iduser a 0 (vai servir como campo de verificação se o login foi bem feito ou não)
+
+Na base de dados, adicionar o user que criou o meeting (leader) automaticamente aos users que estão no meeting.

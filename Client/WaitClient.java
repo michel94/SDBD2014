@@ -1,5 +1,5 @@
 public class WaitClient{
-	Object auth, meetings, meeting, item, action, group, groups, reconnect, def;
+	Object auth, meetings, meeting, item, action, group, groups, reconnect, def, leavemeeting,deleteuser;
 
 	public WaitClient(){
 		auth = new Object();
@@ -11,6 +11,8 @@ public class WaitClient{
 		groups = new Object();
 		group = new Object();
 		reconnect = new Object();
+		leavemeeting = new Object();
+		deleteuser = new Object();
 
 	}
 	private void wait(Object o){
@@ -87,6 +89,20 @@ public class WaitClient{
 
 	public void notifyDefault(){
 		notify(def);
+	}
+	public void waitLeaveMeeting(){
+		wait(leavemeeting);
+	}
+
+	public void notifyLeaveMeeting(){
+		notify(leavemeeting);
+	}
+	public void waitDeleteUser(){
+		wait(deleteuser);
+	}
+
+	public void notifyDeleteUser(){
+		notify(deleteuser);
 	}
 
 }
