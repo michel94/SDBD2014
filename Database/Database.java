@@ -31,8 +31,11 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		/*Meeting meeting = getMeeting(1);
 		System.out.println(meeting.items.get(1).title);*/
 
-		Meetings teste = getFinishedMeetings(3);
-		System.out.println(teste.get(0).title);
+		//Meetings teste = getFinishedMeetings(3);
+		//System.out.println(teste.get(0).title);
+
+		/*Meeting meeting = new Meeting(-1, "Reuniao Z", "descricao da reuniao Z", "2014-05-23 07:03:00", "DEI", 1);
+		insertMeeting(meeting, 2);*/
 	}
 
 	private ResultSet executeQuery(String q){
@@ -53,7 +56,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			return st.executeUpdate(q);
 		}catch(SQLException e){
 			e.printStackTrace();
-			return 0;
+			return -1;
 		}
 	}
 
@@ -64,8 +67,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			ResultSet rs = executeQuery("SELECT * FROM meeting WHERE idmeeting="+idmeeting+" AND active=1;");
 			if(rs.next())
 			{
-				meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
-				meeting.description = rs.getString("description");
+				meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("description"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
 				meeting.created_datetime = rs.getString("created_datetime");
 
 				//--- Obter user do leader ---
@@ -119,7 +121,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			ResultSet rs = executeQuery("SELECT m.* FROM meeting as m, meeting_user as mu WHERE mu.user = "+ iduser +" AND mu.meeting = m.idmeeting AND m.active = 1");
 			while(rs.next())
 			{
-				Meeting meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
+				Meeting meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("description"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
 				meetings.add(meeting);
 			}
 		}catch(SQLException e){
@@ -137,7 +139,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			ResultSet rs = executeQuery("SELECT m.* FROM meeting as m, meeting_user as mu WHERE mu.user = "+ iduser +" AND mu.meeting = m.idmeeting AND m.datetime < NOW() AND m.active = 1");
 			while(rs.next())
 			{
-				Meeting meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
+				Meeting meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("description"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
 				meetings.add(meeting);
 			}
 		}catch(SQLException e){
@@ -147,19 +149,11 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		
 		return meetings;
 	}
-	public Meeting insertMeeting(Meeting m, User u) {
-		try{
-			String query = "insert into meeting(title, description, datetime, location, leader, created_datetime) values('" + 
-				m.title + "', '" + m.description + "', '" + m.datetime + "', '" + m.location + "', '" + u.id + "', " + "now()" + ");";
-			System.out.println(query);
-			stmt.executeUpdate(query);
-			u.password = "";
-			m.leader = u;
-			return m;
-		}catch(SQLException e){
-			e.printStackTrace();
-			return null;
-		}
+
+	public int insertMeeting(Meeting meeting, int iduser) {
+
+		String query = "INSERT INTO meeting(title, description, datetime, location, leader, created_datetime) values('" + meeting.title + "', '" + meeting.description + "', '" + meeting.datetime + "', '" + meeting.location + "', '" + iduser + "', " + "NOW()" + ");";
+		return executeUpdate(query);
 	}
 
 	public Meeting updateMeeting(Meeting m, User u){
@@ -179,7 +173,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public Comment insertComment(Comment com, User u){
-		String query = "INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.id + ", " + u.id + ",  now() )";
+		String query = "INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.id + ", " + u.iduser + ",  now() )";
 		
 		executeUpdate(query);
 
@@ -233,7 +227,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			if(rs.next()){
 				aut.userData = readUser(rs);
 				System.out.println(aut.userData.username);
-				aut.confirm(aut.userData.id);
+				aut.confirm(aut.userData.iduser);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();

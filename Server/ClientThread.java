@@ -65,7 +65,7 @@ public class ClientThread implements Runnable {
 					int id = ((Request)req).id;
 
 					if(req.type.equals("meetings")){
-						r = database.getMeetings();
+						r = database.getMeetings(userData.iduser);
 					}else if(req.type.equals("meeting")){
 						r = database.getMeeting(id);
 						System.out.println( ((Meeting)r).title);
@@ -80,7 +80,7 @@ public class ClientThread implements Runnable {
 				else if(data instanceof Meeting){
 					Meeting m = (Meeting) data;
 					if(m.idmeeting == 0){
-						Meeting result = database.insertMeeting(m, userData);
+						Meeting result = database.insertMeeting(m, userData.iduser);
 						if(result != null)
 							broadcastMessage(result, "meeting", 0);
 					}else{
