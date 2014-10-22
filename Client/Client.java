@@ -128,8 +128,9 @@ public class Client{
 			case 1:
 				lt.context = "Meetings";
 				break;
-			case 2:
-				lt.context = "Groups";
+			case 2:	
+				print("Not working yet");
+				lt.context = "Main";
 				break;
 			case 3:
 				System.exit(0);
@@ -175,7 +176,8 @@ public class Client{
 				break;
 			case 3:
 				if(ms.size()!=0){
-					lt.context = "DeleteMeeting";
+					print("Not working yet");
+					lt.context = "Meetings";
 				}
 				break;
 			case 4:
