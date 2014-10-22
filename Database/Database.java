@@ -23,7 +23,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","");
+		connection = DriverManager.getConnection(url,"root","toor");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 
@@ -34,8 +34,13 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		//Meetings teste = getFinishedMeetings(3);
 		//System.out.println(teste.get(0).title);
 
-		/*Meeting meeting = new Meeting(-1, "Reuniao Z", "descricao da reuniao Z", "2014-05-23 07:03:00", "DEI", 1);
-		insertMeeting(meeting, 2);*/
+		/*User user = getUser(1);
+
+		Meeting meeting = new Meeting(5, "Reuniao y", "descricao da reuniao y", "2014-05-23 07:03:00", "DEI", user, 1);
+		updateMeeting(meeting);*/
+		/*Users users = new Users();
+		users = getAllUsersFromMeeting(1);
+		System.out.println(users.get(2).username);*/
 
 	}
 
@@ -63,21 +68,18 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public Meeting getMeeting(int idmeeting){
 		Meeting meeting = null;
+		User user = null;
 		try
 		{
 			ResultSet rs = executeQuery("SELECT * FROM meeting WHERE idmeeting="+idmeeting+" AND active=1;");
 			if(rs.next())
 			{
-				meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("description"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
-				meeting.created_datetime = rs.getString("created_datetime");
+				user = getUser(rs.getInt("leader"));
 
-				//--- Obter user do leader ---
-				rs = executeQuery("SELECT iduser, username FROM user WHERE iduser="+rs.getInt("leader")+" AND active=1;");
-				if(rs.next())
-				{
-					User user = new User(rs.getInt("iduser"), rs.getString("username"));
-					meeting.leader = user;
-				}
+				if(user == null)
+					return null;
+
+				meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("description"), rs.getString("datetime"), rs.getString("location"), user, rs.getInt("active"));
 
 				//--- Obter items ---
 				rs = executeQuery("SELECT iditem, title, description FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");	
@@ -103,6 +105,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 					meeting.actions.add(action);
 				}
+
+				meeting.created_datetime = rs.getString("created_datetime");
+
 			}
 		}
 		catch(SQLException e)
@@ -117,12 +122,19 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public Meetings getMeetings(int iduser){
 		Meetings meetings = new Meetings();
+		User user = null;
 
 		try{
 			ResultSet rs = executeQuery("SELECT m.* FROM meeting as m, meeting_user as mu WHERE mu.user = "+ iduser +" AND mu.meeting = m.idmeeting AND m.active = 1");
 			while(rs.next())
 			{
-				Meeting meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("description"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
+				user = getUser(rs.getInt("leader"));
+
+				if(user == null)
+					return null;
+
+				Meeting meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("description"), rs.getString("datetime"), rs.getString("location"), user, rs.getInt("active"));
+
 				meetings.add(meeting);
 			}
 		}catch(SQLException e){
@@ -135,12 +147,18 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public Meetings getFinishedMeetings(int iduser){
 		Meetings meetings = new Meetings();
+		User user = null;
 
 		try{
 			ResultSet rs = executeQuery("SELECT m.* FROM meeting as m, meeting_user as mu WHERE mu.user = "+ iduser +" AND mu.meeting = m.idmeeting AND m.datetime < NOW() AND m.active = 1");
 			while(rs.next())
 			{
-				Meeting meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("description"), rs.getString("datetime"), rs.getString("location"), rs.getInt("active"));
+				user = getUser(rs.getInt("leader"));
+
+				if(user == null)
+					return null;
+
+				Meeting meeting = new Meeting(rs.getInt("idmeeting"), rs.getString("title"), rs.getString("description"), rs.getString("datetime"), rs.getString("location"), user, rs.getInt("active"));
 				meetings.add(meeting);
 			}
 		}catch(SQLException e){
@@ -151,16 +169,36 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return meetings;
 	}
 
-	public int insertMeeting(Meeting meeting, int iduser) {
+	public int insertMeeting(Meeting meeting) {
 
-		String query = "INSERT INTO meeting(title, description, datetime, location, leader, created_datetime) values('" + meeting.title + "', '" + meeting.description + "', '" + meeting.datetime + "', '" + meeting.location + "', '" + iduser + "', " + "NOW()" + ");";
+		String query = "INSERT INTO meeting(title, description, datetime, location, leader, created_datetime) values('" + meeting.title + "', '" + meeting.description + "', '" + meeting.datetime + "', '" + meeting.location + "', '" + meeting.leader.iduser + "', " + "NOW()" + ");";
 		return executeUpdate(query);
 	}
 
-	public int updateMeeting(Meeting m, User u){
 
+	public int updateMeeting(Meeting meeting){
 
-		return 0;
+		String query = "UPDATE meeting SET title='" + meeting.title + "', description='" + meeting.description + "', datetime='" + meeting.datetime + "', location='" + meeting.location + "', leader='" + meeting.leader.iduser + "', active='" + meeting.active + "' WHERE idmeeting="+meeting.idmeeting+" AND active=1;";
+		return executeUpdate(query);
+	}
+
+	public Users getAllUsersFromMeeting(int idmeeting){
+		Users users = new Users();
+
+		try{
+			ResultSet rs = executeQuery("SELECT u.iduser, u.username FROM user as u, meeting_user as mu WHERE mu.meeting="+idmeeting+" AND u.iduser=mu.user AND u.active=1;");
+			while(rs.next())
+			{
+				User user = new User(rs.getInt("iduser"), rs.getString("username"));
+				users.add(user);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+		return users;
+
 	}
 
 	public int insertItem(Item it, User u){
@@ -196,6 +234,19 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return it;
 	}
 
+	public User getUser(int iduser){
+		User user = null;
+		try{
+		ResultSet subrs = executeQuery("SELECT iduser, username FROM user WHERE iduser="+iduser+" AND active=1;");
+		if(subrs.next())
+			user = new User(subrs.getInt("iduser"), subrs.getString("username"));
+		return user;
+		}
+		catch(SQLException e){
+			return null;
+		}
+	}
+
 	/*public Comment updateComment(Comment com, User u){
 		
 	}*/
@@ -204,7 +255,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		banned = true;
 		return true;
 	}
-
 
 	private User readUser(ResultSet rs){
 		User u = null;

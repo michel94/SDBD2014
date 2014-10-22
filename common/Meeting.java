@@ -24,7 +24,7 @@ public class Meeting implements Serializable{
 		actions = new ArrayList<Action>();
 	}
 
-	public Meeting(int idmeeting, String title, String description, String datetime, String location, int active){ //construtor do Bhovan :)
+	public Meeting(int idmeeting, String title, String description, String datetime, String location, User leader, int active){ //construtor do Bhovan :)
 		this.title = title;
 		if(idmeeting != -1){
 			this.idmeeting = idmeeting;
@@ -32,6 +32,7 @@ public class Meeting implements Serializable{
 		this.description = description;
 		this.datetime = datetime;
 		this.location = location;
+		this.leader = leader;
 		this.active = active;
 		items = new ArrayList<Item>();
 		actions = new ArrayList<Action>();

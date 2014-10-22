@@ -29,8 +29,13 @@ getFinishedMeetings - gets all finished meetings
 
 
 MEETINGS
-	insertMeeting
-	getMeeting
-	updateMeeting
-	deleteMeeting
+	*getMeeting
+	*getMeetings
+	*getFinishedMeetings
+	*insertMeeting
+	*updateMeeting
+	*getAllUsersFromMeeting
+	
+	*getUser
+
 
