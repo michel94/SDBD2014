@@ -8,7 +8,8 @@ public interface DatabaseInterface extends Remote{
 	public Meeting getMeeting(int idmeeting) throws RemoteException;
 	public Meetings getMeetings(int iduser) throws RemoteException;
 	public Meetings getFinishedMeetings(int iduser) throws RemoteException;
-	public int insertMeeting(Meeting meeting, int iduser) throws RemoteException;
+	public int insertMeeting(Meeting meeting) throws RemoteException;
+	public int updateMeeting(Meeting meeting) throws RemoteException;
 
 	public Item getItem(int id) throws RemoteException;
 	
@@ -16,7 +17,6 @@ public interface DatabaseInterface extends Remote{
 		public Item insertItem(Item it, User u) throws RemoteException;
 	public Comment insertComment(Comment com, User u) throws RemoteException;
 	
-	public Meeting updateMeeting(Meeting m, User u) throws RemoteException;
 	public Item updateItem(Item it, User u) throws RemoteException;
 	//public Comment updateComment(Comment com, User u) throws RemoteException;
 }
