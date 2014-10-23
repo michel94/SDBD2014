@@ -141,6 +141,7 @@ public class Client{
 		writeObject(r);
 		wait.waitMeetings();
 		Meetings ms = lt.meetings;
+
 		print("Meetings:");
 		for(int i=0; i<ms.size(); i++){
 			print(i+1 + " - "+ms.get(i).datetime + "  " + ms.get(i).title);
@@ -185,7 +186,6 @@ public class Client{
 			case 4:
 				clear();
 				print("Not working yet");
-				lt.context = "Meetings";
 				break;
 			case 5:
 				clear();
@@ -197,6 +197,8 @@ public class Client{
 	public void newMeetingMenu(){
 		int sel;
 		Request r;
+
+
 		Meeting m = new Meeting();
 		clear();
 		print("Creating new meeting. Fill the following form:");
@@ -214,7 +216,7 @@ public class Client{
 		writeObject(m);
 		wait.waitDefault();
 		
-		print("Invite users to the meeting:");
+		print("Invite users to the meeting: (Not working yet)");
 
 		clear();
 		print("Meeting created successfully");
@@ -222,30 +224,16 @@ public class Client{
 		lt.context = "Meetings";
 	}
 
-	public void newItemMenu(){
-		int sel;
-		Item it = new Item();
-
-		print("Adding new meeting. Fill the following form:");
-		print("Title: ");
-		it.title = readString();
-		print("Description: ");
-		it.description = readString();
-		it.meeting = lt.meeting.idmeeting;
-
-		writeObject(it);
-		wait.waitDefault();
-
-		lt.context = "ConsultMeeting";
-
-	}
+	
 
 	public void consultMeetingMenu(){
 		int sel;
 		Request r;
-		Meetings ms=lt.meetings;
 
-		Meeting m = lt.meeting;
+
+		
+		Meeting m = (Meeting)updateDataInClient("meeting",lt.meeting.idmeeting);
+
 		print("Title: "+m.title);
 		print("Description: "+m.description);
 		print("Date/Time: "+m.datetime);
@@ -272,7 +260,7 @@ public class Client{
 		print("7 - Add group to meeting");
 		print("8 - Close this meeting");
 		print("9 - Back");
-		sel = readInt(1, 8);
+		sel = readInt(1, 9);
 
 		switch(sel){
 			case 1:
@@ -300,7 +288,6 @@ public class Client{
 			case 3:
 				clear();
 				print("Not working yet");
-
 				lt.context = "newItemMenu";
 				break;
 			case 4:
@@ -336,14 +323,13 @@ public class Client{
 				break;
 		}
 	}
-
+	
 	public void consultItemMenu(){
 		int sel;
 		Request r;
 		Meeting m = lt.meeting;
-
+		Item it = (Item)updateDataInClient("item", lt.item.id);
 		
-		Item it = lt.item;
 		print("Key Decisions:");
 		for (int i=0;i<it.decisions.size();i++){
 			print(it.decisions.get(i).date+" "+ it.decisions.get(i).description);
@@ -373,22 +359,19 @@ public class Client{
 			case 2:
 				clear();
 				print("Not working yet.");
-				lt.context="ConsultItem";
+				//lt.context="ConsultMeeting";
 				break;
 			case 3:
 				clear();
 				print("Not working yet.");
-				lt.context="ConsultItem";
 				break;
 			case 4:
 				clear();
 				print("Not working yet.");
-				lt.context="ConsultItem";
 				break;
 			case 5:
 				clear();
 				print("Not working yet");
-				lt.context="ConsultItem";
 				break;			
 			case 6:
 				lt.context="ConsultMeeting";
@@ -396,14 +379,14 @@ public class Client{
 
 		}
 
-		
 	}
 
 	public void consultActionMenu(){
 		int sel;
 		Request r;
-		Meeting m = lt.meeting;
 		
+		Action a = (Action)updateDataInClient("action", lt.action.idaction);
+
 		print("What do you want to do?");
 		print("1 - Edit this action");
 		print("2 - Delete this action");
@@ -420,7 +403,8 @@ public class Client{
 			case 2:
 				clear();
 				print("Not working yet.");
-				lt.context="ConsultAction";
+
+				lt.context="ConsultMeeting";
 				break;
 			case 3:
 				clear();
@@ -430,6 +414,26 @@ public class Client{
 
 
 	}
+
+	public void newItemMenu(){
+		int sel;
+		Item it = new Item();
+
+		print("Adding new item. Fill the following form:");
+		print("Title: ");
+		it.title = readString();
+		print("Description: ");
+		it.description = readString();
+		it.meeting = lt.meeting.idmeeting;
+
+		writeObject(it);
+		wait.waitDefault();
+
+		lt.context = "ConsultMeeting";
+
+	}
+
+	
 
 	protected void login(){
 		int sel;
@@ -579,11 +583,40 @@ public class Client{
 		System.out.print("\033[H\033[2J");
 	}
 	
+	public Object updateDataInClient(String flag, int id){
+		Object o = new Object();
+		if(flag.equals("meeting")){
+			Request r = new Request("meeting", id);
+			writeObject(r);
+			wait.waitMeeting();
+			return lt.meeting;		
+		}else if(flag.equals("group")){
+			Request r = new Request("group", id);
+			writeObject(r);
+			wait.waitGroup();
+			return lt.group;	
+
+		}else if(flag.equals("item")){
+			Request r = new Request("item", id);
+			writeObject(r);
+			wait.waitItem();
+			return lt.item;		
+		}else if(flag.equals("action")){
+			Request r = new Request("action", id);
+			writeObject(r);
+			wait.waitAction();
+			return lt.action;	
+		}
+		return o;
+	}
 	public static void main(String[] args){
 		String[] a = new String[0];
 		Gtk.init(a);
 		Client client = new Client();
 		
 	}
+
+
+
 	
 }
