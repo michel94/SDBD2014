@@ -76,6 +76,7 @@ public class ClientThread implements Runnable {
 						r = database.getItem(id);
 					}else if(req.type.equals("users")){
 						r = database.getAllUsers();
+
 					}else if(req.type.equals("action")){
 						r = database.getAction(id);
 					}else if(req.type.equals("groups")){
@@ -124,6 +125,8 @@ public class ClientThread implements Runnable {
 					KeyDecision kd = (KeyDecision) data;
 					if(kd.idkeydecision == 0){
 						qres = database.insertKeyDecision(kd);
+					}else{
+						qres = database.updateKeyDecision(kd);
 					}
 				}
 
@@ -135,7 +138,7 @@ public class ClientThread implements Runnable {
 					}
 				}
 				if(qres != -2){
-					System.out.println(qres);
+					System.out.println("qres " + qres);
 					if(qres == -1){
 						conf.error = 1;
 					}else{

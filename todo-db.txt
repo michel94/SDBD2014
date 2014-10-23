@@ -15,6 +15,8 @@ fazer assign de um user a uma action
 update action
 apagar action
 
+registar conta
+
 
 
 TRABALHO DO DIOGO DAQUI PARA BAIXO
@@ -26,9 +28,10 @@ add group to meeting
 	- inserir cada utilizador manualmente
 fechar meeting ??
 
+add user to group
+	-add user to all the group meetings
 
 apagar meeting
 apagar item
-
-
-registar conta
+apagar keydecision
+apagar action
