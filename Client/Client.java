@@ -133,7 +133,8 @@ public class Client{
 				clear();
 				break;
 			case 2:	
-				lt.context = "Groups";
+				//lt.context = "Groups";
+				
 				clear();
 				break;
 			case 3:
@@ -224,7 +225,7 @@ public class Client{
 		writeObject(m);
 		wait.waitDefault();
 		
-		listAllUsers();
+		//listAllUsers();
 		print("Invite users to the meeting: (Not working yet)");
 		
 		clear();
@@ -239,9 +240,7 @@ public class Client{
 		int sel;
 		Request r;
 
-
-		
-		Meeting m = (Meeting)updateDataInClient("meeting",lt.meeting.idmeeting);
+		Meeting m = lt.meeting;
 
 		print("Title: "+m.title);
 		print("Description: "+m.description);
@@ -330,6 +329,7 @@ public class Client{
 				lt.context = "Meetings";
 				break;
 		}
+		updateDataInClient("meeting",lt.meeting.idmeeting);
 	}
 	
 	public void consultItemMenu(){
@@ -337,7 +337,7 @@ public class Client{
 		Request r;
 		Meeting m = lt.meeting;
 		KeyDecision kd;
-		Item it = (Item)updateDataInClient("item", lt.item.iditem);
+		Item it = lt.item;
 		
 		print("Item Title: " + it.title);
 		print("Item Description: " + it.description);
@@ -408,6 +408,7 @@ public class Client{
 				break;
 
 		}
+		updateDataInClient("item", lt.item.iditem);
 
 	}
 
@@ -415,7 +416,8 @@ public class Client{
 		int sel;
 		Request r;
 		
-		Action a = (Action)updateDataInClient("action", lt.action.idaction);
+		Action a = lt.action;
+
 		print("Action");
 		print("Description: " + a.description);
 		print("Due to: " + a.due_to);
@@ -448,6 +450,7 @@ public class Client{
 				lt.context="ConsultMeeting";
 				break;
 		}
+		updateDataInClient("action", lt.action.idaction);
 
 
 	}

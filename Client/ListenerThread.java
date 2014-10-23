@@ -26,6 +26,7 @@ public class ListenerThread implements Runnable{
 	public Group group;
 	public Users users;
 	public User user; 
+	public KeyDecision keydecision;
 	
 	public void setConfigs(){
 		try{
@@ -144,15 +145,18 @@ public class ListenerThread implements Runnable{
 					Notification ncom = new Notification("New Comment on item " + comment.item.iditem, comment.text, "dialog-information");
 					ncom.show();
 				}else if(r instanceof Action){
-					Action action = (Action) r;
+				        action = (Action) r;
 					wait.notifyDefault();
 				}else if(r instanceof KeyDecision){
-					KeyDecision kd = (KeyDecision) r;
+					keydecision = (KeyDecision) r;
 					wait.notifyDefault();
 				}else if(r instanceof Confirmation){
 					if( ((Confirmation) r).error > 0)
 						print("Sorry, we could not process your request due to conflicts with other accesses. Try again");
 					wait.notifyDefault();
+				}else if( r instanceof Users){
+					 users = (Users) r;
+					 wait.notifyDefault();
 				}
 
 			}catch(IOException ex){
