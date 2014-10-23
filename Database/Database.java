@@ -235,8 +235,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int insertItem(Item it, User u){
-
-		return 0;
+		String query = "INSERT INTO item(title, description, user, meeting) values('" + it.title + "', '" + it.description + "', '" + u.iduser + "', '" + it.meeting + "')";
+		return executeUpdate(query);
 	}
 
 	public int updateItem(Item it, User u){
