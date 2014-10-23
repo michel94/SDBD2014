@@ -370,17 +370,16 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int insertKeyDecision(KeyDecision kd){
-		executeUpdate("INSERT INTO keydecision(description, item) values('" + kd.description + "', " + kd.item + ")");
+		return executeUpdate("INSERT INTO keydecision(description, item) values('" + kd.description + "', " + kd.item + ")");
 	}
 
 	public int deleteKeyDecision(int idkeydecision){
-		executeUpdate("UPDATE keydecision set active=0 where idkeydecision=" + idkeydecision);
+		return executeUpdate("UPDATE keydecision set active=0 where idkeydecision=" + idkeydecision);
 	}
 
 	public int updateKeyDecision(KeyDecision kd){
-		executeUpdate("UPDATE keydecision set description=" + kd.description + " where idkeydecision=" + kd.idkeydecision);
+		return executeUpdate("UPDATE keydecision set description=" + kd.description + " where idkeydecision=" + kd.idkeydecision);
 	}
-
 
 	public boolean stonith(){
 		banned = true;

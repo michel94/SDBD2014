@@ -336,6 +336,7 @@ public class Client{
 		int sel;
 		Request r;
 		Meeting m = lt.meeting;
+		KeyDecision kd;
 		Item it = (Item)updateDataInClient("item", lt.item.iditem);
 		
 		print("Item Title: " + it.title);
@@ -354,7 +355,7 @@ public class Client{
 		print("1 - Comment on this item");
 		print("2 - Delete this item");
 		print("3 - Add Key Decision");
-		print("4 - Confirm Key Decision");
+		print("4 - Edit Key Decision");
 		print("5 - Edit item description");
 		print("6 - Back");
 
@@ -362,6 +363,7 @@ public class Client{
 
 		switch(sel){
 			case 1:
+				print("Write your comment:");
 				String s = readString();
 				Object com = new Comment(s, lt.item);
 				writeObject(com);
@@ -374,11 +376,23 @@ public class Client{
 				break;
 			case 3:
 				clear();
-				print("Not working yet.");
+				print("Insert the key description data:");
+				print("Description: ");
+				kd = new KeyDecision(readString());
+				writeObject(kd);
+				wait.waitDefault();
+
 				break;
 			case 4:
 				clear();
-				print("Not working yet.");
+				print("Which key decision do you want to edit?");
+				int ikd = readInt(1, it.keydecisions.size())-1;
+				print("Description: ");
+				kd = new KeyDecision(readString());
+				kd.idkeydecision = ikd;
+				writeObject(kd);
+				wait.waitDefault();
+
 				break;
 			case 5:
 				clear();

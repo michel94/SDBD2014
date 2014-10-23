@@ -25,7 +25,7 @@ public class ListenerThread implements Runnable{
 	public Groups groups;
 	public Group group;
 	public Users users;
-	public User user;
+	public User user; 
 	
 	public void setConfigs(){
 		try{
@@ -145,6 +145,9 @@ public class ListenerThread implements Runnable{
 					ncom.show();
 				}else if(r instanceof Action){
 					Action action = (Action) r;
+					wait.notifyDefault();
+				}else if(r instanceof KeyDecision){
+					KeyDecision kd = (KeyDecision) r;
 					wait.notifyDefault();
 				}else if(r instanceof Confirmation){
 					if( ((Confirmation) r).error > 0)

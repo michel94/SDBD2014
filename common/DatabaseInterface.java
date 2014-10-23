@@ -23,6 +23,12 @@ public interface DatabaseInterface extends Remote{
 
 	public Authentication login(Authentication auth) throws RemoteException;
 	public int insertComment(Comment com, User u) throws RemoteException;
+
+
+	public int insertKeyDecision(KeyDecision kd) throws RemoteException;
+	public int deleteKeyDecision(int idkeydecision) throws RemoteException;
+	public int updateKeyDecision(KeyDecision kd) throws RemoteException;
+	
 	
 	//public Comment updateComment(Comment com, User u) throws RemoteException;
 }

@@ -27,7 +27,6 @@ add group to meeting
 fechar meeting ??
 
 
-
 apagar meeting
 apagar item
 

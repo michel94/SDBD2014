@@ -120,9 +120,9 @@ public class ClientThread implements Runnable {
 					}*/
 				}else if(data instanceof KeyDecision){
 					KeyDecision kd = (KeyDecision) data;
-					/*if(act.idaction == 0){
+					if(kd.idkeydecision == 0){
 						qres = database.insertKeyDecision(kd);
-					}*/
+					}
 				}
 
 				if(r != null){
