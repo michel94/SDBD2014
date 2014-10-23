@@ -2,24 +2,22 @@ Meter na tabela dos grupos o id do user que o criou (Para só ser possível ser 
 
 Meter na tabela hora de logout
 
-Proteger contra adicionar users que já existam a uma reuniao ( Fazer depois do resto estar feito);
+Proteger contra adicionar users que já existam a uma reuniao, incluindo convidar-se a si mesmo. ( Fazer depois do resto estar feito, esta proteção deve ser feita na base de dados?);
 
 
 
 
 
 
-Register users (com confirmação se o user já existe)
+Register users (com confirmação se o user já existe) - Done
 
-Mostrar lista de usars no meeting que estamos a consultar
+Mostrar lista de users Do meeting que estamos a consultar <- PRECISA DE FUNÇÃO NA BASE DE DADOS
 
-Edit meeting details
+Edit meeting details <- Done
 
-Add group to meetings
+Close this meeting <- Não tá na checklist
 
-Close this meeting
-
-Leave meeting
+Leave meeting <- Não tá na checklist
 
 Pending meeting invites
 
@@ -30,5 +28,5 @@ Edit this action
 Delete this action
 
 Tudo dos grupos
-
+Add group to meetings
 

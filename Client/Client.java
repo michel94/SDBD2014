@@ -109,6 +109,8 @@ public class Client{
 				newItemMenu();
 			}else if(lt.context.equals("NewActionMenu")){
 				newActionMenu();
+			}else if (lt.context.equals("EditMeetingMenu")){
+				editMeetingMenu();			
 			}
 
 		}
@@ -231,9 +233,52 @@ public class Client{
 		wait.waitDefault();
 		clear();
 		print("Meeting created successfully");
-		print("É preciso mudar a função de criar meetings na base de dados para adicionar os users passados no array. Senão isto não adiciona logo.");
 		
 		lt.context = "Meetings";
+	}
+
+	public void editMeetingMenu(){
+		Meeting m = lt.meeting;
+		String s, date;
+		clear();
+		print("Edit meeting. Fill the following form to replace fields (To skip field write skip):");
+		print("Title: " + m.title);
+		s = readString();
+		if(!s.equals("skip")){
+			m.title = s;
+		}
+		print("Description: "+ m.description);
+		s = readString();
+		if(!s.equals("skip")){
+			m.description = s;
+		}
+		String[] ss = m.datetime.split(" ");		
+		print("Date: "+ss[0]);
+		s = readString();
+		if(!s.equals("skip")){
+			date = s;
+		}else date = ss[0];		
+		print("Time: "+ ss[1]);
+		s = readString();
+		if(!s.equals("skip")){
+			m.datetime = date + " " + s;
+		}else m.datetime = date + " " + ss[1];
+		print("Location: "+ m.location);
+		s = readString();
+		if(!s.equals("skip")){
+			m.location = s;
+		}
+		
+		clear();
+		writeObject(m);
+		wait.waitDefault();
+		clear();
+		print("Meeting edited successfully");
+		
+		lt.context = "Meetings";
+	
+
+
 	}
 
 	
@@ -306,9 +351,8 @@ public class Client{
 				break;
 			case 5: 
 				clear();
-				print("Not working yet");
 
-				lt.context = "ConsultMeeting";
+				lt.context = "EditMeetingMenu";
 				break;
 			case 6: 
 				clear();
