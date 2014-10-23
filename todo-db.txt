@@ -1,0 +1,32 @@
+adicionar user a meeting -> insert 			done
+get action -> Action 						done
+edit meeting details 						done
+getItem
+
+
+adicionar keydecision a item   				done
+apagar keydecision							done
+edit keydecision							done
+
+
+aceitar ou recusar convite --> vamos ter de implementar invite, pois ha um ponto da checklist q é exactamente "aceitar invite"
+
+add group to meeting
+	- inserir na tabela group_user
+	- inserir cada utilizador manualmente
+fechar meeting ??
+
+
+
+
+insertAction
+fazer assign de um user a uma action
+update action
+apagar action
+
+
+apagar meeting
+apagar item
+
+
+registar conta
