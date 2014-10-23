@@ -42,11 +42,14 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		users = getAllUsersFromMeeting(1);
 		System.out.println(users.get(2).username);*/
 
-		Item item = null;
+		/*Item item = null;
 
 		item = getItem(2);
 
-		System.out.println(item.user.username);
+		System.out.println(item.user.username);*/
+
+		Item item = new Item(-1, "titulo item", "descricaooooo", getUser(1), 1);
+		insertItem(item);
 
 	}
 
@@ -266,8 +269,11 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return item;
 	}
 
-	public int insertItem(Item it, User u){
-		String query = "INSERT INTO item(title, description, user, meeting, created_datetime) values('" + it.title + "', '" + it.description + "', '" + u.iduser + "', '" + it.meeting + "', now())";
+	public int insertItem(Item item){
+
+		if(item.iditem!=-1)
+			return -1;
+		String query = "INSERT INTO item(title, description, user, meeting, created_datetime) values('" + item.title + "', '" + item.description + "', '" + item.user.iduser + "', '" + item.meeting + "', NOW())";
 		return executeUpdate(query);
 	}
 
