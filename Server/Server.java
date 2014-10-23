@@ -11,22 +11,32 @@ import java.sql.Date;
 import java.util.*;
 import java.lang.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.io.*;
+import java.util.Properties;
 
 public class Server{
 	private int clientNumber = 1;
-	private int serverPort = 6000;
+	private int serverPort;
 	private Boolean second;
 	private DatabaseInterface database = null;
 	private ConcurrentHashMap<Integer, ClientData> clients;
 
 
-	protected Server(boolean s, int port){
+	protected Server(boolean s){
 		super();
 		
+		try{
+			Properties prop = new Properties();
+			FileInputStream txt = new FileInputStream("../global.properties");
+			prop.load(txt);
+			serverPort = Integer.parseInt(prop.getProperty("tcpport"));
+		}catch(IOException e){
+			System.out.println("Could not load configuration. Exiting.");
+			System.exit(0);
+		}
 
 		clients = new ConcurrentHashMap<Integer, ClientData>();
 
-		serverPort = port;
 		second = s;
 
 
@@ -125,30 +135,8 @@ public class Server{
 	}
 
 	public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
-		boolean primary=false, second=false;
-		int port=6000;
 
-		for(int i=0; i<args.length; i++){
-			if(args[i].equals("-p"))
-				primary = true;
-			else if(args[i].equals("-s"))
-				second = true;
-			else{
-				try{
-					port = Integer.parseInt(args[i]);
-				}catch(NumberFormatException e){
-					;
-				}
-			}
-		}
-		if(primary && second){
-			System.out.println("The server cannot be primary and secondary at the same time");
-			return;
-		}
-
-
-		Server server = new Server(second, port);
-			
+		Server server = new Server(false);
 
 	}
 

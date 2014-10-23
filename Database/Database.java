@@ -112,6 +112,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 
 			}
+
+			meeting.users = getAllUsersFromMeeting(idmeeting);
+
 		}
 		catch(SQLException e)
 		{
@@ -183,7 +186,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}catch(SQLException e){
 			return -1;
 		}
-
 
 	}
 

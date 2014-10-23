@@ -74,6 +74,8 @@ public class ClientThread implements Runnable {
 						System.out.println( ((Meeting)r).title);
 					}else if(req.type.equals("item")){
 						r = database.getItem(id);
+					}else if(req.type.equals("users")){
+						//r = database.getUsers()
 					}
 
 				}
@@ -106,9 +108,15 @@ public class ClientThread implements Runnable {
 						}
 					}
 				}else if(data instanceof Action){
-					
+					Action act = (Action) data;
+					/*if(act.idaction == 0){
+						qres = database.insertAction(act);
+					}*/
 				}else if(data instanceof KeyDecision){
-
+					KeyDecision kd = (KeyDecision) data;
+					/*if(act.idaction == 0){
+						qres = database.insertKeyDecision(kd);
+					}*/
 				}
 
 				if(r != null){

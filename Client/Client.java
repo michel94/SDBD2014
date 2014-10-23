@@ -16,6 +16,9 @@ public class Client{
 	
 	public Client(){
 		clear();
+
+		Notify.init("Hello World");
+		
 		print("Client started");
 		in = new BufferedReader(new InputStreamReader(System.in));
 		lt = new ListenerThread();
