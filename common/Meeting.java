@@ -9,6 +9,7 @@ public class Meeting implements Serializable{
 
 	public ArrayList<Item> items;
 	public ArrayList<Action> actions;
+	public Users users;
 	private static final long serialVersionUID = 1L;
 	
 	public Meeting(){
