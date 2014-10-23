@@ -103,6 +103,9 @@ public class Client{
 
 			}else if(lt.context.equals("Groups")){
 				groupsMenu();
+
+			}else if(lt.context.equals("newItemMenu")){
+				newItemMenu();
 			}
 
 		}
@@ -290,7 +293,7 @@ public class Client{
 				break;
 			case 3:
 				clear();
-				print("Not working yet");
+				
 				lt.context = "newItemMenu";
 				break;
 			case 4:

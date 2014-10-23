@@ -127,6 +127,7 @@ public class ClientThread implements Runnable {
 					}
 				}
 				if(qres != -2){
+					System.out.println(qres);
 					if(qres == -1){
 						conf.error = 1;
 					}else{
