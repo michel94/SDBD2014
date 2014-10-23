@@ -23,7 +23,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","");
+		connection = DriverManager.getConnection(url,"root","toor");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 
@@ -41,6 +41,12 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		/*Users users = new Users();
 		users = getAllUsersFromMeeting(1);
 		System.out.println(users.get(2).username);*/
+
+		Item item = null;
+
+		item = getItem(2);
+
+		System.out.println(item.user.username);
 
 	}
 
@@ -86,7 +92,12 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				rs = executeQuery("SELECT iditem, title, description FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");	
 				while(rs.next())
 				{
-					Item item = new Item(rs.getInt("iditem"), rs.getString("title"));
+					user = getUser(rs.getInt("user"));
+
+					if(user == null)
+						return null;
+
+					Item item = new Item(rs.getInt("iditem"), rs.getString("title"), rs.getString("description"), user, idmeeting);
 					meeting.items.add(item);
 					System.out.println("item");
 				}
@@ -176,25 +187,23 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		try{
 			String query = "INSERT INTO meeting(title, description, datetime, location, leader, created_datetime) values('" + meeting.title + "', '" + meeting.description + "', '" + meeting.datetime + "', '" + meeting.location + "', '" + meeting.leader.iduser + "', " + "NOW()" + ");";
 			if(executeUpdate(query) == -1) return -1;
-			ResultSet rs = executeQuery("SELECT max(idmeeting) AS m from meeting"); rs.next();
 
+			ResultSet rs = executeQuery("SELECT max(idmeeting) AS m from meeting"); rs.next();
 			query = "INSERT INTO meeting_user(meeting, user) values(" + rs.getInt("m") + ", " + meeting.leader.iduser + ")";
 			return executeUpdate(query);
+
 		}catch(SQLException e){
 			return -1;
 		}
-
-
 	}
-
 
 	public int updateMeeting(Meeting meeting){
 
-		String query = "UPDATE meeting SET title='" + meeting.title + "', description='" + meeting.description + "', datetime='" + meeting.datetime + "', location='" + meeting.location + "', leader='" + meeting.leader.iduser + "', active='" + meeting.active + "' WHERE idmeeting="+meeting.idmeeting+" AND active=1;";
+		String query = "UPDATE meeting SET title='" + meeting.title + "', description='" + meeting.description + "', datetime='" + meeting.datetime + "', location='" + meeting.location + "', leader='" + meeting.leader.iduser + "', active='" + meeting.active + "' WHERE idmeeting="+meeting.idmeeting+" AND datetime > NOW() AND active=1;";
 		return executeUpdate(query);
 	}
 
-	public Users getAllUsersFromMeeting(int idmeeting){
+	private Users getAllUsersFromMeeting(int idmeeting){
 		Users users = new Users();
 
 		try{
@@ -210,7 +219,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 		
 		return users;
-
 	}
 
 	public Users getAllUsers(){
@@ -229,7 +237,29 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 		
 		return users;
+	}
 
+	public Item getItem(int iditem){
+		Item item = null;
+		User user = null;
+		
+		try{
+			ResultSet rs = executeQuery("SELECT * FROM item WHERE iditem="+iditem+" AND active = 1;");
+			if(rs.next())
+			{
+				user = getUser(rs.getInt("user"));
+
+				if(user == null)
+					return null;
+
+				item = new Item(rs.getInt("iditem"), rs.getString("title"), rs.getString("description"), user, rs.getInt("meeting"));
+			}
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+
+		return item;
 	}
 
 	public int insertItem(Item it, User u){
@@ -243,27 +273,13 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int insertComment(Comment com, User u){
-		String query = "INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.id + ", " + u.iduser + ",  now() )";
+		String query = "INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.iditem + ", " + u.iduser + ",  now() )";
 		
 		executeUpdate(query);
 
 		return 0;
 	}
 
-	public Item getItem(int id){
-		Item it = null;
-		
-		try{
-			ResultSet rs = executeQuery("SELECT * FROM item where iditem=" + id);
-			if(rs.next())
-				it = new Item(rs.getInt("iditem"), rs.getString("title"), rs.getString("description"), rs.getInt("user"), rs.getInt("meeting"));
-			
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-
-		return it;
-	}
 
 	public User getUser(int iduser){
 		User user = null;

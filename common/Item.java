@@ -3,15 +3,16 @@ import java.util.ArrayList;
 
 public class Item implements Serializable{
 	public String title, description;
-	public int id, user, meeting;
-	public ArrayList<Comment> comments;
-	public ArrayList<KeyDecision> decisions;
+	public int iditem, meeting;
+	public User user;
+	public Comments comments;
+	public KeyDecisions keydecisions;
 
 	private static final long serialVersionUID = 1L;
 	
-	public Item(String title, int id){
+	/*public Item(String title, int iditem){
 		this.title = title;
-		this.id = id;
+		this.iditem = iditem;
 		comments = new ArrayList<Comment>();
 		decisions = new ArrayList<KeyDecision>();
 	}
@@ -26,15 +27,15 @@ public class Item implements Serializable{
 		this.id = id;
 		comments = new ArrayList<Comment>();
 		decisions = new ArrayList<KeyDecision>();
-	}
+	}*/
 
-	public Item(int iditem, String title, String description, int user, int meeting){
+	public Item(int iditem, String title, String description, User user, int meeting){
 		this.title = title;
-		this.id = iditem;
+		this.iditem = iditem;
 		this.description = description;
 		this.user = user;
 		this.meeting = meeting;
-		comments = new ArrayList<Comment>();
-		decisions = new ArrayList<KeyDecision>();
+		this.comments = new Comments();
+		this.keydecisions = new KeyDecisions();
 	}
 }
