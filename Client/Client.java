@@ -224,8 +224,9 @@ public class Client{
 		writeObject(m);
 		wait.waitDefault();
 		
+		listAllUsers();
 		print("Invite users to the meeting: (Not working yet)");
-
+		
 		clear();
 		print("Meeting created successfully");
 		
@@ -450,7 +451,13 @@ public class Client{
 		print("Description: ");
 		act.description = readString();
 		act.meeting = lt.meeting;
-		print("Assigned user:(Not working yet)");
+		listAllUsers();
+		print("Assign user by writing its number from the user list:");
+		sel=readInt(1,lt.users.size())-1;
+		Request r = new Request("user", lt.users.get(sel).iduser);
+		writeObject(r);
+		wait.waitDefault();
+		act.assigned_user = lt.user;
 		writeObject(act);
 		wait.waitDefault();
 
@@ -601,6 +608,15 @@ public class Client{
 				clear();
 				lt.context = "Main";
 				break;
+		}
+	}
+	
+	public void listAllUsers(){
+		Request r = new Request("users");
+		writeObject(r);
+		wait.waitDefault();	
+		for(int i=0;i<lt.users.size();i++){
+			print(i+1+" - "+lt.users.get(i).username);		
 		}
 	}
 
