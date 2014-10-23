@@ -338,13 +338,16 @@ public class Client{
 		Meeting m = lt.meeting;
 		Item it = (Item)updateDataInClient("item", lt.item.iditem);
 		
+		print("Item Title: " + it.title);
+		print("Item Description: " + it.description);
+
 		print("Key Decisions:");
 		for (int i=0;i<it.keydecisions.size();i++){
-			print(it.keydecisions.get(i).date+" "+ it.keydecisions.get(i).description);
+			print(it.keydecisions.get(i).datetime+" "+ it.keydecisions.get(i).description);
 		}
 		print("Comments:");
 		for (int i=0;i<it.comments.size();i++){
-			print(it.comments.get(i).datetime+" "+ it.comments.get(i).user+": "+ it.comments.get(i).text);
+			print(it.comments.get(i).datetime+" "+ it.comments.get(i).user.username+": "+ it.comments.get(i).text);
 		}
 
 		print("What do you want to do?");
@@ -642,7 +645,7 @@ public class Client{
 			Request r = new Request("meeting", id);
 			writeObject(r);
 			wait.waitMeeting();
-			return lt.meeting;		
+			return lt.meeting;
 		}else if(flag.equals("group")){
 			Request r = new Request("group", id);
 			writeObject(r);

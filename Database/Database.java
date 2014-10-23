@@ -42,13 +42,17 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		users = getAllUsersFromMeeting(1);
 		System.out.println(users.get(2).username);*/
 
-		/*Item item = null;
+		/*Item item = getItem(1);
+		for(int i=0; i<item.comments.size(); i++){
+			System.out.println(item.comments.get(i).text);
+		}
+		for(int i=0; i<item.keydecisions.size(); i++){
+			System.out.println(item.keydecisions.get(i).description);
+		}*/
 
-		item = getItem(2);
+		//System.out.println(item.user.username);
 
-		System.out.println(item.user.username);*/
-
-		/*Item item = new Item(-1, "titulo item", "descricaooooo", getUser(1), 1);
+		/*Item item = new Item(-1, "titulo item", "descricao", getUser(1), 1);
 		insertItem(item);*/
 
 		//addUserToMeeting(getUser(5), getMeeting(1));
@@ -201,7 +205,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				ResultSet srs = executeQuery("SELECT * from user where iduser=" + rs.getInt("assigned_user"));
 				User u = null;
 				if(srs.next()) u = new User(srs.getInt("iduser"), srs.getString("username") );
-				return new Action(rs.getInt("idaction"), rs.getTimestamp("due_to").toString(), u, rs.getInt("done"), null, rs.getInt("active"));
+				return new Action(rs.getInt("idaction"), rs.getString("description"), rs.getTimestamp("due_to").toString(), u, rs.getInt("done"), null, rs.getInt("active"));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -274,12 +278,21 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			ResultSet rs = executeQuery("SELECT * FROM item WHERE iditem="+iditem+" AND active = 1;");
 			if(rs.next())
 			{
-				user = getUser(rs.getInt("user"));
+				item = new Item(rs.getInt("iditem"), rs.getString("title"), rs.getString("description"), user, rs.getInt("meeting"));
 
+				user = getUser(rs.getInt("user"));
 				if(user == null)
 					return null;
 
-				item = new Item(rs.getInt("iditem"), rs.getString("title"), rs.getString("description"), user, rs.getInt("meeting"));
+				ResultSet srs = executeQuery("SELECT com.*, u.username, u.iduser FROM comment as com, user as u WHERE com.user=u.iduser and item=" + iditem);
+				while(srs.next()){
+					Comment c = new Comment(srs.getInt("idcomment"), srs.getString("comment"), new User(srs.getInt("iduser"), srs.getString("username")), item, srs.getTimestamp("created_datetime").toString() );
+					item.comments.add(c);
+				}
+				srs = executeQuery("SELECT * FROM keydecision WHERE item=" + iditem);
+				while(srs.next()){
+					item.keydecisions.add(new KeyDecision(srs.getInt("idkeydecision"), srs.getString("description"), srs.getInt("active"), iditem ));
+				}
 			}
 			
 		}catch(SQLException e){
@@ -294,9 +307,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int insertItem(Item item){
+		System.out.println("-------> item <--------");
 
-		if(item.iditem!=-1)
-			return -1;
 		String query = "INSERT INTO item(title, description, user, meeting, created_datetime) values('" + item.title + "', '" + item.description + "', '" + item.user.iduser + "', '" + item.meeting + "', NOW())";
 		return executeUpdate(query);
 	}
@@ -327,7 +339,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		meeting.finished = 1;
 		return updateMeeting(meeting);
 	}
-	
+
 	public int updateItem(Item it, User u){
 
 		return 0;
@@ -341,6 +353,33 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return 0;
 	}
 
+	public int insertAction(){
+		return -1;
+	}
+
+	public int assignUserToAction(){
+		return -1;
+	}
+
+	public int updateAction(){
+		return -1;
+	}
+
+	public int deleteAction(){
+		return -1;
+	}
+
+	public int insertKeyDecision(KeyDecision kd){
+		executeUpdate("INSERT INTO keydecision(description, item) values('" + kd.description + "', " + kd.item + ")");
+	}
+
+	public int deleteKeyDecision(int idkeydecision){
+		executeUpdate("UPDATE keydecision set active=0 where idkeydecision=" + idkeydecision);
+	}
+
+	public int updateKeyDecision(KeyDecision kd){
+		executeUpdate("UPDATE keydecision set description=" + kd.description + " where idkeydecision=" + kd.idkeydecision);
+	}
 
 
 	public boolean stonith(){

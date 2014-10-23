@@ -97,8 +97,10 @@ public class ClientThread implements Runnable {
 					}
 				}else if(data instanceof Item){
 					Item it = (Item) data;
+					it.user = userData;
+					System.out.println("Received item");
 					if(it.iditem == 0){
-						qres = database.insertItem(it, userData);
+						qres = database.insertItem(it);
 					}else{
 						qres = database.updateItem(it);
 					}
@@ -146,13 +148,16 @@ public class ClientThread implements Runnable {
 
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error: Class not found while reading pipe of client "+clientId +".");
+
 			} catch (IOException e) {
 				System.out.println("Error:IO Exception while reading pipe of client "+clientId +". Please reset connection with server.");
+				e.printStackTrace();
 				break;
 			}
 		}
 		
 		System.out.println("Closing connection to client "+clientId +".");
+		clients.remove(clientId);
 		
 	}
 

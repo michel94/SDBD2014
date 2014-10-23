@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.gnome.gtk.Gtk;
 import org.gnome.notify.Notify;
 import org.gnome.notify.Notification;
+import java.util.Properties;
 
 public class ListenerThread implements Runnable{
 
@@ -26,10 +27,22 @@ public class ListenerThread implements Runnable{
 	public Users users;
 	public User user;
 	
+	public void setConfigs(){
+		try{
+			Properties prop = new Properties();
+			FileInputStream txt = new FileInputStream("../global.properties");
+			prop.load(txt);
+			server1 = new ServerData(prop.getProperty("server1"), Integer.parseInt(prop.getProperty("tcpport")));
+			server2 = new ServerData(prop.getProperty("server2"), Integer.parseInt(prop.getProperty("tcpport")));
+		}catch(IOException e){
+			System.out.println("Could not load configuration. Exiting.");
+			System.exit(0);
+		}
+	}
 
 	public ListenerThread(){
-		server1 = new ServerData("127.0.0.1", 6000);
-		server2 = new ServerData("127.0.0.1", 6001);
+		setConfigs();
+
 		serverData = server1;
 		wait = new WaitClient();
 		reconnect();
@@ -141,6 +154,7 @@ public class ListenerThread implements Runnable{
 
 			}catch(IOException ex){
 				print("Error! Connection to the server lost.");
+				ex.printStackTrace();
 				reconnect();
 				wait.notifyReconnect();
 

@@ -20,6 +20,7 @@ public class Item implements Serializable{
 	public Item(){
 		comments = new Comments();
 		keydecisions = new KeyDecisions();
+		this.iditem = 0;
 	}
 	/*
 	public Item(int id, String title){

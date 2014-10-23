@@ -11,7 +11,6 @@ import java.sql.Date;
 import java.util.*;
 import java.lang.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.io.*;
 import java.util.Properties;
 
 public class Server{
@@ -24,21 +23,11 @@ public class Server{
 
 	protected Server(boolean s){
 		super();
-		
-		try{
-			Properties prop = new Properties();
-			FileInputStream txt = new FileInputStream("../global.properties");
-			prop.load(txt);
-			serverPort = Integer.parseInt(prop.getProperty("tcpport"));
-		}catch(IOException e){
-			System.out.println("Could not load configuration. Exiting.");
-			System.exit(0);
-		}
+
+		setConfigs();
 
 		clients = new ConcurrentHashMap<Integer, ClientData>();
-
 		second = s;
-
 
 		UdpConnection u = new UdpConnection(second);
 
@@ -54,6 +43,18 @@ public class Server{
 		}
 		connectDatabase();
 		clientListener();
+	}
+
+	public void setConfigs(){
+		try{
+			Properties prop = new Properties();
+			FileInputStream txt = new FileInputStream("../global.properties");
+			prop.load(txt);
+			serverPort = Integer.parseInt(prop.getProperty("tcpport"));
+		}catch(IOException e){
+			System.out.println("Could not load configuration. Exiting.");
+			System.exit(0);
+		}
 	}
 
 	public void connectDatabase(){

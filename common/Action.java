@@ -6,6 +6,7 @@ public class Action implements Serializable{
 	public int done,idaction, active; // 1-done, 0-not done
 	public Meeting meeting;
 	public User assigned_user; //assigned user
+	private static final long serialVersionUID = 1L;
 
 	public Action(){	
 	}
