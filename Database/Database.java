@@ -48,8 +48,10 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		System.out.println(item.user.username);*/
 
-		Item item = new Item(-1, "titulo item", "descricaooooo", getUser(1), 1);
-		insertItem(item);
+		/*Item item = new Item(-1, "titulo item", "descricaooooo", getUser(1), 1);
+		insertItem(item);*/
+
+		addUserToMeeting(getUser(5), getMeeting(1));
 
 	}
 
@@ -92,7 +94,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				meeting.created_datetime = rs.getString("created_datetime");
 
 				//--- Obter items ---
-				rs = executeQuery("SELECT iditem, title, description FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");	
+				rs = executeQuery("SELECT iditem, title, description, user FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");	
 				while(rs.next())
 				{
 					user = getUser(rs.getInt("user"));
@@ -277,6 +279,25 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return executeUpdate(query);
 	}
 
+	public User getUser(int iduser){
+		User user = null;
+		try{
+		ResultSet subrs = executeQuery("SELECT iduser, username FROM user WHERE iduser="+iduser+" AND active=1;");
+		if(subrs.next())
+			user = new User(subrs.getInt("iduser"), subrs.getString("username"));
+		return user;
+		}
+		catch(SQLException e){
+			return null;
+		}
+	}
+
+	public int addUserToMeeting(User user, Meeting meeting)
+	{
+		String query = "INSERT INTO meeting_user (meeting, user) values((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1));";
+		return executeUpdate(query);
+	}
+
 	public int updateItem(Item it, User u){
 
 		return 0;
@@ -291,22 +312,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 
-	public User getUser(int iduser){
-		User user = null;
-		try{
-		ResultSet subrs = executeQuery("SELECT iduser, username FROM user WHERE iduser="+iduser+" AND active=1;");
-		if(subrs.next())
-			user = new User(subrs.getInt("iduser"), subrs.getString("username"));
-		return user;
-		}
-		catch(SQLException e){
-			return null;
-		}
-	}
-
-	/*public Comment updateComment(Comment com, User u){
-		
-	}*/
 
 	public boolean stonith(){
 		banned = true;

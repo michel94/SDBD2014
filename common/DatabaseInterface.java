@@ -14,6 +14,7 @@ public interface DatabaseInterface extends Remote{
 	//private Users getAllUsersFromMeeting(int idmeeting); FOI REMOVIDA DA INTERFACE
 	public Item getItem(int id) throws RemoteException;
 	public int insertItem(Item item) throws RemoteException;
+	public int addUserToMeeting(User user, Meeting meeting) throws RemoteException;
 
 
 
