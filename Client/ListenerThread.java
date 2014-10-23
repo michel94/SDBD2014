@@ -130,6 +130,9 @@ public class ListenerThread implements Runnable{
 					Comment comment = (Comment) r;
 					Notification ncom = new Notification("New Comment on item " + comment.item.iditem, comment.text, "dialog-information");
 					ncom.show();
+				}else if(r instanceof Action){
+					Action action = (Action) r;
+					wait.notifyDefault();
 				}else if(r instanceof Confirmation){
 					if( ((Confirmation) r).error > 0)
 						print("Sorry, we could not process your request due to conflicts with other accesses. Try again");

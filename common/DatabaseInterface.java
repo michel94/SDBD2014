@@ -13,6 +13,8 @@ public interface DatabaseInterface extends Remote{
 	public User getUser(int iduser) throws RemoteException;
 	//private Users getAllUsersFromMeeting(int idmeeting); FOI REMOVIDA DA INTERFACE
 
+	public Action getAction(int idaction) throws RemoteException;
+	public int updateItem(Item item) throws RemoteException;
 
 	public Item getItem(int id) throws RemoteException;
 	
@@ -20,6 +22,5 @@ public interface DatabaseInterface extends Remote{
 	public int insertItem(Item it, User u) throws RemoteException;
 	public int insertComment(Comment com, User u) throws RemoteException;
 	
-	public int updateItem(Item it, User u) throws RemoteException;
 	//public Comment updateComment(Comment com, User u) throws RemoteException;
 }

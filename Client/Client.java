@@ -273,7 +273,7 @@ public class Client{
 				if(m.items.size()!=0){
 					print("Which item do you want to consult? Write its number:");
 		
-					r = new Request("item",m.items.get(readInt(1,m.items.size())-1 ).iditem);
+					r = new Request("item", m.items.get(readInt(1,m.items.size())-1).iditem);
 					writeObject(r);
 					wait.waitItem();
 					lt.context = "ConsultItem";
@@ -377,6 +377,11 @@ public class Client{
 				break;
 			case 5:
 				clear();
+				print("Insert new description:");
+				String desc = readString();
+				Item nit = new Item(it.iditem, it.title, desc, it.user, it.meeting);
+				writeObject(nit);
+				wait.waitDefault();
 				print("Not working yet");
 				break;			
 			case 6:
@@ -392,6 +397,13 @@ public class Client{
 		Request r;
 		
 		Action a = (Action)updateDataInClient("action", lt.action.idaction);
+		print("Action");
+		print("Description: " + a.description);
+		print("Due to: " + a.due_to);
+		print("Assigned User: " + a.assigned_user.username);
+		if(a.done == 0) print("Done: No");
+		else print("Done: Yes");
+
 
 		print("What do you want to do?");
 		print("1 - Edit this action");
@@ -410,7 +422,7 @@ public class Client{
 				clear();
 				print("Not working yet.");
 
-				lt.context="ConsultMeeting";
+				lt.context="ConsultAction";
 				break;
 			case 3:
 				clear();

@@ -76,6 +76,8 @@ public class ClientThread implements Runnable {
 						r = database.getItem(id);
 					}else if(req.type.equals("users")){
 						//r = database.getUsers()
+					}else if(req.type.equals("action")){
+						r = database.getAction(id);
 					}
 
 				}
@@ -93,10 +95,10 @@ public class ClientThread implements Runnable {
 					}
 				}else if(data instanceof Item){
 					Item it = (Item) data;
-					if(it.id == 0){
+					if(it.iditem == 0){
 						qres = database.insertItem(it, userData);
 					}else{
-						//Item result = database.updateItem(it, userData);
+						qres = database.updateItem(it);
 					}
 				}else if(data instanceof Comment){
 					System.out.println("Received Comment");
@@ -104,7 +106,7 @@ public class ClientThread implements Runnable {
 					if(com.commentId == 0){
 						qres = database.insertComment(com, userData);
 						if(qres != -1){
-							broadcastMessage(com, "comment", com.item.id);
+							broadcastMessage(com, "comment", com.item.iditem);
 						}
 					}
 				}else if(data instanceof Action){

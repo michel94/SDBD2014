@@ -23,7 +23,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","toor");
+		connection = DriverManager.getConnection(url,"root","");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 
@@ -89,7 +89,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				meeting.created_datetime = rs.getString("created_datetime");
 
 				//--- Obter items ---
-				rs = executeQuery("SELECT iditem, title, description FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");	
+				rs = executeQuery("SELECT iditem, title, description, user FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");	
 				while(rs.next())
 				{
 					user = getUser(rs.getInt("user"));
@@ -186,6 +186,22 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return meetings;
 	}
 
+	public Action getAction(int idaction){
+		try{
+			ResultSet rs = executeQuery("SELECT * from action where idaction=" + idaction);
+
+			if(rs.next()){
+				ResultSet srs = executeQuery("SELECT * from user where iduser=" + rs.getInt("assigned_user"));
+				User u = null;
+				if(srs.next()) u = new User(srs.getInt("iduser"), srs.getString("username") );
+				return new Action(rs.getInt("idaction"), rs.getTimestamp("due_to").toString(), u, rs.getInt("done"), null, rs.getInt("active"));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public int insertMeeting(Meeting meeting) {
 		try{
 			String query = "INSERT INTO meeting(title, description, datetime, location, leader, created_datetime) values('" + meeting.title + "', '" + meeting.description + "', '" + meeting.datetime + "', '" + meeting.location + "', '" + meeting.leader.iduser + "', " + "NOW()" + ");";
@@ -271,9 +287,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return executeUpdate(query);
 	}
 
-	public int updateItem(Item it, User u){
-
-		return 0;
+	public int updateItem(Item it){
+		return executeUpdate("UPDATE item set description='" + it.description + "' where iditem=" + it.iditem);
 	}
 
 	public int insertComment(Comment com, User u){
@@ -282,6 +297,10 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		executeUpdate(query);
 
 		return 0;
+	}
+
+	public int confirmAction(Action a){
+		return executeUpdate("UPDATE action set done=1 where idaction=" + a.idaction);
 	}
 
 
