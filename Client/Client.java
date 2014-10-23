@@ -104,8 +104,10 @@ public class Client{
 			}else if(lt.context.equals("Groups")){
 				groupsMenu();
 
-			}else if(lt.context.equals("newItemMenu")){
+			}else if(lt.context.equals("NewItemMenu")){
 				newItemMenu();
+			}else if(lt.context.equals("NewActionMenu")){
+				newActionMenu();
 			}
 
 		}
@@ -273,7 +275,7 @@ public class Client{
 				if(m.items.size()!=0){
 					print("Which item do you want to consult? Write its number:");
 		
-					r = new Request("item",m.items.get(readInt(1,m.items.size())-1 ).id);
+					r = new Request("item",m.items.get(readInt(1,m.items.size())-1 ).iditem);
 					writeObject(r);
 					wait.waitItem();
 					lt.context = "ConsultItem";
@@ -294,12 +296,11 @@ public class Client{
 			case 3:
 				clear();
 				
-				lt.context = "newItemMenu";
+				lt.context = "NewItemMenu";
 				break;
 			case 4:
 				clear();
-				print("Not working yet");
-				lt.context = "ConsultMeeting";
+				lt.context = "AddAction";
 				break;
 			case 5: 
 				clear();
@@ -334,11 +335,11 @@ public class Client{
 		int sel;
 		Request r;
 		Meeting m = lt.meeting;
-		Item it = (Item)updateDataInClient("item", lt.item.id);
+		Item it = (Item)updateDataInClient("item", lt.item.iditem);
 		
 		print("Key Decisions:");
-		for (int i=0;i<it.decisions.size();i++){
-			print(it.decisions.get(i).date+" "+ it.decisions.get(i).description);
+		for (int i=0;i<it.keydecisions.size();i++){
+			print(it.keydecisions.get(i).date+" "+ it.keydecisions.get(i).description);
 		}
 		print("Comments:");
 		for (int i=0;i<it.comments.size();i++){
@@ -433,6 +434,24 @@ public class Client{
 		it.meeting = lt.meeting.idmeeting;
 
 		writeObject(it);
+		wait.waitDefault();
+
+		lt.context = "ConsultMeeting";
+
+	}
+	
+	public void newActionMenu(){
+		int sel;
+		Action act = new Action();
+
+		print("Adding new action. Fill the following form:");
+		print("Due date (YYYY/MM/DD): ");
+		act.due_to = readString();
+		print("Description: ");
+		act.description = readString();
+		act.meeting = lt.meeting;
+		print("Assigned user:(Not working yet)");
+		writeObject(act);
 		wait.waitDefault();
 
 		lt.context = "ConsultMeeting";

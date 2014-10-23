@@ -16,12 +16,12 @@ public class Item implements Serializable{
 		comments = new ArrayList<Comment>();
 		decisions = new ArrayList<KeyDecision>();
 	}
-
+	*/
 	public Item(){
-		comments = new ArrayList<Comment>();
-		decisions = new ArrayList<KeyDecision>();
+		comments = new Comments();
+		keydecisions = new KeyDecisions();
 	}
-
+	/*
 	public Item(int id, String title){
 		this.title = title;
 		this.id = id;
