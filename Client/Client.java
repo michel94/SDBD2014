@@ -329,7 +329,7 @@ public class Client{
 				lt.context = "Meetings";
 				break;
 		}
-		updateDataInClient("meeting",lt.meeting.idmeeting);
+		m = (Meeting)updateDataInClient("meeting",lt.meeting.idmeeting);
 	}
 	
 	public void consultItemMenu(){
@@ -408,7 +408,7 @@ public class Client{
 				break;
 
 		}
-		updateDataInClient("item", lt.item.iditem);
+		it = (Item)updateDataInClient("item", lt.item.iditem);
 
 	}
 
@@ -450,7 +450,7 @@ public class Client{
 				lt.context="ConsultMeeting";
 				break;
 		}
-		updateDataInClient("action", lt.action.idaction);
+		a = (Action)updateDataInClient("action", lt.action.idaction);
 
 
 	}
