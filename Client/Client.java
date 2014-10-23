@@ -273,7 +273,7 @@ public class Client{
 				if(m.items.size()!=0){
 					print("Which item do you want to consult? Write its number:");
 		
-					r = new Request("item",m.items.get(readInt(1,m.items.size())-1 ).id);
+					r = new Request("item",m.items.get(readInt(1,m.items.size())-1 ).iditem);
 					writeObject(r);
 					wait.waitItem();
 					lt.context = "ConsultItem";
@@ -334,11 +334,11 @@ public class Client{
 		int sel;
 		Request r;
 		Meeting m = lt.meeting;
-		Item it = (Item)updateDataInClient("item", lt.item.id);
+		Item it = (Item)updateDataInClient("item", lt.item.iditem);
 		
 		print("Key Decisions:");
-		for (int i=0;i<it.decisions.size();i++){
-			print(it.decisions.get(i).date+" "+ it.decisions.get(i).description);
+		for (int i=0;i<it.keydecisions.size();i++){
+			print(it.keydecisions.get(i).date+" "+ it.keydecisions.get(i).description);
 		}
 		print("Comments:");
 		for (int i=0;i<it.comments.size();i++){
