@@ -9,6 +9,16 @@ apagar keydecision							done
 edit keydecision							done
 
 
+
+insertAction
+fazer assign de um user a uma action
+update action
+apagar action
+
+
+
+TRABALHO DO DIOGO DAQUI PARA BAIXO
+
 aceitar ou recusar convite --> vamos ter de implementar invite, pois ha um ponto da checklist q é exactamente "aceitar invite"
 
 add group to meeting
@@ -16,13 +26,6 @@ add group to meeting
 	- inserir cada utilizador manualmente
 fechar meeting ??
 
-
-
-
-insertAction
-fazer assign de um user a uma action
-update action
-apagar action
 
 
 apagar meeting
