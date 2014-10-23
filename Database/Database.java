@@ -370,7 +370,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int insertKeyDecision(KeyDecision kd){
-		return executeUpdate("INSERT INTO keydecision(description, item) values('" + kd.description + "', " + kd.item + ")");
+		return executeUpdate("INSERT INTO keydecision(description, item, created_datetime) values('" + kd.description + "', " + kd.item + ", now() )");
 	}
 
 	public int deleteKeyDecision(int idkeydecision){
@@ -378,7 +378,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int updateKeyDecision(KeyDecision kd){
-		return executeUpdate("UPDATE keydecision set description=" + kd.description + " where idkeydecision=" + kd.idkeydecision);
+		return executeUpdate("UPDATE keydecision set description='" + kd.description + "' where idkeydecision=" + kd.idkeydecision);
 	}
 
 	public boolean stonith(){

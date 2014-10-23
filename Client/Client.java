@@ -379,17 +379,21 @@ public class Client{
 				print("Insert the key description data:");
 				print("Description: ");
 				kd = new KeyDecision(readString());
+				kd.item = it.iditem;
+				System.out.print("iditem " + kd.item);
+
 				writeObject(kd);
 				wait.waitDefault();
 
 				break;
 			case 4:
-				clear();
 				print("Which key decision do you want to edit?");
 				int ikd = readInt(1, it.keydecisions.size())-1;
 				print("Description: ");
 				kd = new KeyDecision(readString());
 				kd.idkeydecision = ikd;
+				kd.item = it.iditem;
+				
 				writeObject(kd);
 				wait.waitDefault();
 
