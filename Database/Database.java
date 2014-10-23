@@ -256,7 +256,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		Users users = new Users();
 
 		try{
-			ResultSet rs = executeQuery("SELECT * FROM user active=1;");
+			ResultSet rs = executeQuery("SELECT * FROM user where active=1;");
 			while(rs.next())
 			{
 				User user = new User(rs.getInt("iduser"), rs.getString("username"));
