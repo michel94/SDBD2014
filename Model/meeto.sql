@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 21, 2014 at 12:37 AM
+-- Generation Time: Oct 23, 2014 at 07:11 AM
 -- Server version: 5.5.38-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.3
 
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   PRIMARY KEY (`iditem`),
   KEY `fk_item_1_idx` (`user`),
   KEY `fk_item_2_idx` (`meeting`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `item`
@@ -139,7 +139,9 @@ CREATE TABLE IF NOT EXISTS `item` (
 
 INSERT INTO `item` (`iditem`, `title`, `description`, `user`, `created_datetime`, `meeting`, `active`) VALUES
 (1, 'Item 1', 'descrição do item 1', 4, '2014-10-16 16:19:22', 1, 1),
-(2, 'Item 2', 'Descrição item 2', 5, '2014-10-16 16:19:22', 1, 1);
+(2, 'Item 2', 'Descrição item 2', 5, '2014-10-16 16:19:22', 1, 1),
+(3, 'titulo item', 'descricaooooo', 1, '2014-10-23 04:24:45', 1, 1),
+(4, 'titulo item', 'descricaooooo', 1, '2014-10-23 04:26:28', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -177,21 +179,23 @@ CREATE TABLE IF NOT EXISTS `meeting` (
   `datetime` datetime NOT NULL,
   `location` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `leader` int(11) NOT NULL,
+  `finished` tinyint(4) NOT NULL DEFAULT '0',
   `created_datetime` datetime NOT NULL,
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idmeeting`),
   KEY `fk_meeting_1_idx` (`leader`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `meeting`
 --
 
-INSERT INTO `meeting` (`idmeeting`, `title`, `description`, `datetime`, `location`, `leader`, `created_datetime`, `active`) VALUES
-(1, 'Reunião A', 'descricao da reuniao a', '2014-12-10 00:00:00', 'DEI', 3, '2014-10-14 00:00:00', 1),
-(2, 'hjjhgh', 'jhgjhghg', '2014-10-16 00:00:00', 'dei', 4, '2014-10-16 17:38:54', 1),
-(3, 'asd', 'asdad', '2014-03-03 00:00:00', 'coimbra', 1, '2014-10-20 21:47:00', 1),
-(4, 'asd', 'asdad', '2014-03-03 00:00:00', 'coimbra', 1, '2014-10-20 21:54:00', 1);
+INSERT INTO `meeting` (`idmeeting`, `title`, `description`, `datetime`, `location`, `leader`, `finished`, `created_datetime`, `active`) VALUES
+(1, 'Reunião A', 'descricao da reuniao a', '2014-12-10 00:00:00', 'DEI', 3, 0, '2014-10-14 00:00:00', 1),
+(2, 'hjjhgh', 'jhgjhghg', '2014-10-16 00:00:00', 'dei', 4, 0, '2014-10-16 17:38:54', 1),
+(3, 'asd', 'asdad', '2014-03-03 00:00:00', 'coimbra', 1, 0, '2014-10-20 21:47:00', 1),
+(4, 'asd', 'asdad', '2014-03-03 00:00:00', 'coimbra', 1, 0, '2014-10-20 21:54:00', 1),
+(5, 'Reuniao y', 'descricao da reuniao y', '2014-05-23 07:03:00', 'DEI', 1, 0, '2014-10-22 01:07:58', 1);
 
 -- --------------------------------------------------------
 
@@ -233,6 +237,7 @@ CREATE TABLE IF NOT EXISTS `meeting_user` (
 INSERT INTO `meeting_user` (`meeting`, `user`) VALUES
 (1, 1),
 (1, 3),
+(3, 3),
 (1, 4),
 (1, 5);
 
