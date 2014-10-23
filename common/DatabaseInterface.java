@@ -28,6 +28,7 @@ public interface DatabaseInterface extends Remote{
 	public int insertKeyDecision(KeyDecision kd) throws RemoteException;
 	public int deleteKeyDecision(int idkeydecision) throws RemoteException;
 	public int updateKeyDecision(KeyDecision kd) throws RemoteException;
+	public Users getAllUsers() throws RemoteException;
 	
 	
 	//public Comment updateComment(Comment com, User u) throws RemoteException;

@@ -300,7 +300,7 @@ public class Client{
 				break;
 			case 4:
 				clear();
-				lt.context = "AddAction";
+				lt.context = "NewActionMenu";
 				break;
 			case 5: 
 				clear();
@@ -344,7 +344,7 @@ public class Client{
 
 		print("Key Decisions:");
 		for (int i=0;i<it.keydecisions.size();i++){
-			print(it.keydecisions.get(i).datetime+" "+ it.keydecisions.get(i).description);
+			print(i +" -" +"Description: "+it.keydecisions.get(i).description);
 		}
 		print("Comments:");
 		for (int i=0;i<it.comments.size();i++){
@@ -384,7 +384,6 @@ public class Client{
 
 				break;
 			case 4:
-				clear();
 				print("Which key decision do you want to edit?");
 				int ikd = readInt(1, it.keydecisions.size())-1;
 				print("Description: ");
