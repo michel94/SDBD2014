@@ -104,8 +104,10 @@ public class Client{
 			}else if(lt.context.equals("Groups")){
 				groupsMenu();
 
-			}else if(lt.context.equals("newItemMenu")){
+			}else if(lt.context.equals("NewItemMenu")){
 				newItemMenu();
+			}else if(lt.context.equals("NewActionMenu")){
+				newActionMenu();
 			}
 
 		}
@@ -294,12 +296,11 @@ public class Client{
 			case 3:
 				clear();
 				
-				lt.context = "newItemMenu";
+				lt.context = "NewItemMenu";
 				break;
 			case 4:
 				clear();
-				print("Not working yet");
-				lt.context = "ConsultMeeting";
+				lt.context = "AddAction";
 				break;
 			case 5: 
 				clear();
@@ -433,6 +434,24 @@ public class Client{
 		it.meeting = lt.meeting.idmeeting;
 
 		writeObject(it);
+		wait.waitDefault();
+
+		lt.context = "ConsultMeeting";
+
+	}
+	
+	public void newActionMenu(){
+		int sel;
+		Action act = new Action();
+
+		print("Adding new action. Fill the following form:");
+		print("Due date (YYYY/MM/DD): ");
+		act.due_to = readString();
+		print("Description: ");
+		act.description = readString();
+		act.meeting = lt.meeting;
+		print("Assigned user:(Not working yet)");
+		writeObject(act);
 		wait.waitDefault();
 
 		lt.context = "ConsultMeeting";
