@@ -123,6 +123,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 
 			}
+
+			meeting.users = getAllUsersFromMeeting(idmeeting);
+
 		}
 		catch(SQLException e)
 		{
@@ -195,6 +198,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}catch(SQLException e){
 			return -1;
 		}
+
 	}
 
 	public int updateMeeting(Meeting meeting){
@@ -263,8 +267,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int insertItem(Item it, User u){
-
-		return 0;
+		String query = "INSERT INTO item(title, description, user, meeting, created_datetime) values('" + it.title + "', '" + it.description + "', '" + u.iduser + "', '" + it.meeting + "', now())";
+		return executeUpdate(query);
 	}
 
 	public int updateItem(Item it, User u){
