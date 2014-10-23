@@ -51,7 +51,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		/*Item item = new Item(-1, "titulo item", "descricaooooo", getUser(1), 1);
 		insertItem(item);*/
 
-		addUserToMeeting(getUser(5), getMeeting(1));
+		//addUserToMeeting(getUser(5), getMeeting(1));
+
+		//finishMeeting(getMeeting(5));
 
 	}
 
@@ -112,7 +114,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				while(rs.next())
 				{
 					System.out.println("OK");
-					Action action = new Action(rs.getInt("idaction"), rs.getString("due_to"), null, rs.getInt("done"), meeting, rs.getInt("active"));
+					Action action = new Action(rs.getInt("idaction"), rs.getString("description"), rs.getString("due_to"), null, rs.getInt("done"), meeting, rs.getInt("active"));
 
 					ResultSet subrs = executeQuery("SELECT iduser, username FROM user WHERE iduser="+rs.getInt("assigned_user")+" AND active=1;");
 					System.out.println("OK1");
@@ -172,7 +174,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		User user = null;
 
 		try{
-			ResultSet rs = executeQuery("SELECT m.* FROM meeting as m, meeting_user as mu WHERE mu.user = "+ iduser +" AND mu.meeting = m.idmeeting AND m.datetime < NOW() AND m.active = 1");
+			ResultSet rs = executeQuery("SELECT m.* FROM meeting as m, meeting_user as mu WHERE mu.user = "+ iduser +" AND mu.meeting = m.idmeeting AND m.finished = 1 AND m.active = 1");
 			while(rs.next())
 			{
 				user = getUser(rs.getInt("leader"));
@@ -208,7 +210,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public int updateMeeting(Meeting meeting){
 
-		String query = "UPDATE meeting SET title='" + meeting.title + "', description='" + meeting.description + "', datetime='" + meeting.datetime + "', location='" + meeting.location + "', leader='" + meeting.leader.iduser + "', active='" + meeting.active + "' WHERE idmeeting="+meeting.idmeeting+" AND datetime > NOW() AND active=1;";
+		String query = "UPDATE meeting SET title='" + meeting.title + "', description='" + meeting.description + "', datetime='" + meeting.datetime + "', location='" + meeting.location + "', leader='" + meeting.leader.iduser + "', finished='"+meeting.finished+"', active='" + meeting.active + "' WHERE idmeeting="+meeting.idmeeting+" AND datetime > NOW() AND active=1;";
 		return executeUpdate(query);
 	}
 
@@ -292,11 +294,18 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 	}
 
-	public int addUserToMeeting(User user, Meeting meeting)
-	{
+	public int addUserToMeeting(User user, Meeting meeting){
 		String query = "INSERT INTO meeting_user (meeting, user) values((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1));";
 		return executeUpdate(query);
 	}
+
+	public int finishMeeting(Meeting meeting){
+		meeting.finished = 1;
+		return updateMeeting(meeting);
+	}
+
+
+
 
 	public int updateItem(Item it, User u){
 

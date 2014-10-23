@@ -5,7 +5,7 @@ public class Meeting implements Serializable{
 	public String title, description, datetime, location, created_datetime;
 	public int idmeeting;
 	public User leader;
-	public int active;
+	public int active, finished;
 
 	public ArrayList<Item> items;
 	public ArrayList<Action> actions;

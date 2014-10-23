@@ -15,6 +15,7 @@ public interface DatabaseInterface extends Remote{
 	public Item getItem(int id) throws RemoteException;
 	public int insertItem(Item item) throws RemoteException;
 	public int addUserToMeeting(User user, Meeting meeting) throws RemoteException;
+	public int finishMeeting(Meeting meeting) throws RemoteException;
 
 
 
