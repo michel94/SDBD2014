@@ -132,6 +132,9 @@ public class ClientThread implements Runnable {
 				}else if(data instanceof InviteUsers){
 					InviteUsers iu = (InviteUsers) data;
 					qres = database.inviteUsers(iu);
+				}else if(data instanceof User){
+					User u = (User) data;
+					r = database.createAccount(u);				
 				}
 
 				if(r != null){

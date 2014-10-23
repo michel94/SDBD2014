@@ -436,14 +436,26 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return aut;
 	}
 
-	public int createAccount(User u){
-		ResultSet rs = executeQuery("SELECT * from user where username=" + u.username);
+	public User createAccount(User u){
+		ResultSet rs = executeQuery("SELECT * from user where username='" + u.username+"'");
 		try{
-			if(rs.next()) return -1;
+			if(rs.next()) return u;
 		}catch(SQLException e){
-			return -1;
+			return u;
 		}
-		return executeUpdate("INSERT INTO user(username, password) values('" + u.username + "', '" + u.password + "')");
+		
+		executeUpdate("INSERT INTO user(username, password,created_datetime) values('" + u.username + "', '" + u.password + "',now())" );
+		rs = executeQuery("SELECT iduser from user where username='" + u.username+"'");
+		
+		try{
+			if(rs.next()){
+				u.iduser = rs.getInt("iduser");
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+
+		return u;
 	}
 
 	public static void main(String[] args) throws RemoteException, SQLException {

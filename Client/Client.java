@@ -13,6 +13,7 @@ public class Client{
 	private BufferedReader in;
 	private boolean loggedIn = false;
 	public WaitClient wait;
+	private User user;
 	
 	public Client(){
 		clear();
@@ -552,7 +553,25 @@ public class Client{
 					break;
 				case 2:
 					clear();
-					//print("Write your desired username:");
+					while(true){
+						user = new User();
+						print("Write your desired username:");
+						s = readString();
+						user.username = s;
+						print("Write your desired password:");
+						s = readString();
+						user.password = s;
+					
+						writeObject(user);
+						wait.waitDefault();
+					
+						if (lt.user.iduser ==0){
+							print("Username already exists please try again");
+						}else break;
+					}
+					clear();
+					print("Account successfully created!");
+					
 					break;
 				case 3:
 					System.exit(0);
