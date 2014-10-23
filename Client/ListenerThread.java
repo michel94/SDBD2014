@@ -152,7 +152,7 @@ public class ListenerThread implements Runnable{
 					keydecision = (KeyDecision) r;
 					wait.notifyDefault();
 				}else if(r instanceof Confirmation){
-					this.confirmation = (Confirmation) r);
+					this.confirmation = (Confirmation) r;
 					if( ((Confirmation) r).error > 0)
 						print("Sorry, we could not process your request due to conflicts with other accesses. Try again");
 					wait.notifyDefault();
