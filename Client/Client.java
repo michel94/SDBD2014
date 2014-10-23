@@ -133,7 +133,8 @@ public class Client{
 				clear();
 				break;
 			case 2:	
-				lt.context = "Groups";
+				//lt.context = "Groups";
+				
 				clear();
 				break;
 			case 3:
@@ -224,7 +225,7 @@ public class Client{
 		writeObject(m);
 		wait.waitDefault();
 		
-		listAllUsers();
+		//listAllUsers();
 		print("Invite users to the meeting: (Not working yet)");
 		
 		clear();
@@ -239,9 +240,7 @@ public class Client{
 		int sel;
 		Request r;
 
-
-		
-		Meeting m = (Meeting)updateDataInClient("meeting",lt.meeting.idmeeting);
+		Meeting m = lt.meeting;
 
 		print("Title: "+m.title);
 		print("Description: "+m.description);
@@ -301,7 +300,7 @@ public class Client{
 				break;
 			case 4:
 				clear();
-				lt.context = "AddAction";
+				lt.context = "NewActionMenu";
 				break;
 			case 5: 
 				clear();
@@ -330,6 +329,7 @@ public class Client{
 				lt.context = "Meetings";
 				break;
 		}
+		m = (Meeting)updateDataInClient("meeting",lt.meeting.idmeeting);
 	}
 	
 	public void consultItemMenu(){
@@ -337,14 +337,14 @@ public class Client{
 		Request r;
 		Meeting m = lt.meeting;
 		KeyDecision kd;
-		Item it = (Item)updateDataInClient("item", lt.item.iditem);
+		Item it = lt.item;
 		
 		print("Item Title: " + it.title);
 		print("Item Description: " + it.description);
 
 		print("Key Decisions:");
 		for (int i=0;i<it.keydecisions.size();i++){
-			print(it.keydecisions.get(i).datetime+" "+ it.keydecisions.get(i).description);
+			print(i +" -" +"Description: "+it.keydecisions.get(i).description);
 		}
 		print("Comments:");
 		for (int i=0;i<it.comments.size();i++){
@@ -412,6 +412,7 @@ public class Client{
 				break;
 
 		}
+		it = (Item)updateDataInClient("item", lt.item.iditem);
 
 	}
 
@@ -419,7 +420,8 @@ public class Client{
 		int sel;
 		Request r;
 		
-		Action a = (Action)updateDataInClient("action", lt.action.idaction);
+		Action a = lt.action;
+
 		print("Action");
 		print("Description: " + a.description);
 		print("Due to: " + a.due_to);
@@ -452,6 +454,7 @@ public class Client{
 				lt.context="ConsultMeeting";
 				break;
 		}
+		a = (Action)updateDataInClient("action", lt.action.idaction);
 
 
 	}
