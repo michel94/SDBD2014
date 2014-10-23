@@ -104,8 +104,10 @@ public class Client{
 			}else if(lt.context.equals("Groups")){
 				groupsMenu();
 
-			}else if(lt.context.equals("newItemMenu")){
+			}else if(lt.context.equals("NewItemMenu")){
 				newItemMenu();
+			}else if(lt.context.equals("NewActionMenu")){
+				newActionMenu();
 			}
 
 		}
@@ -222,8 +224,9 @@ public class Client{
 		writeObject(m);
 		wait.waitDefault();
 		
+		listAllUsers();
 		print("Invite users to the meeting: (Not working yet)");
-
+		
 		clear();
 		print("Meeting created successfully");
 		
@@ -294,12 +297,11 @@ public class Client{
 			case 3:
 				clear();
 				
-				lt.context = "newItemMenu";
+				lt.context = "NewItemMenu";
 				break;
 			case 4:
 				clear();
-				print("Not working yet");
-				lt.context = "ConsultMeeting";
+				lt.context = "AddAction";
 				break;
 			case 5: 
 				clear();
@@ -450,6 +452,30 @@ public class Client{
 		lt.context = "ConsultMeeting";
 
 	}
+	
+	public void newActionMenu(){
+		int sel;
+		Action act = new Action();
+
+		print("Adding new action. Fill the following form:");
+		print("Due date (YYYY/MM/DD): ");
+		act.due_to = readString();
+		print("Description: ");
+		act.description = readString();
+		act.meeting = lt.meeting;
+		listAllUsers();
+		print("Assign user by writing its number from the user list:");
+		sel=readInt(1,lt.users.size())-1;
+		Request r = new Request("user", lt.users.get(sel).iduser);
+		writeObject(r);
+		wait.waitDefault();
+		act.assigned_user = lt.user;
+		writeObject(act);
+		wait.waitDefault();
+
+		lt.context = "ConsultMeeting";
+
+	}
 
 	
 
@@ -594,6 +620,15 @@ public class Client{
 				clear();
 				lt.context = "Main";
 				break;
+		}
+	}
+	
+	public void listAllUsers(){
+		Request r = new Request("users");
+		writeObject(r);
+		wait.waitDefault();	
+		for(int i=0;i<lt.users.size();i++){
+			print(i+1+" - "+lt.users.get(i).username);		
 		}
 	}
 

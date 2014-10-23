@@ -78,6 +78,8 @@ public class ClientThread implements Runnable {
 						//r = database.getUsers()
 					}else if(req.type.equals("action")){
 						r = database.getAction(id);
+					}else if(req.type.equals("groups")){
+						//r = database.getGroups()
 					}
 
 				}
