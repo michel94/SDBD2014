@@ -16,11 +16,11 @@ update action
 apagar action
 
 
-registar conta							
+registar conta								done			
 
 TRABALHO DO DIOGO DAQUI PARA BAIXO
 
-aceitar ou recusar convite --> vamos ter de implementar invite, pois ha um ponto da checklist q é exactamente "aceitar invite"
+recusar convite
 
 add group to meeting
 	- inserir na tabela group_user
@@ -35,4 +35,4 @@ apagar item
 apagar keydecision
 apagar action
 
-insert meeting adiciona tb utilizadores
+insert meeting adiciona tb utilizadores		done
