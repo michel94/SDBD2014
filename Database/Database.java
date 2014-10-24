@@ -372,7 +372,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int updateAction(Action act){
-		return executeUpdate("UPDATE action(description, due_to, meeting) values('" + act.description + "', " + act.due_to + ", " + act.meeting + ")");
+		return executeUpdate("UPDATE action SET description='" + act.description + "', due_to='" + act.due_to + "', assigned_user='" + act.assigned_user.iduser + "', done='"+act.done+"' WHERE idaction="+act.idaction);
+		
 	}
 
 	public int deleteAction(int idaction){

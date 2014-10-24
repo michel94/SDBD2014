@@ -121,6 +121,8 @@ public class ClientThread implements Runnable {
 					System.out.println("Received action");
 					if(act.idaction == 0){
 						qres = database.insertAction(act);
+					}else{
+						qres = database.updateAction(act);
 					}
 				}else if(data instanceof KeyDecision){
 					KeyDecision kd = (KeyDecision) data;

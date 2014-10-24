@@ -111,6 +111,8 @@ public class Client{
 				newActionMenu();
 			}else if (lt.context.equals("EditMeetingMenu")){
 				editMeetingMenu();			
+			}else if (lt.context.equals("EditAction")){
+				editActionMenu();			
 			}
 
 		}
@@ -277,6 +279,45 @@ public class Client{
 		
 		lt.context = "Meetings";
 	
+
+
+	}
+	public void editActionMenu(){
+		Action a = lt.action;
+		String s, date;
+		clear();
+		print("Edit meeting. Fill the following form to replace fields (To skip field write skip):");
+		print("Description: "+ a.description);
+		s = readString();
+		if(!s.equals("skip")){
+			a.description = s;
+		}
+		String[] ss = a.due_to.split(" ");		
+		print("Date: "+ss[0]);
+		s = readString();
+		if(!s.equals("skip")){
+			date = s;
+		}else date = ss[0];		
+		print("Time: "+ ss[1]);
+		s = readString();
+		if(!s.equals("skip")){
+			a.due_to = date + " " + s;
+		}else a.due_to = date + " " + ss[1];
+		
+		print("Status (1 for Done, 0 for Pending): "+ a.done);
+		a.done = readInt(1,2);
+
+		listAllUsers();
+		print("Assign user by writing its number from the user list:");
+		int sel=readInt(1,lt.users.size())-1;
+		a.assigned_user = lt.users.get(sel);
+
+		writeObject(a);
+		wait.waitDefault();
+
+		lt.context = "ConsultAction";
+		clear();
+		print("Action edited successfully");
 
 
 	}
@@ -496,14 +537,13 @@ public class Client{
 		switch(sel){
 			case 1:
 				clear();
-				print("Not working yet.");
-				lt.context="ConsultAction";
+				
+				
+				lt.context="EditAction";
 				break;
 			case 2:
 				clear();
-				print("Not working yet.");
-
-				lt.context="ConsultAction";
+				lt.context="EditActionMenu";
 				break;
 			case 3:
 				clear();
