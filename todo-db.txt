@@ -35,3 +35,5 @@ apagar meeting
 apagar item
 apagar keydecision
 apagar action
+
+insert meeting adiciona tb utilizadores

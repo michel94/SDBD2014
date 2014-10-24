@@ -29,7 +29,7 @@ public class UdpConnection implements Runnable {
 				socket = new DatagramSocket(udpPort);
 
 				while(true){
-					byte[] buffer = new byte[1000]; 			
+					byte[] buffer = new byte[1000];
 					DatagramPacket request = new DatagramPacket(buffer, buffer.length);
 					socket.receive(request);
 					s = new String(request.getData(), 0, request.getLength());

@@ -118,7 +118,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				while(rs.next())
 				{
 					System.out.println("OK");
-					Action action = new Action(rs.getInt("idaction"), rs.getString("description"), rs.getString("due_to"), null, rs.getInt("done"), meeting, rs.getInt("active"));
+					Action action = new Action(rs.getInt("idaction"), rs.getString("description"), rs.getString("due_to"), null, rs.getInt("done"), meeting.idmeeting, rs.getInt("active"));
 
 					ResultSet subrs = executeQuery("SELECT iduser, username FROM user WHERE iduser="+rs.getInt("assigned_user")+" AND active=1;");
 					System.out.println("OK1");
@@ -205,7 +205,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				ResultSet srs = executeQuery("SELECT * from user where iduser=" + rs.getInt("assigned_user"));
 				User u = null;
 				if(srs.next()) u = new User(srs.getInt("iduser"), srs.getString("username") );
-				return new Action(rs.getInt("idaction"), rs.getString("description"), rs.getTimestamp("due_to").toString(), u, rs.getInt("done"), null, rs.getInt("active"));
+				return new Action(rs.getInt("idaction"), rs.getString("description"), rs.getTimestamp("due_to").toString(), u, rs.getInt("done"), rs.getInt("meeting"), rs.getInt("active"));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -256,7 +256,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		Users users = new Users();
 
 		try{
-			ResultSet rs = executeQuery("SELECT * FROM user active=1;");
+			ResultSet rs = executeQuery("SELECT * FROM user where active=1;");
 			while(rs.next())
 			{
 				User user = new User(rs.getInt("iduser"), rs.getString("username"));
@@ -353,19 +353,19 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return 0;
 	}
 
-	public int insertAction(){
-		return -1;
+	public int insertAction(Action act){
+		return executeUpdate("INSERT INTO action(description, due_to, meeting, assigned_user, created_datetime) values('" + act.description + "', '" + act.due_to + "', " + act.meeting + ", " + act.assigned_user.iduser + ", now() )");
 	}
 
-	public int assignUserToAction(){
-		return -1;
+	public int assignUserToAction(Action act){
+		return executeUpdate("INSERT INTO action(assigned_user) values(" + act.assigned_user.iduser + ")");
 	}
 
-	public int updateAction(){
-		return -1;
+	public int updateAction(Action act){
+		return executeUpdate("UPDATE action(description, due_to, meeting) values('" + act.description + "', " + act.due_to + ", " + act.meeting + ")");
 	}
 
-	public int deleteAction(){
+	public int deleteAction(int idaction){
 		return -1;
 	}
 

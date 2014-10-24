@@ -256,6 +256,7 @@ public class Client{
 			if(m.actions.get(i).done == 0){
 				print(" Status: Pending");
 			}else print(" Status: Done");
+			print("Assigned to: " + m.actions.get(i).assigned_user.username);
 		}
 		print("");
 		print("What do you want to do?");
@@ -486,14 +487,12 @@ public class Client{
 		act.due_to = readString();
 		print("Description: ");
 		act.description = readString();
-		act.meeting = lt.meeting;
+		act.meeting = lt.meeting.idmeeting;
 		listAllUsers();
 		print("Assign user by writing its number from the user list:");
 		sel=readInt(1,lt.users.size())-1;
-		Request r = new Request("user", lt.users.get(sel).iduser);
-		writeObject(r);
-		wait.waitDefault();
-		act.assigned_user = lt.user;
+		
+		act.assigned_user = lt.users.get(sel);
 		writeObject(act);
 		wait.waitDefault();
 
@@ -682,7 +681,7 @@ public class Client{
 			Request r = new Request("action", id);
 			writeObject(r);
 			wait.waitAction();
-			return lt.action;	
+			return lt.action;
 		}
 		return o;
 	}
