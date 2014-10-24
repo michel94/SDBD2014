@@ -11,22 +11,27 @@ Proteger contra adicionar users que já existam a uma reuniao, incluindo convida
 
 Register users (com confirmação se o user já existe) - Done
 
-Mostrar lista de users Do meeting que estamos a consultar <- PRECISA DE FUNÇÃO NA BASE DE DADOS
-
 Edit meeting details <- Done
 
 Close this meeting <- Não tá na checklist fica pra depois
 
 Leave meeting <- Não tá na checklist fica pra depois
 
+Edit this action <- Done
+
+Mostrar lista de users Do meeting que estamos a consultar <- PRECISA DE FUNÇÃO NA BASE DE DADOS
+
+
+
+
+
 Pending meeting invites
 
 Delete this item
 
-Edit this action <- Done
-
 Delete this action
 
 Tudo dos grupos
+
 Add group to meetings
 
