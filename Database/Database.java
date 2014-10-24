@@ -220,6 +220,18 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 			ResultSet rs = executeQuery("SELECT max(idmeeting) AS m from meeting"); rs.next();
 			query = "INSERT INTO meeting_user(meeting, user) values(" + rs.getInt("m") + ", " + meeting.leader.iduser + ")";
+			if(executeUpdate(query) == -1) return -1;
+
+			rs = executeQuery("select max(idmeeting) as mid from meeting;");
+			if(!rs.next()) return -1;
+			int mid = rs.getInt("mid");
+
+			Users users = meeting.users;
+			query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
+			for(int i=0; i<users.size(); i++){
+				query += "(" + users.get(i).iduser + ", " + mid + ")";
+				if(i < users.size() - 1) query += ", ";
+			}
 			return executeUpdate(query);
 
 		}catch(SQLException e){
@@ -307,8 +319,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int insertItem(Item item){
-		System.out.println("-------> item <--------");
-
 		String query = "INSERT INTO item(title, description, user, meeting, created_datetime) values('" + item.title + "', '" + item.description + "', '" + item.user.iduser + "', '" + item.meeting + "', NOW())";
 		return executeUpdate(query);
 	}
@@ -381,6 +391,15 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return executeUpdate("UPDATE keydecision set description='" + kd.description + "' where idkeydecision=" + kd.idkeydecision);
 	}
 
+	public int inviteUsers(InviteUsers iu){
+		String query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
+		for(int i=0; i<iu.size(); i++){
+			query += "(" + iu.get(i).user + ", " + iu.get(i).meeting + ")";
+			if(i < iu.size() - 1) query += ", ";
+		}
+		return executeUpdate(query);
+	}
+
 	public boolean stonith(){
 		banned = true;
 		return true;
@@ -415,6 +434,16 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 
 		return aut;
+	}
+
+	public int createAccount(User u){
+		ResultSet rs = executeQuery("SELECT * from user where username=" + u.username);
+		try{
+			if(rs.next()) return -1;
+		}catch(SQLException e){
+			return -1;
+		}
+		return executeUpdate("INSERT INTO user(username, password) values('" + u.username + "', '" + u.password + "')");
 	}
 
 	public static void main(String[] args) throws RemoteException, SQLException {

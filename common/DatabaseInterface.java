@@ -35,6 +35,8 @@ public interface DatabaseInterface extends Remote{
 	public int updateAction(Action act) throws RemoteException;
 	public int deleteAction(int idaction) throws RemoteException;
 	
-	
+	public int inviteUsers(InviteUsers iu) throws RemoteException;
+	public int createAccount(User u) throws RemoteException;
+
 	//public Comment updateComment(Comment com, User u) throws RemoteException;
 }

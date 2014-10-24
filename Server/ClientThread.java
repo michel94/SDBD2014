@@ -129,6 +129,9 @@ public class ClientThread implements Runnable {
 					}else{
 						qres = database.updateKeyDecision(kd);
 					}
+				}else if(data instanceof InviteUsers){
+					InviteUsers iu = (InviteUsers) data;
+					qres = database.inviteUsers(iu);
 				}
 
 				if(r != null){
@@ -156,8 +159,9 @@ public class ClientThread implements Runnable {
 				System.out.println("Error: Class not found while reading pipe of client "+clientId +".");
 
 			} catch (IOException e) {
-				System.out.println("Error:IO Exception while reading pipe of client "+clientId +". Please reset connection with server.");
-				e.printStackTrace();
+				System.out.println("Closed connect with client " + clientId + ".");
+				clients.remove(clientId);
+				//e.printStackTrace();
 				break;
 			}
 		}

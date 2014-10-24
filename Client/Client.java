@@ -319,7 +319,7 @@ public class Client{
 					invu = new InviteUser(users.get(i).iduser,lt.meeting.idmeeting);
 					invus.add(invu);
 				}
-				writeobject(invus);
+				writeObject(invus);
 				wait.waitDefault();
 
 				lt.context = "ConsultMeeting";

@@ -10,14 +10,13 @@ edit keydecision							done
 
 
 
-insertAction
-fazer assign de um user a uma action
+insertAction								done
+fazer assign de um user a uma action 		done
 update action
 apagar action
 
-registar conta
 
-
+registar conta							
 
 TRABALHO DO DIOGO DAQUI PARA BAIXO
 
