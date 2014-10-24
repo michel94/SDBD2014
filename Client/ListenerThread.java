@@ -157,6 +157,9 @@ public class ListenerThread implements Runnable{
 				}else if( r instanceof Users){
 					 users = (Users) r;
 					 wait.notifyDefault();
+				}else if(r instanceof User){
+					user = (User) r;
+					wait.notifyDefault();
 				}
 
 			}catch(IOException ex){

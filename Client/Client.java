@@ -222,14 +222,15 @@ public class Client{
 		print("Location: ");
 		m.leader = lt.user;
 		m.location = readString();
+		
+		
+		m.users = inviteUsers();
+
 		writeObject(m);
 		wait.waitDefault();
-		
-		//listAllUsers();
-		print("Invite users to the meeting: (Not working yet)");
-		
 		clear();
 		print("Meeting created successfully");
+		print("É preciso mudar a função de criar meetings na base de dados para adicionar os users passados no array. Senão isto não adiciona logo.");
 		
 		lt.context = "Meetings";
 	}
@@ -265,7 +266,7 @@ public class Client{
 		print("3 - Add item");
 		print("4 - Add action");
 		print("5 - Edit meeting details");
-		print("6 - Add user to meeting");
+		print("6 - Add users to meeting");
 		print("7 - Add group to meeting");
 		print("8 - Close this meeting");
 		print("9 - Back");
@@ -311,7 +312,16 @@ public class Client{
 				break;
 			case 6: 
 				clear();
-				print("Not working yet");
+				Users users = inviteUsers();
+				InviteUsers invus = new InviteUsers();
+				InviteUser invu;
+				for(int i= 0; i< users.size(); i++){
+					invu = new InviteUser(users.get(i).iduser,lt.meeting.idmeeting);
+					invus.add(invu);
+				}
+				writeobject(invus);
+				wait.waitDefault();
+
 				lt.context = "ConsultMeeting";
 				break;
 			case 7: 
@@ -489,10 +499,12 @@ public class Client{
 		act.description = readString();
 		act.meeting = lt.meeting.idmeeting;
 		listAllUsers();
+
 		print("Assign user by writing its number from the user list:");
 		sel=readInt(1,lt.users.size())-1;
 		
 		act.assigned_user = lt.users.get(sel);
+
 		writeObject(act);
 		wait.waitDefault();
 
@@ -685,6 +697,45 @@ public class Client{
 		}
 		return o;
 	}
+	
+	public Users inviteUsers(){
+		Request req;
+		Users users = new Users();
+		listAllUsers();
+		print("Invite users by writing their id number (To stop adding users write stop):");
+		int sel;
+		int inf = 1;
+		int sup = lt.users.size();
+
+		while(true){
+			try{
+				String s = readString();
+				if(s.equals("stop")){
+					break;
+				}
+				else{
+					int r = Integer.parseInt(s);
+				
+					if(r >= inf && r <= sup){
+						print("Adding user");
+						sel = r-1;
+						req = new Request("user", lt.users.get(sel).iduser);
+						writeObject(req);
+						wait.waitDefault();
+						users.add(lt.user);
+						print("Added user. Insert next id (To stop adding users write stop):");
+					}						
+					else
+						print("Insert your selection, a number between " + inf + " and " + sup + ":");	
+				}
+			}catch(Exception e){
+				print("Insert your selection, a number between " + inf + " and " + sup + ":");
+			}
+
+		}
+		return users;
+	}
+
 	public static void main(String[] args){
 		String[] a = new String[0];
 		Gtk.init(a);
