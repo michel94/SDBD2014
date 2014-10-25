@@ -23,7 +23,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","");
+		connection = DriverManager.getConnection(url,"root","toor");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 
@@ -58,6 +58,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		//addUserToMeeting(getUser(5), getMeeting(1));
 
 		//finishMeeting(getMeeting(5));
+
+		deleteAction(1);
+		deleteKeyDecision(2);
 
 	}
 
@@ -377,7 +380,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int deleteAction(int idaction){
-		return -1;
+		return executeUpdate("UPDATE action SET active=0 WHERE idaction="+idaction);
 	}
 
 	public int insertKeyDecision(KeyDecision kd){
