@@ -19,17 +19,18 @@ Leave meeting <- Não tá na checklist fica pra depois
 
 Edit this action <- Done
 
-Mostrar lista de users Do meeting que estamos a consultar <- PRECISA DE FUNÇÃO NA BASE DE DADOS
 
 
 
 
+
+Mostrar lista de users Do meeting que estamos a consultar
 
 Pending meeting invites
 
-Delete this item
+Delete this item <- Done in client and server, need database working to test
 
-Delete this action
+Delete this action <- Done in client and server, need database working to test
 
 Tudo dos grupos
 

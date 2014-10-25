@@ -83,7 +83,12 @@ public class ClientThread implements Runnable {
 						//r = database.getGroups();
 					}else if(req.type.equals("user")){
 						r = database.getUser(id);					
+					}else if(req.type.equals("deleteitem")){
+						r = database.deleteItem(id);					
+					}else if(req.type.equals("deleteaction")){
+						r = database.deleteAction(id);					
 					}
+
 
 				}
 				else if(data instanceof Authentication){ //A ideia do Rui de devolver a classe com um campo alterado pode ser usada no resto, por exemplo ao fazer um add, completa-se os campos

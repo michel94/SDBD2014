@@ -468,8 +468,15 @@ public class Client{
 				break;
 			case 2:
 				clear();
-				print("Not working yet.");
-				//lt.context="ConsultMeeting";
+				print("Are you sure you want to delete this item? Yes-1 No-2");
+				sel = readInt(1,2);
+				if(sel ==1){
+					r = new Request("deleteitem", lt.item.iditem);
+					writeObject(r);
+					waitDefault();
+					print("Item successfully deleted.");
+					lt.context="ConsultMeeting";
+				}
 				break;
 			case 3:
 				clear();
@@ -543,7 +550,15 @@ public class Client{
 				break;
 			case 2:
 				clear();
-				lt.context="EditActionMenu";
+				print("Are you sure you want to delete this action? Yes-1 No-2");
+				sel = readInt(1,2);
+				if(sel ==1){
+					r = new Request("deleteaction", lt.action.idaction);
+					writeObject(r);
+					waitDefault();
+					print("Action successfully deleted.");
+					lt.context="ConsultMeeting";
+				}
 				break;
 			case 3:
 				clear();
