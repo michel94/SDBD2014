@@ -102,7 +102,7 @@ public class Client{
 			}else if(lt.context.equals("ConsultAction")){
 				consultActionMenu();
 
-			}else if(lt.context.equals("Groups")){
+			}else if(lt.context.equals("GroupsMenu")){
 				groupsMenu();
 
 			}else if(lt.context.equals("NewItemMenu")){
@@ -113,6 +113,9 @@ public class Client{
 				editMeetingMenu();			
 			}else if (lt.context.equals("EditAction")){
 				editActionMenu();			
+			}else if(lt.context.equals("ConsultGroup")){
+				consultGroupMenu();
+
 			}
 
 		}
@@ -138,7 +141,7 @@ public class Client{
 				clear();
 				break;
 			case 2:	
-				//lt.context = "Groups";
+				lt.context = "GroupsMenu";
 				
 				clear();
 				break;
@@ -696,9 +699,10 @@ public class Client{
 		int sel;
 		Request r;
 
-		r = new Request("groups", clientID);
+		r = new Request("groupsofuser", clientID);
 		writeObject(r);
-		wait.waitGroups();
+		wait.waitDefault();
+		
 		Groups gs = lt.groups;
 		clear();
 		print("Groups:");
@@ -720,7 +724,7 @@ public class Client{
 		
 					r = new Request("group",gs.get(readInt(1,gs.size())-1 ).idgroup);
 					writeObject(r);
-					wait.waitGroup();
+					wait.waitDefault();
 					clear();
 					lt.context = "ConsultGroup";
 				}
