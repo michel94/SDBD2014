@@ -151,7 +151,7 @@ public class Client{
 		int sel;
 		Request r;
 
-		r = new Request("meetings");
+		r = new Request("meetings",clientID);
 		writeObject(r);
 		wait.waitMeetings();
 		Meetings ms = lt.meetings;
@@ -694,7 +694,7 @@ public class Client{
 		int sel;
 		Request r;
 
-		r = new Request("groups");
+		r = new Request("groups", clientID);
 		writeObject(r);
 		wait.waitGroups();
 		Groups gs = lt.groups;
@@ -719,6 +719,7 @@ public class Client{
 					r = new Request("group",gs.get(readInt(1,gs.size())-1 ).idgroup);
 					writeObject(r);
 					wait.waitGroup();
+					clear();
 					lt.context = "ConsultGroup";
 				}
 				break;
@@ -739,11 +740,12 @@ public class Client{
 	}
 	public void consultGroupMenu(){
 		int sel;
-		Request r;
-		Groups gs=lt.groups;
+		Request r = new Request("groups",clientID);
+		writeObject(r);
+		wait.waitDefault();
 
-		Group g = lt.group;
-		clear();
+		Group g=lt.group;
+
 		print("Group name: "+g.name);
 		
 		print("\nUsers:");

@@ -68,7 +68,7 @@ public class ClientThread implements Runnable {
 					int id = ((Request)req).id;
 
 					if(req.type.equals("meetings")){
-						r = database.getMeetings(userData.iduser);
+						r = database.getMeetings(id);
 					}else if(req.type.equals("meeting")){
 						r = database.getMeeting(id);
 						System.out.println( ((Meeting)r).title);
@@ -80,13 +80,15 @@ public class ClientThread implements Runnable {
 					}else if(req.type.equals("action")){
 						r = database.getAction(id);
 					}else if(req.type.equals("groups")){
-						//r = database.getGroups();
+						r = database.getGroups(id);
 					}else if(req.type.equals("user")){
 						r = database.getUser(id);					
 					}else if(req.type.equals("deleteitem")){
 						//qres = database.deleteItem(id);					
 					}else if(req.type.equals("deleteaction")){
 						qres = database.deleteAction(id);					
+					}else if(req.type.equals("group")){
+						r = database.getGroup(id);
 					}
 
 
