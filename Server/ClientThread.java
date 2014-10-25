@@ -143,9 +143,9 @@ public class ClientThread implements Runnable {
 				}else if(data instanceof User){
 					User u = (User) data;
 					r = database.createAccount(u);				
-				}else if(data instanceof RemoveUsersFromGroup){
-					RemoveUsersFromGroup rus = (RemoveUsersFromGroup) data;
-					qres = database.removeUsersFromGroup(rus);	
+				}else if(data instanceof RemoveUserFromGroup){
+					RemoveUserFromGroup ru = (RemoveUserFromGroup) data;
+					qres = database.removeUserFromGroup(ru);	
 				}
 
 				if(r != null){

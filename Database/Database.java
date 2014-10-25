@@ -537,7 +537,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return group;
 	}
 	
-	public int removeUsersFromGroup(RemoveUsersFromGroup ru){
+	public int removeUserFromGroup(RemoveUserFromGroup ru){
 
 		return -1;
 	}

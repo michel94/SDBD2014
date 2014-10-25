@@ -778,10 +778,9 @@ public class Client{
 				break;
 			case 2:	
 				if(g.users.size()!=0){
-					
 					print("Which user do you want to remove? Write its number:");
-					Request r = new Request("removeuserfromgroup",g.users.get(readInt(1,g.users.size())-1 ).iduser);
-					writeObject(r);
+					RemoveUserFromGroup ru = new RemoveUserFromGroup(g.users.get(readInt(1,g.users.size())-1 ).iduser, lt.group.idgroup);
+					writeObject(ru);
 					wait.waitDefault();
 					clear();
 					print("User deleted successfully");
