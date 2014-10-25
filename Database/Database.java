@@ -249,6 +249,14 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return executeUpdate(query);
 	}
 
+	/* int deleteMeeting(int idmeeting){ INACABADO****************
+		ResultSet rs = executeQuery("SELECT max(idmeeting) AS m from meeting");
+		executeUpdate("UPDATE comment set active=0 where item=(SELECT )");
+		executeUpdate("UPDATE meeting set active=0 where idmeeting=" + idmeeting);
+		executeUpdate("UPDATE meeting set active=0 where idmeeting=" + idmeeting);
+		executeUpdate("UPDATE meeting set active=0 where idmeeting=" + idmeeting);
+	}*/
+
 	private Users getAllUsersFromMeeting(int idmeeting){
 		Users users = new Users();
 
@@ -319,6 +327,10 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public int updateItem(Item it){
 		return executeUpdate("UPDATE item set description='" + it.description + "' where iditem=" + it.iditem);
+	}
+
+	public int deleteItem(int iditem){
+		return executeUpdate("UPDATE item set active=0 where iditem=" + iditem);
 	}
 
 	public int insertItem(Item item){
