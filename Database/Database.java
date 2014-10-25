@@ -23,7 +23,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","");
+		connection = DriverManager.getConnection(url,"root","toor");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 
@@ -58,6 +58,10 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		//addUserToMeeting(getUser(5), getMeeting(1));
 
 		//finishMeeting(getMeeting(5));
+		/*Groups groups = null;
+		groups = getGroupsOfUser(6);
+
+		System.out.println(groups.get(0).name);*/
 	}
 
 	private ResultSet executeQuery(String q){
@@ -245,6 +249,13 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return executeUpdate(query);
 	}
 
+	/* int deleteMeeting(int idmeeting){ INACABADO****************
+		executeUpdate("UPDATE comment set active=0 where item=(SELECT )");
+		executeUpdate("UPDATE meeting set active=0 where idmeeting=" + idmeeting);
+		executeUpdate("UPDATE meeting set active=0 where idmeeting=" + idmeeting);
+		executeUpdate("UPDATE meeting set active=0 where idmeeting=" + idmeeting);
+	}*/
+
 	private Users getAllUsersFromMeeting(int idmeeting){
 		Users users = new Users();
 
@@ -315,6 +326,10 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public int updateItem(Item it){
 		return executeUpdate("UPDATE item set description='" + it.description + "' where iditem=" + it.iditem);
+	}
+
+	public int deleteItem(int iditem){
+		return executeUpdate("UPDATE item set active=0 where iditem=" + iditem);
 	}
 
 	public int insertItem(Item item){
@@ -456,6 +471,26 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 
 		return u;
+	}
+
+
+	public Groups getGroupsOfUser(int iduser){
+		Groups groups = new Groups();
+
+		try{
+			ResultSet rs = executeQuery("SELECT g.* FROM group_def as g, group_user as gu WHERE gu.user = "+ iduser +" AND gu.group = g.idgroup AND g.active = 1");
+			while(rs.next())
+			{
+				Group group = new Group(rs.getInt("idgroup"), rs.getString("name"));
+				groups.add(group);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+		return groups;
+
 	}
 
 	public static void main(String[] args) throws RemoteException, SQLException {

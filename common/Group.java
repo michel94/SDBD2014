@@ -4,7 +4,6 @@ import java.util.ArrayList;
 public class Group implements Serializable{
 	public String name;
 	public int idgroup;
-	public User leader;
 	public ArrayList<User> users;
 
 	private static final long serialVersionUID = 1L;
@@ -14,7 +13,7 @@ public class Group implements Serializable{
 		idgroup = 0;
 	}
 
-	public Group(String name, int idgroup){
+	public Group(int idgroup, String name){
 		this.name = name;
 		this.idgroup = idgroup;
 	}
