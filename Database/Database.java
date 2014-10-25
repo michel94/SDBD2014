@@ -64,6 +64,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		System.out.println(groups.get(0).name);*/
 
 		//System.out.println(getGroup(1).users.get(1).username);
+
+		addGroupToMeeting(getGroup(1), getMeeting(1));
 	}
 
 	private ResultSet executeQuery(String q){
@@ -356,9 +358,25 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int addUserToMeeting(User user, Meeting meeting){
-		String query = "INSERT INTO meeting_user (meeting, user) values((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1));";
+		String query = "INSERT IGNORE INTO meeting_user (meeting, user) values((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1));";
 		return executeUpdate(query);
 	}
+
+	public int addGroupToMeeting(Group group, Meeting meeting){ //esta funcao esta feita assim para despachar para a META. Isto no que toca a BD estapessimo :p
+		String query = "INSERT IGNORE INTO meeting_group (meeting, group_def) values((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT idgroup FROM group_def WHERE  idgroup = "+group.idgroup+" AND active = 1));";
+		int i = 0;
+		if(executeUpdate(query) > 0)
+		{
+			for(i=0; i<group.users.size(); i++)
+			{
+				if(addUserToMeeting(group.users.get(i), meeting) < 1)
+					return -1;
+			}
+		}
+
+		return 1;
+	}
+
 
 	public int finishMeeting(Meeting meeting){
 		meeting.finished = 1;
@@ -427,8 +445,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			}
 		}
 		return executeUpdate(query);
-
 	}
+
 
 	public boolean stonith(){
 		banned = true;
