@@ -408,12 +408,26 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int inviteUsers(InviteUsers iu){
-		String query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
-		for(int i=0; i<iu.size(); i++){
-			query += "(" + iu.get(i).user + ", " + iu.get(i).meeting + ")";
-			if(i < iu.size() - 1) query += ", ";
+		String query= null;
+		if(iu.flag == 1)
+		{
+			query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
+			for(int i=0; i<iu.size(); i++){
+				query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")"; //Este codigo ranhoso foi imposto pelo Casaleiro :p
+				if(i < iu.size() - 1) query += ", ";
+			}
+
+		}
+		else if(iu.flag == 2)
+		{
+			query = "INSERT IGNORE INTO group_user(group, user) values ";
+			for(int i=0; i<iu.size(); i++){
+				query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")"; //Este codigo ranhoso foi imposto pelo Casaleiro :p
+				if(i < iu.size() - 1) query += ", ";
+			}
 		}
 		return executeUpdate(query);
+
 	}
 
 	public boolean stonith(){

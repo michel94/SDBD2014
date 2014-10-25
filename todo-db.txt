@@ -27,8 +27,10 @@ add group to meeting
 	- inserir cada utilizador manualmente
 fechar meeting ??
 
-add user to group
+add user to group 							done
 	-add user to all the group meetings
+
+getGroup()									done
 
 getGroupsOfUser()							done
 
