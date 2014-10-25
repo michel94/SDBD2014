@@ -1,6 +1,6 @@
-Meter na tabela dos grupos o id do user que o criou (Para só ser possível ser eliminador por ele)
+Meter na tabela dos grupos o id do user que o criou (Para só ser possível ser eliminador por ele) <- Not needed visto que remover grupos não está na checklist
 
-Meter na tabela hora de logout
+Meter na tabela hora de logout <- Porquê? Ass: Rui
 
 Proteger contra adicionar users que já existam a uma reuniao, incluindo convidar-se a si mesmo. ( Fazer depois do resto estar feito, esta proteção deve ser feita na base de dados?);
 
@@ -13,24 +13,32 @@ Register users (com confirmação se o user já existe) - Done
 
 Edit meeting details <- Done
 
+Edit this action <- Done
+
 Close this meeting <- Não tá na checklist fica pra depois
 
 Leave meeting <- Não tá na checklist fica pra depois
 
-Edit this action <- Done
+Remove group from meeting <- Não está na checklist
 
 
 
+
+Pending meeting invites <- Vamos tomar a posicão de: Invites = Add to meeting, Reject Invite = Leave meeting (Porque leave meeting nem sequer está na checklist, só leave group)?
+
+Delete this item <- Done 
+
+Delete this action <- Done
 
 Mostrar lista de users Do meeting que estamos a consultar
 
-Pending meeting invites
+Add group
 
-Delete this item <- Done in client and server, need database working to test
+Add users to group
 
-Delete this action <- Done in client and server, need database working to test
+Add group to meeting
 
-Tudo dos grupos
 
-Add group to meetings
+
+
 

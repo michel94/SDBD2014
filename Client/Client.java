@@ -345,6 +345,11 @@ public class Client{
 				print(" Status: Pending");
 			}else print(" Status: Done");
 		}
+		print("\nUsers in this meeting:");
+		
+		for(int i=0; i<lt.meeting.users.size()){
+			print((i+1)+ " - "+ lt.meeting.users.get(i).username);
+		}
 		print("");
 		print("What do you want to do?");
 		print("1 - Consult item details");
