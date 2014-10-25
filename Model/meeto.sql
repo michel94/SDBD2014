@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 23, 2014 at 07:11 AM
+-- Generation Time: Oct 25, 2014 at 09:08 PM
 -- Server version: 5.5.38-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.3
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `action` (
 --
 
 INSERT INTO `action` (`idaction`, `description`, `due_to`, `assigned_user`, `done`, `meeting`, `created_datetime`, `active`) VALUES
-(1, 'descricao da acçao', '2015-02-12 00:00:00', 6, 0, 1, '2014-10-16 16:27:55', 1);
+(1, 'descricao da acçao', '2015-02-12 00:00:00', 6, 0, 1, '2014-10-16 16:27:55', 0);
 
 -- --------------------------------------------------------
 
@@ -100,9 +100,9 @@ INSERT INTO `group_def` (`idgroup`, `name`, `created_datetime`, `active`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `group_user` (
-  `group` int(11) NOT NULL,
+  `group_def` int(11) NOT NULL,
   `user` int(11) NOT NULL,
-  PRIMARY KEY (`group`,`user`),
+  PRIMARY KEY (`group_def`,`user`),
   KEY `fk_group_user_2_idx` (`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -110,8 +110,9 @@ CREATE TABLE IF NOT EXISTS `group_user` (
 -- Dumping data for table `group_user`
 --
 
-INSERT INTO `group_user` (`group`, `user`) VALUES
+INSERT INTO `group_user` (`group_def`, `user`) VALUES
 (1, 2),
+(1, 4),
 (1, 6);
 
 -- --------------------------------------------------------
@@ -157,14 +158,15 @@ CREATE TABLE IF NOT EXISTS `keydecision` (
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idkeydecision`),
   KEY `fk_keydecision_1_idx` (`item`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `keydecision`
 --
 
 INSERT INTO `keydecision` (`idkeydecision`, `description`, `item`, `created_datetime`, `active`) VALUES
-(1, 'descricao keydecision', 1, '2014-10-16 16:28:20', 1);
+(1, 'descricao keydecision', 1, '2014-10-16 16:28:20', 1),
+(2, 'dsjfjdsf', 2, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -195,7 +197,7 @@ INSERT INTO `meeting` (`idmeeting`, `title`, `description`, `datetime`, `locatio
 (2, 'hjjhgh', 'jhgjhghg', '2014-10-16 00:00:00', 'dei', 4, 0, '2014-10-16 17:38:54', 1),
 (3, 'asd', 'asdad', '2014-03-03 00:00:00', 'coimbra', 1, 0, '2014-10-20 21:47:00', 1),
 (4, 'asd', 'asdad', '2014-03-03 00:00:00', 'coimbra', 1, 0, '2014-10-20 21:54:00', 1),
-(5, 'Reuniao y', 'descricao da reuniao y', '2014-05-23 07:03:00', 'DEI', 1, 0, '2014-10-22 01:07:58', 1);
+(5, 'Reuniao y', 'descricao da reuniao y', '2014-12-23 07:03:00', 'DEI', 1, 1, '2014-10-22 01:07:58', 1);
 
 -- --------------------------------------------------------
 
@@ -205,16 +207,16 @@ INSERT INTO `meeting` (`idmeeting`, `title`, `description`, `datetime`, `locatio
 
 CREATE TABLE IF NOT EXISTS `meeting_group` (
   `meeting` int(11) NOT NULL,
-  `group` int(11) NOT NULL,
-  PRIMARY KEY (`meeting`,`group`),
-  KEY `fk_meeting_group_2_idx` (`group`)
+  `group_def` int(11) NOT NULL,
+  PRIMARY KEY (`meeting`,`group_def`),
+  KEY `fk_meeting_group_2_idx` (`group_def`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `meeting_group`
 --
 
-INSERT INTO `meeting_group` (`meeting`, `group`) VALUES
+INSERT INTO `meeting_group` (`meeting`, `group_def`) VALUES
 (1, 1);
 
 -- --------------------------------------------------------
@@ -235,11 +237,10 @@ CREATE TABLE IF NOT EXISTS `meeting_user` (
 --
 
 INSERT INTO `meeting_user` (`meeting`, `user`) VALUES
-(1, 1),
+(1, 2),
 (1, 3),
-(3, 3),
 (1, 4),
-(1, 5);
+(1, 6);
 
 -- --------------------------------------------------------
 
@@ -290,7 +291,7 @@ ALTER TABLE `comment`
 -- Constraints for table `group_user`
 --
 ALTER TABLE `group_user`
-  ADD CONSTRAINT `fk_group_user_1` FOREIGN KEY (`group`) REFERENCES `group_def` (`idgroup`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_group_user_1` FOREIGN KEY (`group_def`) REFERENCES `group_def` (`idgroup`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_group_user_2` FOREIGN KEY (`user`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
@@ -316,8 +317,8 @@ ALTER TABLE `meeting`
 -- Constraints for table `meeting_group`
 --
 ALTER TABLE `meeting_group`
-  ADD CONSTRAINT `fk_meeting_group_1` FOREIGN KEY (`meeting`) REFERENCES `meeting` (`idmeeting`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_meeting_group_2` FOREIGN KEY (`group`) REFERENCES `group_def` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_meeting_group_2` FOREIGN KEY (`group_def`) REFERENCES `group_def` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_meeting_group_1` FOREIGN KEY (`meeting`) REFERENCES `meeting` (`idmeeting`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `meeting_user`
