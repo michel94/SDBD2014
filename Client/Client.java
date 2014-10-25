@@ -470,10 +470,11 @@ public class Client{
 				clear();
 				print("Are you sure you want to delete this item? Yes-1 No-2");
 				sel = readInt(1,2);
+				clear();
 				if(sel ==1){
 					r = new Request("deleteitem", lt.item.iditem);
 					writeObject(r);
-					waitDefault();
+					wait.waitDefault();
 					print("Item successfully deleted.");
 					lt.context="ConsultMeeting";
 				}
@@ -552,10 +553,11 @@ public class Client{
 				clear();
 				print("Are you sure you want to delete this action? Yes-1 No-2");
 				sel = readInt(1,2);
+				clear();
 				if(sel ==1){
 					r = new Request("deleteaction", lt.action.idaction);
 					writeObject(r);
-					waitDefault();
+					wait.waitDefault();
 					print("Action successfully deleted.");
 					lt.context="ConsultMeeting";
 				}
