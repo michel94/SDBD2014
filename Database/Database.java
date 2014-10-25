@@ -62,6 +62,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		groups = getGroupsOfUser(6);
 
 		System.out.println(groups.get(0).name);*/
+
+		//System.out.println(getGroup(1).users.get(1).username);
 	}
 
 	private ResultSet executeQuery(String q){
@@ -240,7 +242,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}catch(SQLException e){
 			return -1;
 		}
-
 	}
 
 	public int updateMeeting(Meeting meeting){
@@ -481,7 +482,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return u;
 	}
 
-
 	public Groups getGroupsOfUser(int iduser){
 		Groups groups = new Groups();
 
@@ -498,7 +498,37 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 		
 		return groups;
+	}
 
+	public Group getGroup(int idgroup){
+		Group group = new Group();
+		try
+		{
+			ResultSet rs = executeQuery("SELECT * FROM group_def WHERE idgroup="+idgroup+" AND active=1;");
+			if(rs.next())
+			{
+				group.idgroup = rs.getInt("idgroup");
+				group.name = rs.getString("name");
+				rs = executeQuery("SELECT u.iduser, u.username, gu.user FROM user as u, group_user as gu WHERE gu.group="+idgroup+" AND gu.user = u.iduser AND u.active = 1;");	
+				while(rs.next())
+				{
+					User user = new User(rs.getInt("iduser"), rs.getString("username"));
+
+					if(user == null)
+						return null;
+
+					group.users.add(user);
+				}
+			}
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Mysql error");
+			e.printStackTrace();
+			return null;
+		}
+		
+		return group;
 	}
 
 	public static void main(String[] args) throws RemoteException, SQLException {

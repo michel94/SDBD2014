@@ -30,8 +30,10 @@ fechar meeting ??
 add user to group
 	-add user to all the group meetings
 
-apagar meeting 								done
-apagar item 								done
+getGroupsOfUser()							done
+
+apagar meeting 								n é preciso
+apagar item 								n é preciso 
 apagar keydecision 							done
 apagar action                               done
 	
