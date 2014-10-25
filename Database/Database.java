@@ -438,7 +438,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 		else if(iu.flag == 2)
 		{
-			query = "INSERT IGNORE INTO group_user(group, user) values ";
+			query = "INSERT IGNORE INTO group_user(group_def, user) values ";
 			for(int i=0; i<iu.size(); i++){
 				query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")"; //Este codigo ranhoso foi imposto pelo Casaleiro :p
 				if(i < iu.size() - 1) query += ", ";
@@ -510,7 +510,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		Groups groups = new Groups();
 
 		try{
-			ResultSet rs = executeQuery("SELECT g.* FROM group_def as g, group_user as gu WHERE gu.user = "+ iduser +" AND gu.group = g.idgroup AND g.active = 1");
+			ResultSet rs = executeQuery("SELECT g.* FROM group_def as g, group_user as gu WHERE gu.user = "+ iduser +" AND gu.group_def = g.idgroup AND g.active = 1");
 			while(rs.next())
 			{
 				Group group = new Group(rs.getInt("idgroup"), rs.getString("name"));
@@ -533,7 +533,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			{
 				group.idgroup = rs.getInt("idgroup");
 				group.name = rs.getString("name");
-				rs = executeQuery("SELECT u.iduser, u.username, gu.user FROM user as u, group_user as gu WHERE gu.group="+idgroup+" AND gu.user = u.iduser AND u.active = 1;");	
+				rs = executeQuery("SELECT u.iduser, u.username, gu.user FROM user as u, group_user as gu WHERE gu.group_def="+idgroup+" AND gu.user = u.iduser AND u.active = 1;");	
 				while(rs.next())
 				{
 					User user = new User(rs.getInt("iduser"), rs.getString("username"));
