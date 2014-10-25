@@ -742,9 +742,6 @@ public class Client{
 	}
 	public void consultGroupMenu(){
 		int sel;
-		Request r = new Request("usergroups",clientID);
-		writeObject(r);
-		wait.waitDefault();
 
 		Group g=lt.group;
 
@@ -781,8 +778,9 @@ public class Client{
 				break;
 			case 2:	
 				if(g.users.size()!=0){
+					
 					print("Which user do you want to remove? Write its number:");
-					r = new Request("removeuserfromgroup",g.users.get(readInt(1,g.users.size())-1 ).iduser);
+					Request r = new Request("removeuserfromgroup",g.users.get(readInt(1,g.users.size())-1 ).iduser);
 					writeObject(r);
 					wait.waitDefault();
 					clear();

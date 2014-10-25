@@ -43,7 +43,7 @@ Add users to group <- Já tá feito no server e client, precisa de código na ba
 
 Add group to meeting
 
-Remove user from group. removeUserFromGroup(id) (Tendo em conta tudo ao lvl da base de dados: Removendo o user desse group, remover o mesmo de todas as reuniões em que esse grupo está presente.)
+Remove users from group. removeUsersFromGroup(RemoveUsersFromGroup rus) (Tendo em conta tudo ao lvl da base de dados: Removendo o user desse group, remover o mesmo de todas as reuniões em que esse grupo está presente.)
 
 
 
