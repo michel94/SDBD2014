@@ -30,9 +30,9 @@ fechar meeting ??
 add user to group
 	-add user to all the group meetings
 
-apagar meeting
-apagar item
-apagar keydecision
-apagar action
-
+apagar meeting 								done
+apagar item 								done
+apagar keydecision 							done
+apagar action                               done
+	
 insert meeting adiciona tb utilizadores		done

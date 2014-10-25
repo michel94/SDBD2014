@@ -23,7 +23,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","");
+		connection = DriverManager.getConnection(url,"root","toor");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 
@@ -58,6 +58,10 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		//addUserToMeeting(getUser(5), getMeeting(1));
 
 		//finishMeeting(getMeeting(5));
+		/*Groups groups = null;
+		groups = getGroupsOfUser(6);
+
+		System.out.println(groups.get(0).name);*/
 	}
 
 	private ResultSet executeQuery(String q){
@@ -246,7 +250,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	/* int deleteMeeting(int idmeeting){ INACABADO****************
-		ResultSet rs = executeQuery("SELECT max(idmeeting) AS m from meeting");
 		executeUpdate("UPDATE comment set active=0 where item=(SELECT )");
 		executeUpdate("UPDATE meeting set active=0 where idmeeting=" + idmeeting);
 		executeUpdate("UPDATE meeting set active=0 where idmeeting=" + idmeeting);
@@ -468,6 +471,26 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 
 		return u;
+	}
+
+
+	public Groups getGroupsOfUser(int iduser){
+		Groups groups = new Groups();
+
+		try{
+			ResultSet rs = executeQuery("SELECT g.* FROM group_def as g, group_user as gu WHERE gu.user = "+ iduser +" AND gu.group = g.idgroup AND g.active = 1");
+			while(rs.next())
+			{
+				Group group = new Group(rs.getInt("idgroup"), rs.getString("name"));
+				groups.add(group);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+		return groups;
+
 	}
 
 	public static void main(String[] args) throws RemoteException, SQLException {
