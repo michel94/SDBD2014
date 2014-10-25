@@ -43,6 +43,8 @@ Add users to group
 
 Add group to meeting
 
+Remove user from group. (Tendo em conta tudo ao lvl da base de dados: Removendo o user desse group, remover o mesmo de todas as reuniões em que esse grupo está presente.)
+
 
 
 
