@@ -38,10 +38,8 @@ List groups <-done
 Delete group <- Não está na checklis
 
 Max priority:
-Add users to group <- Not working on database?
+Add users to group <- Done
 
-Remove user from group <- Working in client and server, needs database code
-Add group to meeting
 
 Remove users from group. removeUsersFromGroup(RemoveUsersFromGroup rus) (Tendo em conta tudo ao lvl da base de dados: Removendo o user desse group, remover o mesmo de todas as reuniões em que esse grupo está presente.) <- está implementado no cliente e no server, falta base de dados.
 

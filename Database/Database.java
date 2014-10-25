@@ -23,7 +23,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","toor");
+		connection = DriverManager.getConnection(url,"root","");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 
@@ -440,7 +440,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		{
 			query = "INSERT IGNORE INTO group_user(group_def, user) values ";
 			for(int i=0; i<iu.size(); i++){
-				query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")"; //Este codigo ranhoso foi imposto pelo Casaleiro :p
+				query += "(" + iu.get(i).id + ", " + iu.get(i).user+ ")"; //Este codigo ranhoso foi imposto pelo Casaleiro :p
 				if(i < iu.size() - 1) query += ", ";
 			}
 		}

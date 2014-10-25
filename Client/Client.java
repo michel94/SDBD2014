@@ -746,6 +746,8 @@ public class Client{
 	}
 	public void consultGroupMenu(){
 		int sel;
+		
+		updateDataInClient("group", lt.group.idgroup);
 
 		Group g=lt.group;
 
@@ -781,7 +783,7 @@ public class Client{
 				print("Users invited successfully");
 				break;
 			case 2:	
-				if(g.users.size()!=0){
+				/*if(g.users.size()!=0){
 					print("Which user do you want to remove? Write its number:");
 					RemoveUserFromGroup ru = new RemoveUserFromGroup(g.users.get(readInt(1,g.users.size())-1 ).iduser, lt.group.idgroup);
 					writeObject(ru);
@@ -789,7 +791,7 @@ public class Client{
 					clear();
 					print("User deleted successfully");
 					lt.context = "ConsultGroup";
-				}
+				}*/
 				break;
 			case 3:
 				clear();
@@ -821,7 +823,7 @@ public class Client{
 		}else if(flag.equals("group")){
 			Request r = new Request("group", id);
 			writeObject(r);
-			wait.waitGroup();
+			wait.waitDefault();
 			return lt.group;	
 
 		}else if(flag.equals("item")){
