@@ -80,17 +80,16 @@ public class ClientThread implements Runnable {
 					}else if(req.type.equals("action")){
 						r = database.getAction(id);
 					}else if(req.type.equals("groups")){
-						r = database.getGroups(id);
+						r = database.getGroupsOfUser(id);
 					}else if(req.type.equals("user")){
 						r = database.getUser(id);					
 					}else if(req.type.equals("deleteitem")){
-						//qres = database.deleteItem(id);					
+						qres = database.deleteItem(id);					
 					}else if(req.type.equals("deleteaction")){
 						qres = database.deleteAction(id);					
 					}else if(req.type.equals("group")){
 						r = database.getGroup(id);
 					}
-
 
 				}
 				else if(data instanceof Authentication){ //A ideia do Rui de devolver a classe com um campo alterado pode ser usada no resto, por exemplo ao fazer um add, completa-se os campos
@@ -144,6 +143,9 @@ public class ClientThread implements Runnable {
 				}else if(data instanceof User){
 					User u = (User) data;
 					r = database.createAccount(u);				
+				}else if(data instanceof RemoveUserFromGroup){
+					RemoveUserFromGroup ru = (RemoveUserFromGroup) data;
+					qres = database.removeUserFromGroup(ru);	
 				}
 
 				if(r != null){
