@@ -347,7 +347,7 @@ public class Client{
 		}
 		print("\nUsers in this meeting:");
 		
-		for(int i=0; i<lt.meeting.users.size()){
+		for(int i=0; i<lt.meeting.users.size();i++){
 			print((i+1)+ " - "+ lt.meeting.users.get(i).username);
 		}
 		print("");

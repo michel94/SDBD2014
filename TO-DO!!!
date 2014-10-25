@@ -30,9 +30,14 @@ Delete this item <- Done
 
 Delete this action <- Done
 
-Mostrar lista de users Do meeting que estamos a consultar
+Mostrar lista de users Do meeting que estamos a consultar <- Done
 
-Add group
+
+List groups (Na base de dados, recebe id do user e encontra todos os grupos criados por esse user e grupos a que esse user pertence) <- To do, max+ priority
+
+Max priority:
+
+Add group 
 
 Add users to group
 
