@@ -80,15 +80,17 @@ public class ClientThread implements Runnable {
 					}else if(req.type.equals("action")){
 						r = database.getAction(id);
 					}else if(req.type.equals("groups")){
-						r = database.getGroups(id);
+						r = database.getGroupsOfUser(id);
 					}else if(req.type.equals("user")){
 						r = database.getUser(id);					
 					}else if(req.type.equals("deleteitem")){
-						//qres = database.deleteItem(id);					
+						qres = database.deleteItem(id);					
 					}else if(req.type.equals("deleteaction")){
 						qres = database.deleteAction(id);					
 					}else if(req.type.equals("group")){
 						r = database.getGroup(id);
+					}else if(req.type.equals("removeuserfromgroup")){
+						qres = database.removeUserFromGroup(id);					
 					}
 
 

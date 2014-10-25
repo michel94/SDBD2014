@@ -407,12 +407,20 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int inviteUsers(InviteUsers iu){
-		String query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
-		for(int i=0; i<iu.size(); i++){
-			query += "(" + iu.get(i).user + ", " + iu.get(i).meeting + ")";
-			if(i < iu.size() - 1) query += ", ";
-		}
-		return executeUpdate(query);
+		
+		if(iu.flag ==1){ //Invite to meeting
+			String query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
+			for(int i=0; i<iu.size(); i++){
+				query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")";
+				if(i < iu.size() - 1) query += ", ";
+			}
+			return executeUpdate(query);
+		}/*else if (iu.flag == 2){ //Invite to group
+			
+			return executeUpdate(query);
+		}*/
+
+		return -1;
 	}
 
 	public boolean stonith(){

@@ -409,9 +409,11 @@ public class Client{
 					invu = new InviteUser(users.get(i).iduser,lt.meeting.idmeeting);
 					invus.add(invu);
 				}
+				invus.flag = 1; //flag = meeting
 				writeObject(invus);
 				wait.waitDefault();
-
+				
+				print("Users invited successfully");
 				lt.context = "ConsultMeeting";
 				break;
 			case 7: 
@@ -740,7 +742,7 @@ public class Client{
 	}
 	public void consultGroupMenu(){
 		int sel;
-		Request r = new Request("groups",clientID);
+		Request r = new Request("usergroups",clientID);
 		writeObject(r);
 		wait.waitDefault();
 
@@ -763,14 +765,26 @@ public class Client{
 		switch(sel){
 			case 1:
 				clear();
-				print("Not yet working");
+				Users users = inviteUsers();
+				InviteUsers invus = new InviteUsers();
+				InviteUser invu;
+				
+				for(int i= 0; i< users.size(); i++){
+					invu = new InviteUser(users.get(i).iduser,lt.group.idgroup);
+					invus.add(invu);
+				}
+				invus.flag = 2; //flag = meeting
+				writeObject(invus);
+				wait.waitDefault();
+				clear();
+				print("Users invited successfully");
 				break;
 			case 2:	
 				if(g.users.size()!=0){
 					print("Which user do you want to remove? Write its number:");
-					r = new Request("deleteuser",g.users.get(readInt(1,g.users.size())-1 ).iduser);
+					r = new Request("removeuserfromgroup",g.users.get(readInt(1,g.users.size())-1 ).iduser);
 					writeObject(r);
-					wait.waitDeleteUser();
+					wait.waitDefault();
 					clear();
 					print("User deleted successfully");
 					lt.context = "ConsultGroup";
