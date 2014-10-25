@@ -41,6 +41,7 @@ public interface DatabaseInterface extends Remote{
 	public User createAccount(User u) throws RemoteException;
 
 	public Groups getGroupsOfUser(int iduser) throws RemoteException;
+	public Group getGroup(int idgroup) throws RemoteException;
 
 	//public Comment updateComment(Comment com, User u) throws RemoteException;
 }
