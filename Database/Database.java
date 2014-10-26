@@ -29,7 +29,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","");
+		connection = DriverManager.getConnection(url,"root","toor");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 		
@@ -75,6 +75,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		//addGroupToMeeting(getGroup(1), getMeeting(1));
 		//leaveMeeting(6, 7);
+		/*RemoveUserFromGroup ru = new RemoveUserFromGroup(7, 2);
+		removeUserFromGroup(ru);*/
+		//System.out.println(getUserActions(8).get(0).description);
 	}
 
 	public void setConfigs(){
@@ -379,8 +382,18 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 	}
 
-	public int addUserToMeeting(User user, Meeting meeting){
-		String query = "INSERT IGNORE INTO meeting_user (meeting, user) values((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1));";
+	public int addUserToMeeting(User user, Meeting meeting, Group group){
+		String query = null;
+
+		if(group == null)
+		{
+			query = "INSERT IGNORE INTO meeting_user (meeting, user) VALUES((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1));";
+		}
+		else
+		{
+			query = "INSERT IGNORE INTO meeting_user (meeting, user, group_def) VALUES((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1), "+group.idgroup+");";
+		}
+		
 		return executeUpdate(query);
 	}
 
@@ -391,7 +404,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		{
 			for(i=0; i<group.users.size(); i++)
 			{
-				if(addUserToMeeting(group.users.get(i), meeting) < 1)
+				if(addUserToMeeting(group.users.get(i), meeting, null) < 1)
 					return -1;
 			}
 		}
@@ -582,23 +595,88 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 	
 	public int removeUserFromGroup(RemoveUserFromGroup ru){
+		int idgroup = ru.idgroup;
+		int iduser = ru.iduser;
 
-		return -1;
+		if(executeUpdate("DELETE FROM meeting_user WHERE user = "+iduser+" AND group_def = "+idgroup+";" ) < 0)
+			return -1;
+
+		if(executeUpdate("DELETE FROM group_user WHERE user = "+iduser+";" ) < 1)
+			return -1;
+
+		return 1;
 	}
 
 	public Actions getUserActions(int iduser){
+		Action action = null;
+		Actions actions = new Actions();
 		try{
-			ResultSet rs = executeQuery("select * from action where assigned_user=" + iduser);
-			Actions a = new Actions();
-			while(rs.next()){
-				a.add( new Action(rs.getInt("idaction"), rs.getString("description"), rs.getTimestamp("due_to").toString(), null, rs.getInt("done"), rs.getInt("meeting"), rs.getInt("active") ) );
+			ResultSet rs =executeQuery("SELECT * FROM action WHERE assigned_user = "+iduser+" AND active = 1;");	
+			while(rs.next())
+			{
+				action = new Action(rs.getInt("idaction"), rs.getString("description"), rs.getString("due_to"), getUser(rs.getInt("assigned_user")), rs.getInt("done"), rs.getInt("meeting"), rs.getInt("active"));
+
+				if(action == null)
+					return null;
+
+				actions.add(action);
 			}
-			return a;
-		}catch(SQLException e){
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Mysql error");
+			e.printStackTrace();
 			return null;
 		}
+
+		return actions;
 	}
 	
+
+	public int addGroupToMeeting(int idmeeting, int idgroup){
+		
+		if(executeUpdate("INSERT IGNORE INTO meeting_group(meeting, group_def) values('" + idmeeting + "', '" + idgroup + "');" ) < 1)
+			return -1;
+
+		Group group = getGroup(idgroup);
+		Meeting meeting = getMeeting(idmeeting);
+		int i = 0;
+
+		for(i=0; i<group.users.size(); i++)
+		{
+			if(addUserToMeeting(group.users.get(i), meeting, group) < 1)
+					return -1;
+		}
+
+		return i+1;
+
+	}
+
+	/*public Actions getActionsByUser(int iduser)
+	{
+		Action action = null;
+		Actions actions = new Actions();
+		try{
+			ResultSet rs =executeQuery("SELECT * FROM action WHERE assigned_user = "+iduser+" AND active = 1;");	
+			while(rs.next())
+			{
+				action = new Action(rs.getInt("idaction"), rs.getString("description"), rs.getString("due_to"), getUser(rs.getInt("assigned_user")), rs.getInt("done"), rs.getInt("meeting"), rs.getInt("active"));
+
+				if(action == null)
+					return null;
+
+				actions.add(action);
+			}
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Mysql error");
+			e.printStackTrace();
+			return null;
+		}
+
+		return actions;
+	}*/
 
 	public static void main(String[] args) throws RemoteException, SQLException {
 		DatabaseInterface di = new Database();
