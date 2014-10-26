@@ -140,7 +140,7 @@ public class Client{
 		print("2 - Consult groups");
 		print("3 - To-do list");
 		print("4 - Quit");
-		sel = readInt(1, 3);
+		sel = readInt(1, 4);
 
 		switch(sel){
 			case 1:
@@ -175,7 +175,9 @@ public class Client{
       		String currentdate = df.format(dateobj);
 
 		int upcomingflag =0;
-		print("Previous Meetings:");
+
+		if(ms.size() != 0) print("Previous Meetings:");
+
 		for(int i=0; i<ms.size(); i++){
 			if(currentdate.compareTo(ms.get(i).datetime)<0 && upcomingflag ==0){
 				clear();
@@ -190,9 +192,8 @@ public class Client{
 		print("1 - Consult meeting details");
 		print("2 - Schedule new meeting");
 		print("3 - Leave one of your meetings");
-		print("4 - Pending meeting invites");
-		print("5 - Back");
-		sel = readInt(1, 5);
+		print("4 - Back");
+		sel = readInt(1, 4);
 
 		switch(sel){
 			case 1:
@@ -216,17 +217,22 @@ public class Client{
 		
 					r = new Request("leavemeeting",ms.get(readInt(1,ms.size())-1 ).idmeeting);
 					writeObject(r);
-					wait.waitLeaveMeeting();
+					wait.waitDefault();
 					clear();
 					print("Left meeting successfully");
 				}
 				break;
 			case 4:
 				clear();
-				print("Not working yet");
-				break;
-			case 5:
-				clear();
+
+				if(ms.size()!=0){
+					print("Which meeting do you want to leave? Write its number:");
+		
+					r = new Request("leavemeeting",ms.get(readInt(1,ms.size())-1 ).idmeeting);
+					writeObject(r);
+					wait.waitDefault();
+					clear();
+				}
 				lt.context = "Main";
 
 		}
@@ -634,7 +640,9 @@ public class Client{
 
 		print("Adding new action. Fill the following form:");
 		print("Due date (YYYY/MM/DD): ");
-		act.due_to = readString();
+		String date = readString();
+		print("Time: ");
+		act.due_to = date + " " + readString();
 		print("Description: ");
 		act.description = readString();
 		act.meeting = lt.meeting.idmeeting;
@@ -918,7 +926,11 @@ public class Client{
 		writeObject(r);
 		wait.waitDefault();
 		for(int i=0; i<lt.actions.size();i++){
-			print(1+i+" - "+ lt.actions.get(i).description + " Due to: " + lt.actions.get(i).due_to + " Status: " + lt.actions.get(i).done);
+			print(1+i+" - "+ lt.actions.get(i).description + " Due to: " + lt.actions.get(i).due_to);
+			
+			if(lt.actions.get(i).done == 0){
+				System.out.print(" Status: Pending\n");
+			}else System.out.print(" Status: Done\n");
 		}
 		lt.context = "Main";
 	}

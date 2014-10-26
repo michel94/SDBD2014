@@ -50,3 +50,13 @@ Add group to meeting - addGroupToMeeting (idgroup, idmeeting)					done
 	- inserir cada utilizador manualmente
 
 verificar se leader é auto adicionado à meeting que cria
+
+
+
+||||||||ADICIONADO POR RUI, POR AGORA SO FALTA ISTO DE MAIS IMPORTANTE, DEPOIS FALTAM OUTRAS CENAS SECUNDARIAS, QUE SE CALHAR NAO VAMOS FAZER, SORRY CAPSLOCK
+
+||||||||Remove users from group
+
+||||||||Add group to database
+
+||||||||Add group to meeting
