@@ -17,36 +17,27 @@ public interface DatabaseInterface extends Remote{
 	public int insertItem(Item item) throws RemoteException;
 	public int addUserToMeeting(User user, Meeting meeting, Group group) throws RemoteException;
 	public int finishMeeting(Meeting meeting) throws RemoteException;
-
-
 	public Action getAction(int idaction) throws RemoteException;
 	public int updateItem(Item item) throws RemoteException;
 	public int deleteItem(int iditem) throws RemoteException;
-
 	public Authentication login(Authentication auth) throws RemoteException;
 	public int insertComment(Comment com, User u) throws RemoteException;
-
-
 	public int insertKeyDecision(KeyDecision kd) throws RemoteException;
 	public int deleteKeyDecision(int idkeydecision) throws RemoteException;
 	public int updateKeyDecision(KeyDecision kd) throws RemoteException;
 	public Users getAllUsers() throws RemoteException;
-
 	public int insertAction(Action act) throws RemoteException;
 	public int assignUserToAction(Action act) throws RemoteException;
 	public int updateAction(Action act) throws RemoteException;
 	public int deleteAction(int idaction) throws RemoteException;
-	
-	public int inviteUsers(InviteUsers iu) throws RemoteException;
+	public int inviteUsersToMeeting(InviteUsers iu) throws RemoteException;
+	public int inviteUsersToGroup(InviteUsers iu)  throws RemoteException;
 	public User createAccount(User u) throws RemoteException;
-
 	public Groups getGroupsOfUser(int iduser) throws RemoteException;
 	public Group getGroup(int idgroup) throws RemoteException;
 	public int addGroupToMeeting(Group group, Meeting meeting) throws RemoteException;
-
 	public int removeUserFromGroup(RemoveUserFromGroup ru) throws RemoteException;
 	//public Comment updateComment(Comment com, User u) throws RemoteException;
-
 	public int leaveMeeting(int idmeeting, int iduser) throws RemoteException;
 	public Actions getUserActions(int iduser) throws RemoteException;
 	public int addGroupToMeeting(int idmeeting, int idgroup) throws RemoteException;

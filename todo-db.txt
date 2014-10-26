@@ -49,7 +49,9 @@ Add group to meeting - addGroupToMeeting (idgroup, idmeeting)					done
 	- inserir na tabela group_user
 	- inserir cada utilizador manualmente
 
-verificar se leader é auto adicionado à meeting que cria
+verificar se leader é auto adicionado à meeting que cria						done
+
+Add Group To Meeting 															done
 
 
 
