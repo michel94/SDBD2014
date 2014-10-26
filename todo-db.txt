@@ -34,9 +34,19 @@ getGroup()									done
 
 getGroupsOfUser()							done
 
-apagar meeting 								n é preciso
+apagar meeting 								done
 apagar item 								n é preciso 
 apagar keydecision 							done
 apagar action                               done
 	
 insert meeting adiciona tb utilizadores		done
+
+
+
+Leave meeting - leaveMeeting(idclient)
+
+Remove user from group - removeUserFromGroup(iduse,idgroup)
+
+Assign action to group - Por agora ignora isto
+
+Add group to meeting - addGroupToMeeting (idgroup, idmeeting)
