@@ -1,21 +1,27 @@
-import java.rmi.RemoteException;
+import java.io.*;
+import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+
 import java.util.ArrayList;
 import java.sql.*;
-
+import java.net.*;
+import java.util.Properties;
 
 public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	public Connection connection;
 	public Statement stmt;
 	public String host;
 	public boolean banned;
+	
+	static int RMIPort;
 
 	protected Database() throws RemoteException, SQLException {
-
+		
 		super();
-
 		//initialize JDBC
+		setConfigs();
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			System.out.println("Found Driver");
@@ -26,6 +32,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		connection = DriverManager.getConnection(url,"root","");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
+		
+		
 
 		//addMeeting("asd", "asdad", "2014-03-03 00:00:00", "coimbra", 1);
 		/*Meeting meeting = getMeeting(1);
@@ -67,6 +75,19 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		//addGroupToMeeting(getGroup(1), getMeeting(1));
 		//leaveMeeting(6, 7);
+	}
+
+	public void setConfigs(){
+		try{
+			Properties prop = new Properties();
+			FileInputStream txt = new FileInputStream("DatabaseServer.properties");
+			prop.load(txt);
+			RMIPort = Integer.parseInt(prop.getProperty("rmiport"));
+
+		}catch(IOException e){
+			System.out.println("Could not load configuration. Exiting.");
+			System.exit(0);
+		}
 	}
 
 	private ResultSet executeQuery(String q){
@@ -577,11 +598,23 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			return null;
 		}
 	}
+	
 
 	public static void main(String[] args) throws RemoteException, SQLException {
 		DatabaseInterface di = new Database();
-		LocateRegistry.createRegistry(1099).rebind("database", di);
 
+		try{
+			InetAddress IP=InetAddress.getLocalHost();
+			String ipAddress = IP.getHostAddress();
+			System.out.println("Database server ip: "+ipAddress + " Port: " + RMIPort);
+			if (ipAddress != null)
+				System.setProperty("java.rmi.server.hostname", ipAddress );
+		}catch(Exception e){
+			System.out.print(e);
+		}
+		
+		Registry r = LocateRegistry.createRegistry(RMIPort);
+		r.rebind("database", di);
 		
 		System.out.println("Database ready...");
 	}

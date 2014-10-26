@@ -8,11 +8,12 @@ public class UdpConnection implements Runnable {
 	private boolean sec;
 	private int losses=0;
 	private final int ACCEPTED_LOSSES = 3;
+	private String address;
 
-	public UdpConnection(Boolean s){
+	public UdpConnection(Boolean s, String address){
 		secondary = s;
 		sec = s;
-
+		this.address=address;
 		Thread t = new Thread(this, "pong");
 		
 		t.start();
@@ -65,7 +66,7 @@ public class UdpConnection implements Runnable {
 
 					Thread.sleep(1000);
 					byte [] m = (new String("ping")).getBytes();
-					InetAddress aHost = InetAddress.getByName("localhost");
+					InetAddress aHost = InetAddress.getByName(address);
 					DatagramPacket request = new DatagramPacket(m, m.length, aHost, udpPort);
 
 					System.out.println("Sending ping");

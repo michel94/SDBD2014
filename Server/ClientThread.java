@@ -144,8 +144,12 @@ public class ClientThread implements Runnable {
 						qres = database.updateKeyDecision(kd);
 					}
 				}else if(data instanceof InviteUsers){
-					InviteUsers iu = (InviteUsers) data;
-					qres = database.inviteUsers(iu);
+					/*InviteUsers iu = (InviteUsers) data;
+					if(iu.flag == 1){
+						qres = database.inviteUsersToMeeting(iu);
+					}else if (iu.flag == 2){
+						qres = database.inviteUsersToGroup(iu);
+					}*/
 				}else if(data instanceof User){
 					User u = (User) data;
 					r = database.createAccount(u);				
