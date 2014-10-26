@@ -61,7 +61,7 @@ public class Server{
 		int retries = 0;
 		
 		try{
-			while(retries<5){
+			while(retries<8){
 				try{
 				 	database = (DatabaseInterface) Naming.lookup("database");
 				 	System.out.println("Connected to the database");
@@ -69,22 +69,22 @@ public class Server{
 				}catch(NotBoundException e){
 					System.out.println("Database could not be reached. Failed connection. Retrying connection in 10 seconds.");
 					retries++;
-					Thread.sleep(10000);
+					Thread.sleep(2000);
 				}catch(MalformedURLException e){
 					System.out.println("Could not find the the database hostname. Retrying connection in 10 seconds.");
 					retries++;
-					Thread.sleep(10000);		
+					Thread.sleep(2000);		
 				}catch(RemoteException e){
 					System.out.println("Remote exception. Retrying connection in 10 seconds.");
 					retries++;
-					Thread.sleep(10000);
+					Thread.sleep(2000);
 				}
 			}
 		}catch(InterruptedException ex) {
     			Thread.currentThread().interrupt();
 		}
 
-		if(retries == 5){
+		if(retries == 8){
 			System.out.println("Database could not be reached after 1 minute. Closing server.");
 			System.exit(0);
 		}
@@ -137,7 +137,7 @@ public class Server{
 
 	public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
 
-		Server server = new Server(false);
+		Server server = new Server(true);
 
 	}
 

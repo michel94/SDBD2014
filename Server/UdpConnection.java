@@ -49,7 +49,7 @@ public class UdpConnection implements Runnable {
 		}else{ // secondary
 			try {
 				socket = new DatagramSocket();
-				socket.setSoTimeout(5000);
+				socket.setSoTimeout(1500);
 
 				while(true){
 					

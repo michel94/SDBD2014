@@ -160,7 +160,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		User user = null;
 
 		try{
-			ResultSet rs = executeQuery("SELECT m.* FROM meeting as m, meeting_user as mu WHERE mu.user = "+ iduser +" AND mu.meeting = m.idmeeting AND m.active = 1");
+			ResultSet rs = executeQuery("SELECT m.* FROM meeting as m, meeting_user as mu WHERE mu.user = "+ iduser +" AND mu.meeting = m.idmeeting AND m.active = 1 ORDER BY datetime ASC");
 			while(rs.next())
 			{
 				user = getUser(rs.getInt("leader"));
