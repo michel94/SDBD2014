@@ -175,7 +175,9 @@ public class Client{
       		String currentdate = df.format(dateobj);
 
 		int upcomingflag =0;
-		print("Previous Meetings:");
+
+		if(ms.size() != 0) print("Previous Meetings:");
+
 		for(int i=0; i<ms.size(); i++){
 			if(currentdate.compareTo(ms.get(i).datetime)<0 && upcomingflag ==0){
 				clear();
@@ -222,11 +224,13 @@ public class Client{
 				break;
 			case 4:
 				clear();
+
+				if(ms.size()!=0){
 					print("Which meeting do you want to leave? Write its number:");
 		
 					r = new Request("leavemeeting",ms.get(readInt(1,ms.size())-1 ).idmeeting);
 					writeObject(r);
-					wait.waitMeeting();
+					wait.waitDefault();
 					clear();
 				}
 				lt.context = "Main";

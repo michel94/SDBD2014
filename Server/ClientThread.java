@@ -94,7 +94,7 @@ public class ClientThread implements Runnable {
 					}else if(req.type.equals("actionsofuser")){
 						r = database.getUserActions(userData.iduser);
 					}else if(req.type.equals("leavemeeting")){
-						r = database.leaveMeeting(id,userData.iduser);
+						qres = database.leaveMeeting(id,userData.iduser);
 					}
 
 				}
