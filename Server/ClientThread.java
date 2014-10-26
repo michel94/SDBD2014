@@ -150,6 +150,9 @@ public class ClientThread implements Runnable {
 				}else if(data instanceof RemoveUserFromGroup){
 					RemoveUserFromGroup ru = (RemoveUserFromGroup) data;
 					qres = database.removeUserFromGroup(ru);	
+				}else if(data instanceof Group){
+					Group g = (Group) data;
+					//r = database.createGroup(g);				
 				}
 
 				if(r != null){

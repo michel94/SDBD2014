@@ -28,6 +28,7 @@ public class ListenerThread implements Runnable{
 	public User user; 
 	public KeyDecision keydecision;
 	public Confirmation confirmation = null;
+	public Actions actions;
 	
 	public void setConfigs(){
 		try{
@@ -167,6 +168,9 @@ public class ListenerThread implements Runnable{
 					wait.notifyDefault();			
 				}else if (r instanceof Group){
 					group = (Group) r;
+					wait.notifyDefault();			
+				}else if (r instanceof Actions){
+					actions = (Actions) r;
 					wait.notifyDefault();			
 				}
 
