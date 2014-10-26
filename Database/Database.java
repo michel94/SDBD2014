@@ -23,7 +23,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 		}
 		String url = "jdbc:mysql://localhost:3306/meeto";
-		connection = DriverManager.getConnection(url,"root","");
+		connection = DriverManager.getConnection(url,"root","toor");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
 
@@ -65,7 +65,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		//System.out.println(getGroup(1).users.get(1).username);
 
-		addGroupToMeeting(getGroup(1), getMeeting(1));
+		//addGroupToMeeting(getGroup(1), getMeeting(1));
+		leaveMeeting(6, 7);
 	}
 
 	private ResultSet executeQuery(String q){
@@ -447,7 +448,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return executeUpdate(query);
 	}
 
-
 	public boolean stonith(){
 		banned = true;
 		return true;
@@ -553,6 +553,11 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 		
 		return group;
+	}
+
+	public int leaveMeeting(int idmeeting, int iduser)
+	{
+		return executeUpdate("DELETE FROM meeting_user WHERE meeting = "+idmeeting+" AND user = "+iduser+";");	
 	}
 	
 	public int removeUserFromGroup(RemoveUserFromGroup ru){

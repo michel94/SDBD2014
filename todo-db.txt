@@ -20,13 +20,6 @@ registar conta								done
 
 TRABALHO DO DIOGO DAQUI PARA BAIXO
 
-recusar convite
-
-add group to meeting
-	- inserir na tabela group_user
-	- inserir cada utilizador manualmente
-fechar meeting ??
-
 add user to group 							done
 	-add user to all the group meetings
 
@@ -53,3 +46,7 @@ Remove user from group - removeUserFromGroup(iduse,idgroup)
 Assign action to group - Por agora ignora isto
 
 Add group to meeting - addGroupToMeeting (idgroup, idmeeting)
+	- inserir na tabela group_user
+	- inserir cada utilizador manualmente
+
+	verificar se leader é auto adicionado à meeting que cria
