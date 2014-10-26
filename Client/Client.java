@@ -384,7 +384,7 @@ public class Client{
 		print("5 - Edit meeting details");
 		print("6 - Add users to meeting");
 		print("7 - Add group to meeting");
-		print("8 - Close this meeting");
+		print("8 - Leave this meeting");
 		print("9 - Back");
 		sel = readInt(1, 9);
 
@@ -432,13 +432,32 @@ public class Client{
 				break;
 			case 7: 
 				clear();
-				print("Not working yet");
+
+				r = new Request("groupsofuser", clientID);
+				writeObject(r);
+				wait.waitDefault();
+				Groups gs = lt.groups;
+				clear();
+				print("Groups:");
+				for(int i=0; i<gs.size(); i++){
+					print(i+1 + " - "+gs.get(i).name);
+				}
+
+				print("Which group do you want to add to this meeting? Write its number:");
+				
+				InviteGroup ig = new InviteGroup(gs.get(readInt(1,gs.size())-1).idgroup, lt.meeting.idmeeting);
+				writeObject(ig);
+				wait.waitDefault();
+				clear();
+				
+				print("Group added successfully");
+
 				lt.context = "ConsultMeeting";
 				break;
 			case 8: 
 				clear();
 				print("Not working yet");
-				lt.context = "ConsultMeeting";
+				lt.context = "Meetings";
 				break;
 
 			case 9:

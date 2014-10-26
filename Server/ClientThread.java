@@ -90,8 +90,10 @@ public class ClientThread implements Runnable {
 						qres = database.deleteAction(id);					
 					}else if(req.type.equals("groupsofuser")){
 						r = database.getGroupsOfUser(id);
-					}else if(req.type.equals("actionsfuser")){
+					}else if(req.type.equals("actionsofuser")){
+						System.out.println("Here");
 						r = database.getUserActions(userData.iduser);
+						System.out.println("There");
 					}
 
 				}
@@ -152,6 +154,9 @@ public class ClientThread implements Runnable {
 				}else if(data instanceof Group){
 					Group g = (Group) data;
 					//r = database.createGroup(g);				
+				}else if(data instanceof InviteGroup){
+					InviteGroup g = (InviteGroup) data;
+					//r = database.inviteGroup(g);				
 				}
 
 				if(r != null){
