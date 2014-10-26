@@ -170,7 +170,7 @@ public class Client{
 		print("Previous Meetings:");
 		for(int i=0; i<ms.size(); i++){
 			if(currentdate.compareTo(ms.get(i).datetime)<0 && upcomingflag ==0){
-				clear();
+				print("");
 				print("Upcoming Meetings:");
 				upcomingflag = 1;
 			}
