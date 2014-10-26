@@ -12,20 +12,20 @@ edit keydecision							done
 
 insertAction								done
 fazer assign de um user a uma action 		done
-update action
-apagar action
+update action 								
+apagar action 								
 
 
 registar conta								done			
 
-TRABALHO DO DIOGO DAQUI PARA BAIXO
+TRABALHO DO DIOGO DAQUI PARA BAIXO 			
 
-recusar convite
+recusar convite 							
 
-add group to meeting
-	- inserir na tabela group_user
-	- inserir cada utilizador manualmente
-fechar meeting ??
+add group to meeting 						
+	- inserir na tabela group_user 			
+	- inserir cada utilizador manualmente 	
+fechar meeting ?? 							
 
 add user to group 							done
 	-add user to all the group meetings
@@ -43,13 +43,12 @@ apagar action                               done
 	
 insert meeting adiciona tb utilizadores		done
 
-get actions by user 						
+get actions by user 						done
 
-
-Leave meeting - leaveMeeting(idclient)
+Leave meeting - leaveMeeting(idclient)	
 
 Remove user from group - removeUserFromGroup(iduse,idgroup)
 
-Assign action to group - Por agora ignora isto
+Assign action to group - Por agora ignora isto					
 
-Add group to meeting - addGroupToMeeting (idgroup, idmeeting)
+Add group to meeting - addGroupToMeeting (idgroup, idmeeting) 	
