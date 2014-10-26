@@ -1,24 +1,23 @@
 adicionar user a meeting -> insert 												done
 get action -> Action 															done
 edit meeting details 															done
-getItem
-
+getItem																			done
 
 adicionar keydecision a item   													done
 apagar keydecision																done
 edit keydecision																done
 
-
-
 insertAction																	done
 fazer assign de um user a uma action 											done
-update action
-apagar action
+update action 																	done
+apagar action 																	done
+
+registar conta																	done
 
 
-registar conta																	done			
 
-TRABALHO DO DIOGO DAQUI PARA BAIXO
+TRABALHO DO DIOGO DAQUI PARA BAIXO 			
+
 
 add user to group 																done
 	-add user to all the group meetings
@@ -43,7 +42,7 @@ Leave meeting - leaveMeeting(idclient)											done
 
 Remove user from group - removeUserFromGroup(iduse,idgroup)						done
 
-Assign action to group - Por agora ignora isto
+
 
 Add group to meeting - addGroupToMeeting (idgroup, idmeeting)					done
 	- inserir na tabela group_user
@@ -52,13 +51,11 @@ Add group to meeting - addGroupToMeeting (idgroup, idmeeting)					done
 verificar se leader é auto adicionado à meeting que cria						done
 
 Add Group To Meeting 															done
+verificar se leader é auto adicionado à meeting que cria 						done
 
 
+ADICIONADO POR RUI, POR AGORA SO FALTA ISTO DE MAIS IMPORTANTE, DEPOIS FALTAM OUTRAS CENAS SECUNDARIAS, QUE SE CALHAR NAO VAMOS FAZER, SORRY CAPSLOCK
 
-||||||||ADICIONADO POR RUI, POR AGORA SO FALTA ISTO DE MAIS IMPORTANTE, DEPOIS FALTAM OUTRAS CENAS SECUNDARIAS, QUE SE CALHAR NAO VAMOS FAZER, SORRY CAPSLOCK
+CREATE GROUP
 
-||||||||Remove users from group
-
-||||||||Add group to database
-
-||||||||Add group to meeting
+Assign action to group - Por agora ignora isto					

@@ -1,6 +1,5 @@
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.rmi.RemoteException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -19,18 +18,17 @@ public class Server{
 	private Boolean second;
 	private DatabaseInterface database = null;
 	private ConcurrentHashMap<Integer, ClientData> clients;
-
+	private String failoverserver,databaseIP,databasePort;
 
 	protected Server(boolean s){
 		super();
 
 		setConfigs();
-
-		clients = new ConcurrentHashMap<Integer, ClientData>();
 		second = s;
-
-		UdpConnection u = new UdpConnection(second);
-
+		clients = new ConcurrentHashMap<Integer, ClientData>();
+		UdpConnection u = new UdpConnection(second,failoverserver);
+		
+		
 
 		if(second){
 			try{
@@ -48,9 +46,13 @@ public class Server{
 	public void setConfigs(){
 		try{
 			Properties prop = new Properties();
-			FileInputStream txt = new FileInputStream("../global.properties");
+			FileInputStream txt = new FileInputStream("Server.properties");
 			prop.load(txt);
 			serverPort = Integer.parseInt(prop.getProperty("tcpport"));
+			failoverserver = prop.getProperty("failoverserverip");
+			databaseIP = prop.getProperty("databaseserverip");
+			databasePort = prop.getProperty("databaseserverport");
+
 		}catch(IOException e){
 			System.out.println("Could not load configuration. Exiting.");
 			System.exit(0);
@@ -63,7 +65,7 @@ public class Server{
 		try{
 			while(retries<8){
 				try{
-				 	database = (DatabaseInterface) Naming.lookup("database");
+				 	database = (DatabaseInterface) Naming.lookup("//"+databaseIP+":"+databasePort+"/database");
 				 	System.out.println("Connected to the database");
 					break;
 				}catch(NotBoundException e){
@@ -101,7 +103,10 @@ public class Server{
 			System.out.println("Listening to port " + serverPort);
 			ServerSocket listenSocket = new ServerSocket(serverPort);
 			System.out.println("Server ready");
-			
+
+			InetAddress IP=InetAddress.getLocalHost();
+			System.out.println("IP of this server is : "+IP.getHostAddress());
+
 			while(true){
 				clientSocket = listenSocket.accept();
 
