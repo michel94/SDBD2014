@@ -56,6 +56,7 @@ public class ClientThread implements Runnable {
 		while(true){
 			try {
 				Object data = (Object) in.readObject();
+				System.out.println("Received Object");
 
 				Object r = null;
 				Confirmation conf = new Confirmation();
@@ -169,6 +170,9 @@ public class ClientThread implements Runnable {
 
 				}
 
+			} catch(RemoteException e){
+				System.out.println("Database server is down");
+				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error: Class not found while reading pipe of client "+clientId +".");
 
