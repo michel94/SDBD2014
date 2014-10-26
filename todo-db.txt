@@ -35,8 +35,10 @@ getGroup()									done
 getGroupsOfUser()							done
 
 apagar meeting 								n é preciso
-apagar item 								n é preciso 
+apagar item 								done
 apagar keydecision 							done
 apagar action                               done
 	
 insert meeting adiciona tb utilizadores		done
+
+get actions by user 						
