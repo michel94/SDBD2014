@@ -5,6 +5,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.gnome.gtk.Gtk;
 import org.gnome.notify.Notify;
 import org.gnome.notify.Notification;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class Client{
 	private ListenerThread lt;
@@ -123,6 +126,8 @@ public class Client{
 
 	public void mainMenu(){
 		int sel;
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+		Date dateobj = new Date();
 		Request r;
 		print("\n|   Meeto   |\n");
 		print("");
@@ -158,9 +163,18 @@ public class Client{
 		writeObject(r);
 		wait.waitMeetings();
 		Meetings ms = lt.meetings;
+		
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+     		Date dateobj = new Date();
+      		String currentdate = df.format(dateobj);
 
-		print("Meetings:");
+		int upcomingflag =0;
+		print("Previous Meetings:");
 		for(int i=0; i<ms.size(); i++){
+			if(currentdate.compareTo(ms.get(i).datetime)<0 && upcomingflag ==0){
+				print("Upcoming Meetings:");
+				upcomingflag = 1;
+			}
 			print(i+1 + " - "+ms.get(i).datetime + "  " + ms.get(i).title);
 		}
 		print("");
@@ -310,7 +324,7 @@ public class Client{
 		print("Status (1 for Done, 0 for Pending): "+ a.done);
 		a.done = readInt(0,1);
 		
-		print("Assign user to action:);
+		print("Assign user to action:");
 		listAllUsers();
 		print("Assign user by writing its number from the user list:");
 		int sel=readInt(1,lt.users.size())-1;
