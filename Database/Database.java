@@ -670,6 +670,38 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	}
 
+	public int createGroup(Group group){
+		
+		if(executeUpdate("INSERT INTO group_def(name, created_datetime, active) values('" + group.name + "', NOW(), 1);" ) < 1)
+			return -1;
+
+		int i = 0;
+		try{
+			ResultSet rs = executeQuery("SELECT max(idgroup) as idgroup from group_def");
+			if(rs.next())
+			{
+				group.idgroup = rs.getInt("idgroup");
+
+				String query = "INSERT IGNORE INTO group_user(group_def, user) values ";
+				for(i=0; i<group.users.size(); i++){
+					query += "(" + group.idgroup + ", " + group.users.get(i).iduser+ ")"; 
+					if(i < group.users.size() - 1) query += ", ";
+				}
+			}
+			else
+			{
+				return -1;
+			}
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			return -1;
+		}
+
+		return i;
+
+	}
+
 	/*public Actions getActionsByUser(int iduser)
 	{
 		Action action = null;

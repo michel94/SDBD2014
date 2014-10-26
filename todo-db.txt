@@ -54,8 +54,6 @@ Add Group To Meeting 															done
 verificar se leader é auto adicionado à meeting que cria 						done
 
 
-ADICIONADO POR RUI, POR AGORA SO FALTA ISTO DE MAIS IMPORTANTE, DEPOIS FALTAM OUTRAS CENAS SECUNDARIAS, QUE SE CALHAR NAO VAMOS FAZER, SORRY CAPSLOCK
-
-CREATE GROUP
+CREATE GROUP 																	done
 
 Assign action to group - Por agora ignora isto					
