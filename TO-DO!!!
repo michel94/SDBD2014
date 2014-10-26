@@ -17,7 +17,7 @@ Edit this action <- Done
 
 Close this meeting <- Não tá na checklist fica pra depois
 
-Leave meeting <- Não tá na checklist fica pra depois
+
 
 Remove group from meeting <- Não está na checklist
 
@@ -38,14 +38,17 @@ List groups <-done
 Delete group <- Não está na checklis
 
 Max priority:
-Add users to group <- Done
 
+
+Add users to group <- Done
 
 Remove users from group. removeUsersFromGroup(RemoveUsersFromGroup rus) (Tendo em conta tudo ao lvl da base de dados: Removendo o user desse group, remover o mesmo de todas as reuniões em que esse grupo está presente.) <- está implementado no cliente e no server, falta base de dados.
 
 Add group 
 
 Add group to meeting
+
+Leave meeting
 
 
 

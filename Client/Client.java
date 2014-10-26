@@ -708,6 +708,8 @@ public class Client{
 		print("Groups:");
 		for(int i=0; i<gs.size(); i++){
 			print(i+1 + " - "+gs.get(i).name);
+		}
+
 		print("");
 
 		print("What do you want to do?");
@@ -738,9 +740,9 @@ public class Client{
 				}
 				break;
 			case 4:
+				clear();
 				lt.context = "Main";
 
-			}
 		}
 			
 	}
