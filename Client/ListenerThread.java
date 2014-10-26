@@ -28,6 +28,7 @@ public class ListenerThread implements Runnable{
 	public User user; 
 	public KeyDecision keydecision;
 	public Confirmation confirmation = null;
+	public Actions actions;
 	
 	public void setConfigs(){
 		try{
