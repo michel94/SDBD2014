@@ -140,6 +140,8 @@ public class ClientThread implements Runnable {
 						r = database.getGroupsOfUser(id);
 					}else if(req.type.equals("actionsofuser")){
 						r = database.getUserActions(userData.iduser);
+					}else if(req.type.equals("leavemeeting")){
+						qres = database.leaveMeeting(id,userData.iduser);
 					}
 
 				}
@@ -200,7 +202,10 @@ public class ClientThread implements Runnable {
 					qres = database.removeUserFromGroup(ru);
 				}else if(data instanceof Group){
 					Group g = (Group) data;
-					//r = database.createGroup(g);
+					r = database.createGroup(g);			
+				}else if(data instanceof InviteGroup){
+					InviteGroup g = (InviteGroup) data;
+					//r = database.inviteGroup(g);				
 				}
 
 				return new DatabaseAccess(qres, r);

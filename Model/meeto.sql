@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 25, 2014 at 09:08 PM
+-- Generation Time: Oct 26, 2014 at 07:00 PM
 -- Server version: 5.5.38-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.3
 
@@ -40,13 +40,6 @@ CREATE TABLE IF NOT EXISTS `action` (
   KEY `fk_action_2_idx` (`meeting`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `action`
---
-
-INSERT INTO `action` (`idaction`, `description`, `due_to`, `assigned_user`, `done`, `meeting`, `created_datetime`, `active`) VALUES
-(1, 'descricao da acçao', '2015-02-12 00:00:00', 6, 0, 1, '2014-10-16 16:27:55', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -65,13 +58,6 @@ CREATE TABLE IF NOT EXISTS `comment` (
   KEY `fk_comment_2_idx` (`item`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `comment`
---
-
-INSERT INTO `comment` (`idcomment`, `comment`, `user`, `created_datetime`, `item`, `active`) VALUES
-(1, 'comentario item 2', 3, '2014-10-15 00:00:00', 2, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -84,14 +70,15 @@ CREATE TABLE IF NOT EXISTS `group_def` (
   `created_datetime` datetime NOT NULL,
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idgroup`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `group_def`
 --
 
 INSERT INTO `group_def` (`idgroup`, `name`, `created_datetime`, `active`) VALUES
-(1, 'Grupo Totil', '2014-10-16 16:17:16', 1);
+(2, 'Grupo ABC', '2014-10-09 00:00:00', 1),
+(3, 'Grupo XYZ', '2014-10-22 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -111,9 +98,9 @@ CREATE TABLE IF NOT EXISTS `group_user` (
 --
 
 INSERT INTO `group_user` (`group_def`, `user`) VALUES
-(1, 2),
-(1, 4),
-(1, 6);
+(2, 7),
+(2, 8),
+(3, 9);
 
 -- --------------------------------------------------------
 
@@ -134,16 +121,6 @@ CREATE TABLE IF NOT EXISTS `item` (
   KEY `fk_item_2_idx` (`meeting`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
---
--- Dumping data for table `item`
---
-
-INSERT INTO `item` (`iditem`, `title`, `description`, `user`, `created_datetime`, `meeting`, `active`) VALUES
-(1, 'Item 1', 'descrição do item 1', 4, '2014-10-16 16:19:22', 1, 1),
-(2, 'Item 2', 'Descrição item 2', 5, '2014-10-16 16:19:22', 1, 1),
-(3, 'titulo item', 'descricaooooo', 1, '2014-10-23 04:24:45', 1, 1),
-(4, 'titulo item', 'descricaooooo', 1, '2014-10-23 04:26:28', 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -159,14 +136,6 @@ CREATE TABLE IF NOT EXISTS `keydecision` (
   PRIMARY KEY (`idkeydecision`),
   KEY `fk_keydecision_1_idx` (`item`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `keydecision`
---
-
-INSERT INTO `keydecision` (`idkeydecision`, `description`, `item`, `created_datetime`, `active`) VALUES
-(1, 'descricao keydecision', 1, '2014-10-16 16:28:20', 1),
-(2, 'dsjfjdsf', 2, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -186,18 +155,15 @@ CREATE TABLE IF NOT EXISTS `meeting` (
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idmeeting`),
   KEY `fk_meeting_1_idx` (`leader`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `meeting`
 --
 
 INSERT INTO `meeting` (`idmeeting`, `title`, `description`, `datetime`, `location`, `leader`, `finished`, `created_datetime`, `active`) VALUES
-(1, 'Reunião A', 'descricao da reuniao a', '2014-12-10 00:00:00', 'DEI', 3, 0, '2014-10-14 00:00:00', 1),
-(2, 'hjjhgh', 'jhgjhghg', '2014-10-16 00:00:00', 'dei', 4, 0, '2014-10-16 17:38:54', 1),
-(3, 'asd', 'asdad', '2014-03-03 00:00:00', 'coimbra', 1, 0, '2014-10-20 21:47:00', 1),
-(4, 'asd', 'asdad', '2014-03-03 00:00:00', 'coimbra', 1, 0, '2014-10-20 21:54:00', 1),
-(5, 'Reuniao y', 'descricao da reuniao y', '2014-12-23 07:03:00', 'DEI', 1, 1, '2014-10-22 01:07:58', 1);
+(6, 'Reuniao A', 'descricao A', '2014-10-20 00:00:00', 'Coimbra', 7, 1, '2014-10-17 00:00:00', 1),
+(7, 'Reuniao B', 'descricao B', '2014-10-31 00:00:00', 'DEI', 8, 0, '2014-10-25 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -217,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `meeting_group` (
 --
 
 INSERT INTO `meeting_group` (`meeting`, `group_def`) VALUES
-(1, 1);
+(6, 2);
 
 -- --------------------------------------------------------
 
@@ -228,19 +194,19 @@ INSERT INTO `meeting_group` (`meeting`, `group_def`) VALUES
 CREATE TABLE IF NOT EXISTS `meeting_user` (
   `meeting` int(11) NOT NULL,
   `user` int(11) NOT NULL,
+  `group_def` int(11) DEFAULT NULL,
   PRIMARY KEY (`meeting`,`user`),
-  KEY `fk_meeting_user_2_idx` (`user`)
+  KEY `fk_meeting_user_2_idx` (`user`),
+  KEY `fk_meeting_user_3_idx` (`group_def`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `meeting_user`
 --
 
-INSERT INTO `meeting_user` (`meeting`, `user`) VALUES
-(1, 2),
-(1, 3),
-(1, 4),
-(1, 6);
+INSERT INTO `meeting_user` (`meeting`, `user`, `group_def`) VALUES
+(6, 7, NULL),
+(6, 8, 2);
 
 -- --------------------------------------------------------
 
@@ -255,19 +221,17 @@ CREATE TABLE IF NOT EXISTS `user` (
   `created_datetime` datetime NOT NULL,
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`iduser`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`iduser`, `username`, `password`, `created_datetime`, `active`) VALUES
-(1, 'ze', 'ze', '2014-10-16 16:10:43', 1),
-(2, 'manel', 'manel', '2014-10-16 16:10:43', 1),
-(3, 'jaquim', 'jaquim', '2014-10-16 16:11:15', 1),
-(4, 'egas', 'egas', '2014-10-16 16:11:15', 1),
-(5, 'becas', 'becas', '2014-10-16 16:12:42', 1),
-(6, 'leopoldina', 'leopoldina', '2014-10-16 16:12:42', 1);
+(7, 'ze', 'ze', '2014-09-01 00:00:00', 1),
+(8, 'manel', 'manel', '2014-10-01 00:00:00', 1),
+(9, 'leopoldina', 'leopoldina', '2014-10-08 00:00:00', 1),
+(10, 'popota', 'popota', '2014-10-09 00:00:00', 1);
 
 --
 -- Constraints for dumped tables
@@ -317,13 +281,14 @@ ALTER TABLE `meeting`
 -- Constraints for table `meeting_group`
 --
 ALTER TABLE `meeting_group`
-  ADD CONSTRAINT `fk_meeting_group_2` FOREIGN KEY (`group_def`) REFERENCES `group_def` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_meeting_group_1` FOREIGN KEY (`meeting`) REFERENCES `meeting` (`idmeeting`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_meeting_group_1` FOREIGN KEY (`meeting`) REFERENCES `meeting` (`idmeeting`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_meeting_group_2` FOREIGN KEY (`group_def`) REFERENCES `group_def` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `meeting_user`
 --
 ALTER TABLE `meeting_user`
+  ADD CONSTRAINT `fk_meeting_user_3` FOREIGN KEY (`group_def`) REFERENCES `group_def` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_meeting_user_1` FOREIGN KEY (`meeting`) REFERENCES `meeting` (`idmeeting`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_meeting_user_2` FOREIGN KEY (`user`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE CASCADE;
 

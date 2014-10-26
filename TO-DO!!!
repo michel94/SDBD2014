@@ -42,17 +42,19 @@ Max priority:
 
 Add users to group <- Done
 
+Leave meeting <- Done
+
 Remove users from group <- Pronto no cliente e no server, falta base de dados.
 
 Add group <- Pronto no cliente e server, linha 152 ClientThread falta BD 
 
-Add group to meeting
+Add group to meeting <- Pronto no cliente e server, falta BD
 
-Leave meeting
 
-Remove user from group 
 
-Assign action to group
+
+
+Assign action to group <- GG fuck this
 
 
 
