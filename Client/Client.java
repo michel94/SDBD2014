@@ -126,8 +126,6 @@ public class Client{
 
 	public void mainMenu(){
 		int sel;
-		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-		Date dateobj = new Date();
 		Request r;
 		print("\n|   Meeto   |\n");
 		print("");
@@ -164,7 +162,7 @@ public class Client{
 		wait.waitMeetings();
 		Meetings ms = lt.meetings;
 		
-		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
      		Date dateobj = new Date();
       		String currentdate = df.format(dateobj);
 
@@ -172,6 +170,7 @@ public class Client{
 		print("Previous Meetings:");
 		for(int i=0; i<ms.size(); i++){
 			if(currentdate.compareTo(ms.get(i).datetime)<0 && upcomingflag ==0){
+				clear();
 				print("Upcoming Meetings:");
 				upcomingflag = 1;
 			}
