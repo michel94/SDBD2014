@@ -90,7 +90,7 @@ public class ClientThread implements Runnable {
 						qres = database.deleteAction(id);					
 					}else if(req.type.equals("groupsofuser")){
 						r = database.getGroupsOfUser(id);
-					}else if(req.type.equals("actionsfuser")){
+					}else if(req.type.equals("actionsofuser")){
 						r = database.getUserActions(userData.iduser);
 					}
 
