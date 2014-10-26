@@ -308,8 +308,9 @@ public class Client{
 		}else a.due_to = date + " " + ss[1];
 		
 		print("Status (1 for Done, 0 for Pending): "+ a.done);
-		a.done = readInt(1,2);
-
+		a.done = readInt(0,1);
+		
+		print("Assign user to action:);
 		listAllUsers();
 		print("Assign user by writing its number from the user list:");
 		int sel=readInt(1,lt.users.size())-1;
@@ -708,6 +709,8 @@ public class Client{
 		print("Groups:");
 		for(int i=0; i<gs.size(); i++){
 			print(i+1 + " - "+gs.get(i).name);
+		}
+
 		print("");
 
 		print("What do you want to do?");
@@ -738,9 +741,9 @@ public class Client{
 				}
 				break;
 			case 4:
+				clear();
 				lt.context = "Main";
 
-			}
 		}
 			
 	}
