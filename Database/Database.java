@@ -66,7 +66,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		//System.out.println(getGroup(1).users.get(1).username);
 
 		//addGroupToMeeting(getGroup(1), getMeeting(1));
-		leaveMeeting(6, 7);
+		//leaveMeeting(6, 7);
+
+		addGroupToMeeting(7, 2);
 	}
 
 	private ResultSet executeQuery(String q){
@@ -358,8 +360,18 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 	}
 
-	public int addUserToMeeting(User user, Meeting meeting){
-		String query = "INSERT IGNORE INTO meeting_user (meeting, user) values((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1));";
+	public int addUserToMeeting(User user, Meeting meeting, Group group){
+		String query = null;
+
+		if(group == null)
+		{
+			query = "INSERT IGNORE INTO meeting_user (meeting, user) VALUES((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1));";
+		}
+		else
+		{
+			query = "INSERT IGNORE INTO meeting_user (meeting, user, group_def) VALUES((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1), "+group.idgroup+");";
+		}
+		
 		return executeUpdate(query);
 	}
 
@@ -370,7 +382,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		{
 			for(i=0; i<group.users.size(); i++)
 			{
-				if(addUserToMeeting(group.users.get(i), meeting) < 1)
+				if(addUserToMeeting(group.users.get(i), meeting, null) < 1)
 					return -1;
 			}
 		}
@@ -576,6 +588,25 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}catch(SQLException e){
 			return null;
 		}
+	}
+
+	public int addGroupToMeeting(int idmeeting, int idgroup){
+		
+		if(executeUpdate("INSERT IGNORE INTO meeting_group(meeting, group_def) values('" + idmeeting + "', '" + idgroup + "');" ) < 1)
+			return -1;
+
+		Group group = getGroup(idgroup);
+		Meeting meeting = getMeeting(idmeeting);
+		int i = 0;
+
+		for(i=0; i<group.users.size(); i++)
+		{
+			if(addUserToMeeting(group.users.get(i), meeting, group) < 1)
+					return -1;
+		}
+
+		return i+1;
+
 	}
 
 	public static void main(String[] args) throws RemoteException, SQLException {

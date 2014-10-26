@@ -15,7 +15,7 @@ public interface DatabaseInterface extends Remote{
 	//private Users getAllUsersFromMeeting(int idmeeting); FOI REMOVIDA DA INTERFACE
 	public Item getItem(int id) throws RemoteException;
 	public int insertItem(Item item) throws RemoteException;
-	public int addUserToMeeting(User user, Meeting meeting) throws RemoteException;
+	public int addUserToMeeting(User user, Meeting meeting, Group group) throws RemoteException;
 	public int finishMeeting(Meeting meeting) throws RemoteException;
 
 
@@ -47,9 +47,9 @@ public interface DatabaseInterface extends Remote{
 	public int removeUserFromGroup(RemoveUserFromGroup ru) throws RemoteException;
 	//public Comment updateComment(Comment com, User u) throws RemoteException;
 
-<<<<<<< HEAD
 	public int leaveMeeting(int idmeeting, int iduser) throws RemoteException;
-=======
 	public Actions getUserActions(int iduser) throws RemoteException;
->>>>>>> a28fd2b561e52d431d94ef406ab1ac3969ff2bea
+
+	public int addGroupToMeeting(int idmeeting, int idgroup) throws RemoteException;
+
 }

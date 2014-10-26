@@ -1,52 +1,52 @@
-adicionar user a meeting -> insert 			done
-get action -> Action 						done
-edit meeting details 						done
+adicionar user a meeting -> insert 												done
+get action -> Action 															done
+edit meeting details 															done
 getItem
 
 
-adicionar keydecision a item   				done
-apagar keydecision							done
-edit keydecision							done
+adicionar keydecision a item   													done
+apagar keydecision																done
+edit keydecision																done
 
 
 
-insertAction								done
-fazer assign de um user a uma action 		done
+insertAction																	done
+fazer assign de um user a uma action 											done
 update action
 apagar action
 
 
-registar conta								done			
+registar conta																	done			
 
 TRABALHO DO DIOGO DAQUI PARA BAIXO
 
-add user to group 							done
+add user to group 																done
 	-add user to all the group meetings
 
-getGroup()									done
+getGroup()																		done
 
-getGroupsOfUser()							done
+getGroupsOfUser()																done
 
 
-apagar meeting 								n é preciso
-apagar item 								done
+apagar meeting 																	n é preciso
+apagar item 																	done
 
-apagar keydecision 							done
-apagar action                               done
+apagar keydecision 																done
+apagar action                               									done
 	
-insert meeting adiciona tb utilizadores		done
+insert meeting adiciona tb utilizadores											done
 
 get actions by user 						
 
 
-Leave meeting - leaveMeeting(idclient)
+Leave meeting - leaveMeeting(idclient)											done
 
 Remove user from group - removeUserFromGroup(iduse,idgroup)
 
 Assign action to group - Por agora ignora isto
 
-Add group to meeting - addGroupToMeeting (idgroup, idmeeting)
+Add group to meeting - addGroupToMeeting (idgroup, idmeeting)					done
 	- inserir na tabela group_user
 	- inserir cada utilizador manualmente
 
-	verificar se leader é auto adicionado à meeting que cria
+verificar se leader é auto adicionado à meeting que cria
