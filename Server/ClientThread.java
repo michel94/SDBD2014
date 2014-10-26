@@ -24,8 +24,9 @@ public class ClientThread implements Runnable {
 	ObjectOutputStream out;
 	ConcurrentHashMap<Integer, ClientData> clients;
 	User userData = null;
+	private String failoverserver,databaseIP,databasePort;
 
-	public ClientThread(Socket socket, int n, DatabaseInterface database, ConcurrentHashMap<Integer, ClientData> cl){
+	public ClientThread(Socket socket, int n, DatabaseInterface database, ConcurrentHashMap<Integer, ClientData> cl, String failoverserver, String databaseIP, String databasePort ){
 		t = new Thread(this, "clientThread");
 
 		clientSocket = socket;
@@ -33,6 +34,9 @@ public class ClientThread implements Runnable {
 		clients = cl;
 		this.database = database;
 		this.clients = clients;
+		this.failoverserver = failoverserver;
+		this.databaseIP = databaseIP;
+		this.databasePort = databasePort;
 
 		t.start();
 	}
@@ -172,7 +176,8 @@ public class ClientThread implements Runnable {
 					Comment com = (Comment) data;
 					if(com.commentId == 0){
 						qres = database.insertComment(com, userData);
-						Meeting meeting = database.getMeeting(com.meeting);
+						Item item = database.getItem(com.item.iditem);
+						Meeting meeting = database.getMeeting(item.meeting);
 						if(qres != -1){
 							broadcastComment(com, meeting);
 						}
@@ -207,13 +212,11 @@ public class ClientThread implements Runnable {
 					qres = database.removeUserFromGroup(ru);
 				}else if(data instanceof Group){
 					Group g = (Group) data;
-					r = database.createGroup(g);
+					qres = database.createGroup(g);
+					System.out.println("group created");
 				}else if(data instanceof InviteGroup){
 					InviteGroup g = (InviteGroup) data;
-					if(g.flag == 1)
-						qres = database.inviteUserToMeeting(g);
-					else if(g.flag == 2)
-						qres = database.inviteUserToGroup(g);
+					qres = database.addGroupToMeeting(g.group, g.meeting);
 				}
 
 				return new DatabaseAccess(qres, r);
@@ -234,7 +237,7 @@ public class ClientThread implements Runnable {
 		try{
 			while(true){
 				try{
-				 	database = (DatabaseInterface) Naming.lookup("database");
+				 	database = (DatabaseInterface) Naming.lookup("//"+databaseIP+":"+databasePort+"/database");
 				 	System.out.println("Connected to the database");
 					break;
 				}catch(NotBoundException e){
@@ -294,16 +297,16 @@ public class ClientThread implements Runnable {
 			Integer key = (Integer) it.next();
 			System.out.println("Key: " + key);
 			cd = clients.get(key);
-			if( findUser(meeting, cd.user) )
+			if( findUser(meeting, cd.userData) )
 				try{
-					cd.out.writeObject(message);
-					System.out.println("Wrote to client");
+					cd.out.writeObject(comment);
+					System.out.println("Wrote comment to client");
 				}catch(IOException e){System.out.println("IO Exception");}
 		}
 	}
 	private boolean findUser(Meeting m, User u){
-		for(int i=0; i<n; i++){
-			if(meeting.users.get(i).iduser == u.iduser)
+		for(int i=0; i<m.users.size(); i++){
+			if(m.users.get(i).iduser == u.iduser)
 				return true;
 		}
 		return false;

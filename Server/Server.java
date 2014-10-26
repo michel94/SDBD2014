@@ -111,7 +111,7 @@ public class Server{
 				clientSocket = listenSocket.accept();
 
 				clients.put(clientNumber, new ClientData(null, null));
-				new ClientThread(clientSocket, clientNumber, database, clients);
+				new ClientThread(clientSocket, clientNumber, database, clients, failoverserver,databaseIP,databasePort);
 
 				clientNumber++;
 

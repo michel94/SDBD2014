@@ -220,19 +220,12 @@ public class Client{
 					wait.waitDefault();
 					clear();
 					print("Left meeting successfully");
+					lt.context = "Main";
 				}
 				break;
 			case 4:
 				clear();
 
-				if(ms.size()!=0){
-					print("Which meeting do you want to leave? Write its number:");
-		
-					r = new Request("leavemeeting",ms.get(readInt(1,ms.size())-1 ).idmeeting);
-					writeObject(r);
-					wait.waitDefault();
-					clear();
-				}
 				lt.context = "Main";
 
 		}
@@ -462,8 +455,12 @@ public class Client{
 				break;
 			case 8: 
 				clear();
-				print("Not working yet");
-				lt.context = "Meetings";
+					r = new Request("leavemeeting", m.idmeeting);
+					writeObject(r);
+					wait.waitDefault();
+					clear();
+					print("Left meeting successfully");
+					lt.context = "Main";
 				break;
 
 			case 9:
@@ -471,7 +468,6 @@ public class Client{
 				lt.context = "Meetings";
 				break;
 		}
-		print("Here");
 	}
 	
 	public void consultItemMenu(){
@@ -830,7 +826,7 @@ public class Client{
 				inviteUsers(lt.group.idgroup,2);
 				break;
 			case 2:	
-				/*if(g.users.size()!=0){
+				if(g.users.size()!=0){
 					print("Which user do you want to remove? Write its number:");
 					RemoveUserFromGroup ru = new RemoveUserFromGroup(g.users.get(readInt(1,g.users.size())-1 ).iduser, lt.group.idgroup);
 					writeObject(ru);
@@ -838,7 +834,7 @@ public class Client{
 					clear();
 					print("User deleted successfully");
 					lt.context = "ConsultGroup";
-				}*/
+				}
 				break;
 			case 3:
 				clear();

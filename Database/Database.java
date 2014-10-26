@@ -477,27 +477,30 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			query += "(" + iu.get(i).id + ", " + iu.get(i).user+ ")"; 
 			if(i < iu.size() - 1) query += ", ";
 		}
+		if(executeUpdate(query) < 0)
+			return -1;
 
+		String query2;
 		try{
 			ResultSet rs = executeQuery("SELECT * FROM meeting_group WHERE group_def = "+iu.get(0).id+";");
-			String query2 = "INSERT IGNORE INTO meeting_user(meeting, user, group_def) values ";
-			while(rs.next())
+			if(rs.next())
 			{
-				query2 += "(" + rs.getInt("meeting") + ", " + iu.get(0).user+ ", "+iu.get(0).id+"), "; 
+				query2 = "INSERT IGNORE INTO meeting_user(meeting, user, group_def) values ";
+				
+				do{
+					query2 += "(" + rs.getInt("meeting") + ", " + iu.get(0).user+ ", "+iu.get(0).id+")      , "; 
+				}
+				while((rs.next()));
+
+				query2 = query2.substring(0, query2.length()-4);
+				return executeUpdate(query2);
 			}
-
-			query2 = query2.substring(query2.length()-3, query2.length());
-
 		}catch(SQLException e){
 			e.printStackTrace();
 			return -1;
 		}
 
-		if(executeUpdate(query) < 1)
-			return -1;
-
-		return executeUpdate(query);
-
+		return -1;
 	}
 
 	public boolean stonith(){
@@ -676,17 +679,20 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			return -1;
 
 		int i = 0;
+		String query;
 		try{
 			ResultSet rs = executeQuery("SELECT max(idgroup) as idgroup from group_def");
 			if(rs.next())
 			{
+				System.out.println("groupg ggggggggggggggggggggggg");
 				group.idgroup = rs.getInt("idgroup");
 
-				String query = "INSERT IGNORE INTO group_user(group_def, user) values ";
+				query = "INSERT IGNORE INTO group_user(group_def, user) values ";
 				for(i=0; i<group.users.size(); i++){
 					query += "(" + group.idgroup + ", " + group.users.get(i).iduser+ ")"; 
 					if(i < group.users.size() - 1) query += ", ";
 				}
+				return executeUpdate(query);
 			}
 			else
 			{
@@ -697,8 +703,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 			return -1;
 		}
-
-		return i;
 
 	}
 

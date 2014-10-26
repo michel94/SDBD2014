@@ -171,7 +171,7 @@ public class ListenerThread implements Runnable{
 					wait.notifyDefault();			
 				}else if (r instanceof Actions){
 					actions = (Actions) r;
-					wait.notifyDefault();			
+					wait.notifyDefault();
 				}
 
 			}catch(IOException ex){
