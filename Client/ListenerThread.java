@@ -169,6 +169,9 @@ public class ListenerThread implements Runnable{
 				}else if (r instanceof Group){
 					group = (Group) r;
 					wait.notifyDefault();			
+				}else if (r instanceof Actions){
+					actions = (Actions) r;
+					wait.notifyDefault();			
 				}
 
 			}catch(IOException ex){

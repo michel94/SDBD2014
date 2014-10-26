@@ -894,14 +894,14 @@ public class Client{
 	}
 
 	private void todoList(){
+		print("My actions:");
 		Request r = new Request("actionsofuser", clientID);
 		writeObject(r);
 		wait.waitDefault();
-		
 		for(int i=0; i<lt.actions.size();i++){
-			print("My actions:");
 			print(1+i+" - "+ lt.actions.get(i).description + " Due to: " + lt.actions.get(i).due_to + " Status: " + lt.actions.get(i).done);
 		}
+		lt.context = "Main";
 	}
 
 
