@@ -53,9 +53,10 @@ public class ClientThread implements Runnable {
 			System.out.println("Error:IO Exception while answering request of client "+clientId +".");
 		}
 		
+		Object data;
 		while(true){
 			try {
-				Object data = (Object) in.readObject();
+				data = (Object) in.readObject();
 				System.out.println("Received Object");
 
 				Object r = null;
@@ -91,9 +92,7 @@ public class ClientThread implements Runnable {
 					}else if(req.type.equals("groupsofuser")){
 						r = database.getGroupsOfUser(id);
 					}else if(req.type.equals("actionsofuser")){
-						System.out.println("Here");
 						r = database.getUserActions(userData.iduser);
-						System.out.println("There");
 					}
 
 				}
@@ -181,7 +180,8 @@ public class ClientThread implements Runnable {
 				}
 
 			} catch(RemoteException e){
-				System.out.println("Database server is down");
+				System.out.println("Database server is down. Reconnecting");
+				reconnectDatabase();
 
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
@@ -198,6 +198,44 @@ public class ClientThread implements Runnable {
 		System.out.println("Closing connection to client "+clientId +".");
 		clients.remove(clientId);
 		
+	}
+
+	public void readFromClient(){
+
+	}
+
+	public void processInput(){
+
+	}
+
+	public void reconnectDatabase(){
+		int retries = 0;
+
+		try{
+			while(true){
+				try{
+				 	database = (DatabaseInterface) Naming.lookup("database");
+				 	System.out.println("Connected to the database");
+					break;
+				}catch(NotBoundException e){
+					System.out.println("Database could not be reached. Failed connection. Retrying connection in 2 seconds.");
+					retries++;
+					Thread.sleep(2000);
+				}catch(MalformedURLException e){
+					System.out.println("Could not find the the database hostname. Retrying connection in 2 seconds.");
+					retries++;
+					Thread.sleep(2000);		
+				}catch(RemoteException e){
+					System.out.println("Remote exception. Retrying connection in 2 seconds.");
+					retries++;
+					Thread.sleep(2000);
+				}
+			}
+		}catch(InterruptedException ex) {
+    		Thread.currentThread().interrupt();
+		}
+
+		System.out.println("Connection to database established.");
 	}
 
 	public void parseRequest(){
