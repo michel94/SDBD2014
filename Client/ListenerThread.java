@@ -35,8 +35,8 @@ public class ListenerThread implements Runnable{
 			Properties prop = new Properties();
 			FileInputStream txt = new FileInputStream("../global.properties");
 			prop.load(txt);
-			server1 = new ServerData(prop.getProperty("server1"), Integer.parseInt(prop.getProperty("tcpport")));
-			server2 = new ServerData(prop.getProperty("server2"), Integer.parseInt(prop.getProperty("tcpport")));
+			server1 = new ServerData(prop.getProperty("server1"), Integer.parseInt(prop.getProperty("server1tcpport")));
+			server2 = new ServerData(prop.getProperty("server2"), Integer.parseInt(prop.getProperty("server2tcpport")));
 		}catch(IOException e){
 			System.out.println("Could not load configuration. Exiting.");
 			System.exit(0);
