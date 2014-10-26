@@ -90,6 +90,8 @@ public class ClientThread implements Runnable {
 						qres = database.deleteAction(id);					
 					}else if(req.type.equals("groupsofuser")){
 						r = database.getGroupsOfUser(id);
+					}else if(req.type.equals("actionsfuser")){
+						r = database.getUserActions(userData.iduser);
 					}
 
 				}
@@ -175,6 +177,7 @@ public class ClientThread implements Runnable {
 
 			} catch(RemoteException e){
 				System.out.println("Database server is down");
+
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error: Class not found while reading pipe of client "+clientId +".");
