@@ -460,26 +460,44 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return executeUpdate("UPDATE keydecision set description='" + kd.description + "' where idkeydecision=" + kd.idkeydecision);
 	}
 
-	public int inviteUsers(InviteUsers iu){
-		String query= null;
-		if(iu.flag == 1)
-		{
-			query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
-			for(int i=0; i<iu.size(); i++){
-				query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")"; //Este codigo ranhoso foi imposto pelo Casaleiro :p
-				if(i < iu.size() - 1) query += ", ";
+	public int inviteUsersToMeeting(InviteUsers iu){
+		String query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
+		for(int i=0; i<iu.size(); i++){
+			query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")"; //Este codigo ranhoso foi imposto pelo Casaleiro :p
+			if(i < iu.size() - 1) query += ", ";
+		}
+			
+		return executeUpdate(query);
+	}
+
+	public int inviteUsersToGroup(InviteUsers iu)
+	{
+		String query = "INSERT IGNORE INTO group_user(group_def, user) values ";
+		for(int i=0; i<iu.size(); i++){
+			query += "(" + iu.get(i).id + ", " + iu.get(i).user+ ")"; 
+			if(i < iu.size() - 1) query += ", ";
+		}
+
+		try{
+			ResultSet rs = executeQuery("SELECT * FROM meeting_group WHERE group_def = "+iu.get(0).id+";");
+			String query2 = "INSERT IGNORE INTO meeting_user(meeting, user, group_def) values ";
+			while(rs.next())
+			{
+				query2 += "(" + rs.getInt("meeting") + ", " + iu.get(0).user+ ", "+iu.get(0).id+"), "; 
 			}
 
+			query2 = query2.substring(query2.length()-3, query2.length());
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			return -1;
 		}
-		else if(iu.flag == 2)
-		{
-			query = "INSERT IGNORE INTO group_user(group_def, user) values ";
-			for(int i=0; i<iu.size(); i++){
-				query += "(" + iu.get(i).id + ", " + iu.get(i).user+ ")"; //Este codigo ranhoso foi imposto pelo Casaleiro :p
-				if(i < iu.size() - 1) query += ", ";
-			}
-		}
+
+		if(executeUpdate(query) < 1)
+			return -1;
+
 		return executeUpdate(query);
+
 	}
 
 	public boolean stonith(){
