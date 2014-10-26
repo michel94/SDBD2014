@@ -1,18 +1,18 @@
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.rmi.RemoteException;
+import java.net.MalformedURLException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Iterator;
+import java.util.Calendar;
+import java.rmi.RemoteException;
+import java.rmi.*;
+import java.sql.Date;
+import java.util.*;
+import java.lang.*;
 
 public class ClientThread implements Runnable {
 	Thread t;
@@ -53,9 +53,11 @@ public class ClientThread implements Runnable {
 			System.out.println("Error:IO Exception while answering request of client "+clientId +".");
 		}
 		
+		Object data;
 		while(true){
 			try {
-				Object data = (Object) in.readObject();
+				data = (Object) in.readObject();
+				System.out.println("Received Object");
 
 				Object r = null;
 				Confirmation conf = new Confirmation();
@@ -89,6 +91,8 @@ public class ClientThread implements Runnable {
 						qres = database.deleteAction(id);					
 					}else if(req.type.equals("groupsofuser")){
 						r = database.getGroupsOfUser(id);
+					}else if(req.type.equals("actionsofuser")){
+						r = database.getUserActions(userData.iduser);
 					}
 
 				}
@@ -146,6 +150,12 @@ public class ClientThread implements Runnable {
 				}else if(data instanceof RemoveUserFromGroup){
 					RemoveUserFromGroup ru = (RemoveUserFromGroup) data;
 					qres = database.removeUserFromGroup(ru);	
+				}else if(data instanceof Group){
+					Group g = (Group) data;
+					//r = database.createGroup(g);				
+				}else if(data instanceof InviteGroup){
+					InviteGroup g = (InviteGroup) data;
+					//r = database.inviteGroup(g);				
 				}
 
 				if(r != null){
@@ -169,6 +179,11 @@ public class ClientThread implements Runnable {
 
 				}
 
+			} catch(RemoteException e){
+				System.out.println("Database server is down. Reconnecting");
+				reconnectDatabase();
+
+				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error: Class not found while reading pipe of client "+clientId +".");
 
@@ -183,6 +198,44 @@ public class ClientThread implements Runnable {
 		System.out.println("Closing connection to client "+clientId +".");
 		clients.remove(clientId);
 		
+	}
+
+	public void readFromClient(){
+
+	}
+
+	public void processInput(){
+
+	}
+
+	public void reconnectDatabase(){
+		int retries = 0;
+
+		try{
+			while(true){
+				try{
+				 	database = (DatabaseInterface) Naming.lookup("database");
+				 	System.out.println("Connected to the database");
+					break;
+				}catch(NotBoundException e){
+					System.out.println("Database could not be reached. Failed connection. Retrying connection in 2 seconds.");
+					retries++;
+					Thread.sleep(2000);
+				}catch(MalformedURLException e){
+					System.out.println("Could not find the the database hostname. Retrying connection in 2 seconds.");
+					retries++;
+					Thread.sleep(2000);		
+				}catch(RemoteException e){
+					System.out.println("Remote exception. Retrying connection in 2 seconds.");
+					retries++;
+					Thread.sleep(2000);
+				}
+			}
+		}catch(InterruptedException ex) {
+    		Thread.currentThread().interrupt();
+		}
+
+		System.out.println("Connection to database established.");
 	}
 
 	public void parseRequest(){

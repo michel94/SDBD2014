@@ -5,6 +5,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.gnome.gtk.Gtk;
 import org.gnome.notify.Notify;
 import org.gnome.notify.Notification;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class Client{
 	private ListenerThread lt;
@@ -116,6 +119,9 @@ public class Client{
 			}else if(lt.context.equals("ConsultGroup")){
 				consultGroupMenu();
 
+			}else if(lt.context.equals("ToDo")){
+				todoList();
+
 			}
 
 		}
@@ -132,7 +138,8 @@ public class Client{
 		print("What do you want to do?");
 		print("1 - Consult meetings");
 		print("2 - Consult groups");
-		print("3 - Quit");
+		print("3 - To-do list");
+		print("4 - Quit");
 		sel = readInt(1, 3);
 
 		switch(sel){
@@ -145,7 +152,11 @@ public class Client{
 				
 				clear();
 				break;
-			case 3:
+			case 3:	
+				clear();
+				lt.context = "ToDo";				
+				break;
+			case 4:
 				System.exit(0);
 		}
 	}
@@ -158,9 +169,19 @@ public class Client{
 		writeObject(r);
 		wait.waitMeetings();
 		Meetings ms = lt.meetings;
+		
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+     		Date dateobj = new Date();
+      		String currentdate = df.format(dateobj);
 
-		print("Meetings:");
+		int upcomingflag =0;
+		print("Previous Meetings:");
 		for(int i=0; i<ms.size(); i++){
+			if(currentdate.compareTo(ms.get(i).datetime)<0 && upcomingflag ==0){
+				clear();
+				print("Upcoming Meetings:");
+				upcomingflag = 1;
+			}
 			print(i+1 + " - "+ms.get(i).datetime + "  " + ms.get(i).title);
 		}
 		print("");
@@ -232,7 +253,7 @@ public class Client{
 		m.location = readString();
 		
 		
-		m.users = inviteUsers();
+		m.users = selectUsers();
 
 		writeObject(m);
 		wait.waitDefault();
@@ -310,7 +331,7 @@ public class Client{
 		print("Status (1 for Done, 0 for Pending): "+ a.done);
 		a.done = readInt(0,1);
 		
-		print("Assign user to action:);
+		print("Assign user to action:");
 		listAllUsers();
 		print("Assign user by writing its number from the user list:");
 		int sel=readInt(1,lt.users.size())-1;
@@ -363,7 +384,7 @@ public class Client{
 		print("5 - Edit meeting details");
 		print("6 - Add users to meeting");
 		print("7 - Add group to meeting");
-		print("8 - Close this meeting");
+		print("8 - Leave this meeting");
 		print("9 - Back");
 		sel = readInt(1, 9);
 
@@ -406,29 +427,37 @@ public class Client{
 				break;
 			case 6: 
 				clear();
-				Users users = inviteUsers();
-				InviteUsers invus = new InviteUsers();
-				InviteUser invu;
-				for(int i= 0; i< users.size(); i++){
-					invu = new InviteUser(users.get(i).iduser,lt.meeting.idmeeting);
-					invus.add(invu);
-				}
-				invus.flag = 1; //flag = meeting
-				writeObject(invus);
-				wait.waitDefault();
-				
-				print("Users invited successfully");
+				inviteUsers(lt.meeting.idmeeting,1);
 				lt.context = "ConsultMeeting";
 				break;
 			case 7: 
 				clear();
-				print("Not working yet");
+
+				r = new Request("groupsofuser", clientID);
+				writeObject(r);
+				wait.waitDefault();
+				Groups gs = lt.groups;
+				clear();
+				print("Groups:");
+				for(int i=0; i<gs.size(); i++){
+					print(i+1 + " - "+gs.get(i).name);
+				}
+
+				print("Which group do you want to add to this meeting? Write its number:");
+				
+				InviteGroup ig = new InviteGroup(gs.get(readInt(1,gs.size())-1).idgroup, lt.meeting.idmeeting);
+				writeObject(ig);
+				wait.waitDefault();
+				clear();
+				
+				print("Group added successfully");
+
 				lt.context = "ConsultMeeting";
 				break;
 			case 8: 
 				clear();
 				print("Not working yet");
-				lt.context = "ConsultMeeting";
+				lt.context = "Meetings";
 				break;
 
 			case 9:
@@ -624,7 +653,20 @@ public class Client{
 	}
 
 	
-
+	protected void inviteUsers(int id,int flag){
+		Users users = selectUsers();
+		InviteUsers invus = new InviteUsers();
+		InviteUser invu;
+		for(int i= 0; i< users.size(); i++){
+			invu = new InviteUser(users.get(i).iduser,id);
+			invus.add(invu);
+		}
+		invus.flag = flag; //flag 1 = meeting flag 2 = group
+		writeObject(invus);
+		wait.waitDefault();
+				
+		print("Users invited successfully");
+	}
 	protected void login(){
 		int sel;
 		
@@ -733,7 +775,13 @@ public class Client{
 				}
 				break;
 			case 2:
-				//lt.context = "NewGroup";
+				Group g = new Group();
+				print("Write the group's name:");
+				g.name = readString();
+				g.users = selectUsers();
+				
+				writeObject(g);
+				wait.waitDefault();
 				break;
 			case 3:
 				if(gs.size()!=0){
@@ -771,19 +819,7 @@ public class Client{
 		switch(sel){
 			case 1:
 				clear();
-				Users users = inviteUsers();
-				InviteUsers invus = new InviteUsers();
-				InviteUser invu;
-				
-				for(int i= 0; i< users.size(); i++){
-					invu = new InviteUser(users.get(i).iduser,lt.group.idgroup);
-					invus.add(invu);
-				}
-				invus.flag = 2; //flag = meeting
-				writeObject(invus);
-				wait.waitDefault();
-				clear();
-				print("Users invited successfully");
+				inviteUsers(lt.group.idgroup,2);
 				break;
 			case 2:	
 				/*if(g.users.size()!=0){
@@ -834,16 +870,11 @@ public class Client{
 			writeObject(r);
 			wait.waitItem();
 			return lt.item;		
-		}else if(flag.equals("action")){
-			Request r = new Request("action", id);
-			writeObject(r);
-			wait.waitAction();
-			return lt.action;
 		}
 		return o;
 	}
 	
-	public Users inviteUsers(){
+	public Users selectUsers(){
 		Request req;
 		Users users = new Users();
 		listAllUsers();
@@ -881,12 +912,26 @@ public class Client{
 		return users;
 	}
 
+	private void todoList(){
+		print("My actions:");
+		Request r = new Request("actionsofuser", clientID);
+		writeObject(r);
+		wait.waitDefault();
+		for(int i=0; i<lt.actions.size();i++){
+			print(1+i+" - "+ lt.actions.get(i).description + " Due to: " + lt.actions.get(i).due_to + " Status: " + lt.actions.get(i).done);
+		}
+		lt.context = "Main";
+	}
+
+
 	public static void main(String[] args){
 		String[] a = new String[0];
 		Gtk.init(a);
 		Client client = new Client();
 		
 	}
+	
+	
 
 
 

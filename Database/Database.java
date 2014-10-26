@@ -565,6 +565,19 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return -1;
 	}
 
+	public Actions getUserActions(int iduser){
+		try{
+			ResultSet rs = executeQuery("select * from action where assigned_user=" + iduser);
+			Actions a = new Actions();
+			while(rs.next()){
+				a.add( new Action(rs.getInt("idaction"), rs.getString("description"), rs.getTimestamp("due_to").toString(), null, rs.getInt("done"), rs.getInt("meeting"), rs.getInt("active") ) );
+			}
+			return a;
+		}catch(SQLException e){
+			return null;
+		}
+	}
+
 	public static void main(String[] args) throws RemoteException, SQLException {
 		DatabaseInterface di = new Database();
 		LocateRegistry.createRegistry(1099).rebind("database", di);

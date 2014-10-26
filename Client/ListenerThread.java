@@ -28,6 +28,7 @@ public class ListenerThread implements Runnable{
 	public User user; 
 	public KeyDecision keydecision;
 	public Confirmation confirmation = null;
+	public Actions actions;
 	
 	public void setConfigs(){
 		try{
@@ -62,7 +63,7 @@ public class ListenerThread implements Runnable{
 	public void reconnect(){
 		
 		int tries = 0;
-		while(tries < 3){
+		while(tries < 8){
 			print("Connecting to server, attempt number: "+tries);
 			try{
 				Socket socket = new Socket(serverData.ip, serverData.port);
@@ -74,7 +75,7 @@ public class ListenerThread implements Runnable{
 				return;
 			}catch(IOException e){
 				tries++;
-				try{Thread.sleep(2000);
+				try{Thread.sleep(1500);
 				}catch(InterruptedException ex){;}
 			}
 			
@@ -167,6 +168,9 @@ public class ListenerThread implements Runnable{
 					wait.notifyDefault();			
 				}else if (r instanceof Group){
 					group = (Group) r;
+					wait.notifyDefault();			
+				}else if (r instanceof Actions){
+					actions = (Actions) r;
 					wait.notifyDefault();			
 				}
 
