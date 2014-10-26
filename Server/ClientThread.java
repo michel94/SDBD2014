@@ -172,8 +172,9 @@ public class ClientThread implements Runnable {
 					Comment com = (Comment) data;
 					if(com.commentId == 0){
 						qres = database.insertComment(com, userData);
+						Meeting meeting = database.getMeeting(com.meeting);
 						if(qres != -1){
-							broadcastMessage(com, "comment", com.item.iditem);
+							broadcastComment(com, meeting);
 						}
 					}
 				}else if(data instanceof Action){
@@ -192,24 +193,27 @@ public class ClientThread implements Runnable {
 						qres = database.updateKeyDecision(kd);
 					}
 				}else if(data instanceof InviteUsers){
-					/*InviteUsers iu = (InviteUsers) data;
+					InviteUsers iu = (InviteUsers) data;
 					if(iu.flag == 1){
 						qres = database.inviteUsersToMeeting(iu);
 					}else if (iu.flag == 2){
 						qres = database.inviteUsersToGroup(iu);
-					}*/
+					}
 				}else if(data instanceof User){
 					User u = (User) data;
-					r = database.createAccount(u);				
+					r = database.createAccount(u);
 				}else if(data instanceof RemoveUserFromGroup){
 					RemoveUserFromGroup ru = (RemoveUserFromGroup) data;
 					qres = database.removeUserFromGroup(ru);
 				}else if(data instanceof Group){
 					Group g = (Group) data;
-					r = database.createGroup(g);			
+					r = database.createGroup(g);
 				}else if(data instanceof InviteGroup){
 					InviteGroup g = (InviteGroup) data;
-					//r = database.inviteGroup(g);				
+					if(g.flag == 1)
+						qres = database.inviteUserToMeeting(g);
+					else if(g.flag == 2)
+						qres = database.inviteUserToGroup(g);
 				}
 
 				return new DatabaseAccess(qres, r);
@@ -281,6 +285,30 @@ public class ClientThread implements Runnable {
 		}
 
 	}
+	public void broadcastComment(Comment comment, Meeting meeting){
+		Iterator it = clients.keySet().iterator();
+		ClientData cd;
+
+		System.out.println("Broadcast");
+		while(it.hasNext()){
+			Integer key = (Integer) it.next();
+			System.out.println("Key: " + key);
+			cd = clients.get(key);
+			if( findUser(meeting, cd.user) )
+				try{
+					cd.out.writeObject(message);
+					System.out.println("Wrote to client");
+				}catch(IOException e){System.out.println("IO Exception");}
+		}
+	}
+	private boolean findUser(Meeting m, User u){
+		for(int i=0; i<n; i++){
+			if(meeting.users.get(i).iduser == u.iduser)
+				return true;
+		}
+		return false;
+	}
+
 }
 
 class DatabaseAccess{
