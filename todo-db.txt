@@ -36,12 +36,12 @@ apagar action                               									done
 	
 insert meeting adiciona tb utilizadores											done
 
-get actions by user 						
+get actions by user 															done			
 
 
 Leave meeting - leaveMeeting(idclient)											done
 
-Remove user from group - removeUserFromGroup(iduse,idgroup)
+Remove user from group - removeUserFromGroup(iduse,idgroup)						done
 
 Assign action to group - Por agora ignora isto
 

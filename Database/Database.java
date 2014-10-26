@@ -67,8 +67,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		//addGroupToMeeting(getGroup(1), getMeeting(1));
 		//leaveMeeting(6, 7);
-		RemoveUserFromGroup ru = new RemoveUserFromGroup(7, 2);
-		removeUserFromGroup(ru);
+		/*RemoveUserFromGroup ru = new RemoveUserFromGroup(7, 2);
+		removeUserFromGroup(ru);*/
+		//System.out.println(getUserActions(8).get(0).description);
 	}
 
 	private ResultSet executeQuery(String q){
@@ -586,16 +587,28 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public Actions getUserActions(int iduser){
+		Action action = null;
+		Actions actions = new Actions();
 		try{
-			ResultSet rs = executeQuery("select * from action where assigned_user=" + iduser);
-			Actions a = new Actions();
-			while(rs.next()){
-				a.add( new Action(rs.getInt("idaction"), rs.getString("description"), rs.getTimestamp("due_to").toString(), null, rs.getInt("done"), rs.getInt("meeting"), rs.getInt("active") ) );
+			ResultSet rs =executeQuery("SELECT * FROM action WHERE assigned_user = "+iduser+" AND active = 1;");	
+			while(rs.next())
+			{
+				action = new Action(rs.getInt("idaction"), rs.getString("description"), rs.getString("due_to"), getUser(rs.getInt("assigned_user")), rs.getInt("done"), rs.getInt("meeting"), rs.getInt("active"));
+
+				if(action == null)
+					return null;
+
+				actions.add(action);
 			}
-			return a;
-		}catch(SQLException e){
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Mysql error");
+			e.printStackTrace();
 			return null;
 		}
+
+		return actions;
 	}
 
 	public int addGroupToMeeting(int idmeeting, int idgroup){
@@ -616,6 +629,32 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return i+1;
 
 	}
+
+	/*public Actions getActionsByUser(int iduser)
+	{
+		Action action = null;
+		Actions actions = new Actions();
+		try{
+			ResultSet rs =executeQuery("SELECT * FROM action WHERE assigned_user = "+iduser+" AND active = 1;");	
+			while(rs.next())
+			{
+				action = new Action(rs.getInt("idaction"), rs.getString("description"), rs.getString("due_to"), getUser(rs.getInt("assigned_user")), rs.getInt("done"), rs.getInt("meeting"), rs.getInt("active"));
+
+				if(action == null)
+					return null;
+
+				actions.add(action);
+			}
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Mysql error");
+			e.printStackTrace();
+			return null;
+		}
+
+		return actions;
+	}*/
 
 	public static void main(String[] args) throws RemoteException, SQLException {
 		DatabaseInterface di = new Database();
