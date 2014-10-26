@@ -46,4 +46,6 @@ public interface DatabaseInterface extends Remote{
 
 	public int removeUserFromGroup(RemoveUserFromGroup ru) throws RemoteException;
 	//public Comment updateComment(Comment com, User u) throws RemoteException;
+
+	public int leaveMeeting(int idmeeting, int iduser) throws RemoteException;
 }
