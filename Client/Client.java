@@ -706,12 +706,17 @@ public class Client{
 			switch(sel){
 				case 1:
 					clear();
-					System.out.println("Please write your username and password separated by a space.");
-			
-					s = readString();
 
-					String[] words = s.split(" ");
-					lt.auth = new Authentication(words[0],words[1]);
+					try{
+						System.out.println("Please write your username and password separated by a space.");
+						s = readString();
+
+						String[] words = s.split(" ");
+						lt.auth = new Authentication(words[0],words[1]);
+					}catch(Exception e){
+						break;
+					}
+
 					try{
 						lt.oos.writeObject((Object)lt.auth);
 					}catch(IOException e){
