@@ -145,7 +145,7 @@ public class ListenerThread implements Runnable{
 					wait.notifyAction();
 				}else if(r instanceof Comment){
 					Comment comment = (Comment) r;
-					Notification ncom = new Notification("New Comment on item " + comment.item.title+" from meeting "+comment.meetingtitle, comment.text, "dialog-information");
+					Notification ncom = new Notification("New Comment on item " + comment.item.title+" from meeting "+comment.meetingTitle, comment.text, "dialog-information");
 					ncom.show();
 				}else if(r instanceof Action){
 				        action = (Action) r;

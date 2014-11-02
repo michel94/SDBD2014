@@ -483,7 +483,7 @@ public class Client{
 
 		print("Key Decisions:");
 		for (int i=0;i<it.keydecisions.size();i++){
-			print(i +" -" +"Description: "+it.keydecisions.get(i).description);
+			print(i+1 +" -" +"Description: "+it.keydecisions.get(i).description);
 		}
 		print("Comments:");
 		for (int i=0;i<it.comments.size();i++){
@@ -538,8 +538,13 @@ public class Client{
 					print("Which key decision do you want to edit?");
 					int ikd = readInt(1, it.keydecisions.size())-1;
 					print("Description: ");
-					kd = new KeyDecision(readString());
-					kd.idkeydecision = ikd;
+					s = readString();
+
+					if(!s.equals("skip")){
+						kd.description = s;
+					}
+
+					kd.idkeydecision = it.keydecisions.get(ikd).idkeydecision;
 					kd.item = it.iditem;
 				
 					writeObject(kd);
@@ -580,7 +585,7 @@ public class Client{
 		int sel;
 		Request r;
 		
-		Action a = (Action)updateDataInClient("action", lt.action.idaction);
+		Action a = (Action) updateDataInClient("action", lt.action.idaction);
 
 		print("Action");
 		print("Description: " + a.description);
@@ -887,6 +892,11 @@ public class Client{
 			writeObject(r);
 			wait.waitItem();
 			return lt.item;		
+		}else if(flag.equals("action")){
+			Request r = new Request("action", id);
+			writeObject(r);
+			wait.waitAction();
+			return lt.action;	
 		}
 		return o;
 	}
