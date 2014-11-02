@@ -216,7 +216,8 @@ public class ClientThread implements Runnable {
 					System.out.println("group created");
 				}else if(data instanceof InviteGroup){
 					InviteGroup g = (InviteGroup) data;
-					qres = database.addGroupToMeeting(g.group, g.meeting);
+					System.out.println("add group to meeting");
+					qres = database.addGroupToMeeting(g.meeting, g.group);
 				}
 
 				return new DatabaseAccess(qres, r);

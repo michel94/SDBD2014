@@ -397,10 +397,11 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		return executeUpdate(query);
 	}
 
-	public int addGroupToMeeting(Group group, Meeting meeting){ //esta funcao esta feita assim para despachar para a META. Isto no que toca a BD estapessimo :p
+	/*public int addGroupToMeeting(int idgroup, int idmeeting){
 		String query = "INSERT IGNORE INTO meeting_group (meeting, group_def) values((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT idgroup FROM group_def WHERE  idgroup = "+group.idgroup+" AND active = 1));";
 		int i = 0;
-		if(executeUpdate(query) > 0)
+
+		if(executeUpdate(query) >= 0)
 		{
 			for(i=0; i<group.users.size(); i++)
 			{
@@ -410,7 +411,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}
 
 		return 1;
-	}
+	}*/
 
 
 	public int finishMeeting(Meeting meeting){
@@ -463,7 +464,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	public int inviteUsersToMeeting(InviteUsers iu){
 		String query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
 		for(int i=0; i<iu.size(); i++){
-			query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")"; //Este codigo ranhoso foi imposto pelo Casaleiro :p
+			query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")";
 			if(i < iu.size() - 1) query += ", ";
 		}
 			
@@ -656,17 +657,17 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public int addGroupToMeeting(int idmeeting, int idgroup){
 		
-		if(executeUpdate("INSERT IGNORE INTO meeting_group(meeting, group_def) values('" + idmeeting + "', '" + idgroup + "');" ) < 1)
+		if(executeUpdate("INSERT IGNORE INTO meeting_group(meeting, group_def) values('" + idmeeting + "', '" + idgroup + "');" ) < 0)
 			return -1;
 
 		Group group = getGroup(idgroup);
 		Meeting meeting = getMeeting(idmeeting);
-		int i = 0;
+		int i = 0; 
 
 		for(i=0; i<group.users.size(); i++)
 		{
-			if(addUserToMeeting(group.users.get(i), meeting, group) < 1)
-					return -1;
+			if(addUserToMeeting(group.users.get(i), meeting, group) < 0)
+				return -1;
 		}
 
 		return i+1;
