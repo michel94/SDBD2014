@@ -70,7 +70,6 @@ public class ListenerThread implements Runnable{
 		
 		int tries = 0;
 		while(tries < 8){
-			print("Connecting to server, attempt number: "+tries);
 			try{
 				Socket socket = new Socket(serverData.ip, serverData.port);
 				DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -177,7 +176,7 @@ public class ListenerThread implements Runnable{
 
 			}catch(IOException ex){
 				//print("Error! Connection to the server lost.");
-				ex.printStackTrace();
+				//ex.printStackTrace();
 				reconnect();
 				wait.notifyReconnect();
 

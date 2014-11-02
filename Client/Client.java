@@ -71,7 +71,7 @@ public class Client{
 			try{
 				lt.oos.writeObject(r);
 				return;
-			}catch(IOException e){
+			}catch(Exception e){
 				Notification error = new Notification("Socket error", "Broken pipe.", "error-information");
 				error.show();
 
@@ -722,7 +722,7 @@ public class Client{
 						lt.oos.writeObject((Object)lt.auth);
 					}catch(IOException e){
 						clear();
-						System.out.println("IO Exception while sending authentication input.");
+						//System.out.println("IO Exception while sending authentication input.");
 					}
 					wait.waitAuth();
 
