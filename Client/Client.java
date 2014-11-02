@@ -444,7 +444,7 @@ public class Client{
 					}
 
 					print("Which group do you want to add to this meeting? Write its number:");
-				
+					
 					InviteGroup ig = new InviteGroup(lt.meeting.idmeeting,gs.get(readInt(1,gs.size())-1).idgroup);
 					writeObject(ig);
 					wait.waitDefault();

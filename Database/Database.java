@@ -87,6 +87,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			FileInputStream txt = new FileInputStream("DatabaseServer.properties");
 			prop.load(txt);
 			RMIPort = Integer.parseInt(prop.getProperty("rmiport"));
+			System.out.println("RMI port " + RMIPort);
 
 		}catch(IOException e){
 			System.out.println("Could not load configuration. Exiting.");
@@ -624,7 +625,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		if(executeUpdate("DELETE FROM meeting_user WHERE user = "+iduser+" AND group_def = "+idgroup+";" ) < 0)
 			return -1;
 
-		if(executeUpdate("DELETE FROM group_user WHERE user = "+iduser+";" ) < 1)
+		if(executeUpdate("DELETE FROM group_user WHERE user = "+iduser+";" ) < 0)
 			return -1;
 
 		return 1;
@@ -663,8 +664,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		Group group = getGroup(idgroup);
 		Meeting meeting = getMeeting(idmeeting);
-		int i = 0; 
 
+		int i = 0;
 		for(i=0; i<group.users.size(); i++)
 		{
 			if(addUserToMeeting(group.users.get(i), meeting, group) < 0)

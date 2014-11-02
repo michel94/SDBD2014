@@ -69,7 +69,9 @@ public class ListenerThread implements Runnable{
 	public void reconnect(){
 		
 		int tries = 0;
+
 		while(tries < 8){
+
 			try{
 				Socket socket = new Socket(serverData.ip, serverData.port);
 				DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -92,7 +94,7 @@ public class ListenerThread implements Runnable{
 			serverData = server1;
 
 		tries = 0;
-		while(tries < 3){
+		while(tries < n_tries){
 			try{
 				socket = new Socket(serverData.ip, serverData.port);
 				DataInputStream in = new DataInputStream(socket.getInputStream());
