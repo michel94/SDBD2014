@@ -173,14 +173,14 @@ public class Client{
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
      		Date dateobj = new Date();
       		String currentdate = df.format(dateobj);
-
+		currentdate=currentdate.replace("/","-");
 		int upcomingflag =0;
 
 		if(ms.size() != 0) print("Previous Meetings:");
 
 		for(int i=0; i<ms.size(); i++){
 			if(currentdate.compareTo(ms.get(i).datetime)<0 && upcomingflag ==0){
-				clear();
+				print("");
 				print("Upcoming Meetings:");
 				upcomingflag = 1;
 			}
