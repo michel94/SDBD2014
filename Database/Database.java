@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.sql.*;
 import java.net.*;
 import java.util.Properties;
+import java.util.Enumeration;
 
 public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	public Connection connection;
@@ -732,20 +733,33 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		return actions;
 	}*/
+	
+	public static String getIpAddress() {
+		try {
+			for (Enumeration enumeration = NetworkInterface.getNetworkInterfaces(); enumeration.hasMoreElements();) {
+				NetworkInterface netinterface = (NetworkInterface) enumeration.nextElement();
+				for (Enumeration enumerationIpAddress = netinterface.getInetAddresses(); enumerationIpAddress.hasMoreElements();) {
+					InetAddress inetAddress = (InetAddress) enumerationIpAddress.nextElement();
+					if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address)
+						return inetAddress.getHostAddress().toString();
+				}
+			}
+		} catch (Exception e) { }
+		return null;
+	}
 
 	public static void main(String[] args) throws RemoteException, SQLException {
-		DatabaseInterface di = new Database();
 
 		try{
-			InetAddress IP=InetAddress.getLocalHost();
-			String ipAddress = IP.getHostAddress();
+			String ipAddress = getIpAddress();
 			System.out.println("Database server ip: "+ipAddress + " Port: " + RMIPort);
 			if (ipAddress != null)
 				System.setProperty("java.rmi.server.hostname", ipAddress );
 		}catch(Exception e){
 			System.out.print(e);
 		}
-		
+
+		DatabaseInterface di = new Database();
 		Registry r = LocateRegistry.createRegistry(RMIPort);
 		r.rebind("database", di);
 		
