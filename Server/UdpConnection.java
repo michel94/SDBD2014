@@ -25,6 +25,7 @@ public class UdpConnection implements Runnable {
 		String s;
 		while(true){
 			if(!sec){ //primary
+				System.out.println("Server is now primary");
 				
 				try{
 					socket = new DatagramSocket(udpPort);
@@ -60,6 +61,7 @@ public class UdpConnection implements Runnable {
 								System.out.println("synchronized");
 								sec = false;
 								secondary.notify();
+								break;
 							}
 						}
 
