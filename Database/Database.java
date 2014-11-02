@@ -658,12 +658,12 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public int addGroupToMeeting(int idmeeting, int idgroup){
 		
-		if(executeUpdate("INSERT IGNORE INTO meeting_group(meeting, group_def) values('" + idmeeting + "', '" + idgroup + "');" ) < 0)
+		if(executeUpdate("INSERT IGNORE INTO meeting_group(meeting, group_def) values(" + idmeeting + ", " + idgroup + ");" ) < 0)
 			return -1;
 
 		Group group = getGroup(idgroup);
 		Meeting meeting = getMeeting(idmeeting);
-		int i = 0; 
+		int i = 0; f
 
 		for(i=0; i<group.users.size(); i++)
 		{
