@@ -61,7 +61,8 @@ public class Server{
 
 	public void connectDatabase(){
 		int retries = 0;
-		
+		System.out.println("connecting to: " + "//"+databaseIP+":"+databasePort+"/database");
+
 		try{
 			while(retries<8){
 				try{
@@ -82,6 +83,7 @@ public class Server{
 					Thread.sleep(2000);
 				}
 			}
+
 		}catch(InterruptedException ex) {
     			Thread.currentThread().interrupt();
 		}
