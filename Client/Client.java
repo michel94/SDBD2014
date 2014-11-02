@@ -483,7 +483,7 @@ public class Client{
 
 		print("Key Decisions:");
 		for (int i=0;i<it.keydecisions.size();i++){
-			print(i+1 +" -" +"Description: "+it.keydecisions.get(i).description);
+			print(i+1 +" - " +"Description: "+it.keydecisions.get(i).description);
 		}
 		print("Comments:");
 		for (int i=0;i<it.comments.size();i++){
@@ -539,6 +539,8 @@ public class Client{
 					int ikd = readInt(1, it.keydecisions.size())-1;
 					print("Description: ");
 					s = readString();
+					kd = new KeyDecision();
+					kd.description = it.keydecisions.get(ikd).description;
 
 					if(!s.equals("skip")){
 						kd.description = s;
