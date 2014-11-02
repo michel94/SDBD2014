@@ -437,20 +437,21 @@ public class Client{
 				wait.waitDefault();
 				Groups gs = lt.groups;
 				clear();
-				print("Groups:");
-				for(int i=0; i<gs.size(); i++){
-					print(i+1 + " - "+gs.get(i).name);
+				if(gs.size() !=0){
+					print("Groups:");
+					for(int i=0; i<gs.size(); i++){
+						print(i+1 + " - "+gs.get(i).name);
+					}
+
+					print("Which group do you want to add to this meeting? Write its number:");
+				
+					InviteGroup ig = new InviteGroup(lt.meeting.idmeeting,gs.get(readInt(1,gs.size())-1).idgroup);
+					writeObject(ig);
+					wait.waitDefault();
+					clear();
+				
+					print("Group added successfully");
 				}
-
-				print("Which group do you want to add to this meeting? Write its number:");
-				
-				InviteGroup ig = new InviteGroup(gs.get(readInt(1,gs.size())-1).idgroup, lt.meeting.idmeeting);
-				writeObject(ig);
-				wait.waitDefault();
-				clear();
-				
-				print("Group added successfully");
-
 				lt.context = "ConsultMeeting";
 				break;
 			case 8: 
@@ -782,9 +783,8 @@ public class Client{
 		print("What do you want to do?");
 		print("1 - Consult group users");
 		print("2 - Add new group");
-		print("3 - Delete one of your groups");
-		print("4 - Back");
-		sel = readInt(1, 4);
+		print("3 - Back");
+		sel = readInt(1, 3);
 
 		switch(sel){
 			case 1:
@@ -808,11 +808,6 @@ public class Client{
 				wait.waitDefault();
 				break;
 			case 3:
-				if(gs.size()!=0){
-					//lt.context = "DeleteGroup";
-				}
-				break;
-			case 4:
 				clear();
 				lt.context = "Main";
 
