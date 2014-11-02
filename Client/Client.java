@@ -71,7 +71,7 @@ public class Client{
 			try{
 				lt.oos.writeObject(r);
 				return;
-			}catch(IOException e){
+			}catch(Exception e){
 				Notification error = new Notification("Socket error", "Broken pipe.", "error-information");
 				error.show();
 
@@ -444,7 +444,7 @@ public class Client{
 					}
 
 					print("Which group do you want to add to this meeting? Write its number:");
-				
+					
 					InviteGroup ig = new InviteGroup(lt.meeting.idmeeting,gs.get(readInt(1,gs.size())-1).idgroup);
 					writeObject(ig);
 					wait.waitDefault();
