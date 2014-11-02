@@ -7,6 +7,7 @@ public class Comment implements Serializable{
 	public User user;
 	public Item item;
 	public String datetime;
+	public String meetingTitle;
 	private static final long serialVersionUID = 1L;
 
 	public Comment(String text, Item item){
