@@ -69,7 +69,7 @@ public class ListenerThread implements Runnable{
 	public void reconnect(){
 		
 		int tries = 0;
-		while(tries < 5){
+		while(tries < 8){
 			print("Connecting to server, attempt number: "+tries);
 			try{
 				Socket socket = new Socket(serverData.ip, serverData.port);
@@ -110,9 +110,8 @@ public class ListenerThread implements Runnable{
 			
 		}
 
-		error = new Notification("Connection error", "Both servers are down. Try again later", "dialog-information");
+		Notification error = new Notification("Connection error", "Both servers are down. Try again later", "dialog-information");
 		error.show();
-		
 		System.exit(0);
 				
 	}
