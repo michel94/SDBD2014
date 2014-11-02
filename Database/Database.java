@@ -664,8 +664,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		Group group = getGroup(idgroup);
 		Meeting meeting = getMeeting(idmeeting);
-		int i = 0;
 
+		int i = 0;
 		for(i=0; i<group.users.size(); i++)
 		{
 			if(addUserToMeeting(group.users.get(i), meeting, group) < 0)
@@ -753,7 +753,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		try{
 			String ipAddress = getIpAddress();
-			System.out.println("Database server ip: "+ipAddress + " Port: " + RMIPort);
+			System.out.println("Database server ip: "+ipAddress);
 			if (ipAddress != null)
 				System.setProperty("java.rmi.server.hostname", ipAddress );
 		}catch(Exception e){

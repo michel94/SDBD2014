@@ -157,7 +157,7 @@ public class ListenerThread implements Runnable{
 				}else if(r instanceof Confirmation){
 					this.confirmation = (Confirmation) r;
 					if( ((Confirmation) r).error > 0)
-						print("Sorry, we could not process your request due to conflicts with other accesses. Try again");
+						print("Sorry, the server could not process your request. Try again");
 					wait.notifyDefault();
 				}else if( r instanceof Users){
 					 users = (Users) r;
@@ -177,7 +177,7 @@ public class ListenerThread implements Runnable{
 				}
 
 			}catch(IOException ex){
-				print("Error! Connection to the server lost.");
+				//print("Error! Connection to the server lost.");
 				ex.printStackTrace();
 				reconnect();
 				wait.notifyReconnect();

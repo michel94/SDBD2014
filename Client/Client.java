@@ -714,6 +714,7 @@ public class Client{
 						String[] words = s.split(" ");
 						lt.auth = new Authentication(words[0],words[1]);
 					}catch(Exception e){
+						print("Please write your username and password in the correct format");
 						break;
 					}
 
