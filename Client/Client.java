@@ -495,7 +495,7 @@ public class Client{
 		print("2 - Delete this item");
 		print("3 - Add Key Decision");
 		print("4 - Edit Key Decision");
-		print("5 - Edit item description");
+		print("5 - Edit item");
 		print("6 - Back");
 
 		sel = readInt(1,6);
@@ -534,23 +534,36 @@ public class Client{
 
 				break;
 			case 4:
-				print("Which key decision do you want to edit?");
-				int ikd = readInt(1, it.keydecisions.size())-1;
-				print("Description: ");
-				kd = new KeyDecision(readString());
-				kd.idkeydecision = ikd;
-				kd.item = it.iditem;
+				if (it.keydecisions.size() != 0){
+					print("Which key decision do you want to edit?");
+					int ikd = readInt(1, it.keydecisions.size())-1;
+					print("Description: ");
+					kd = new KeyDecision(readString());
+					kd.idkeydecision = ikd;
+					kd.item = it.iditem;
 				
-				writeObject(kd);
-				wait.waitDefault();
+					writeObject(kd);
+					wait.waitDefault();
+				}
 				clear();
 				break;
 			case 5:
 				clear();
+				
+				it = lt.item;
+
+				print("Insert new title:");
+				s = readString();
+				if(!s.equals("skip")){
+					 it.title = s;
+				}
 				print("Insert new description:");
-				String desc = readString();
-				Item nit = new Item(it.iditem, it.title, desc, it.user, it.meeting);
-				writeObject(nit);
+				s = readString();
+				if(!s.equals("skip")){
+					 it.description = s;
+				}
+				
+				writeObject(it);
 				wait.waitDefault();
 				clear();
 				break;			
