@@ -69,7 +69,7 @@ public class ListenerThread implements Runnable{
 	public void reconnect(){
 		
 		int tries = 0;
-		while(tries < 8){
+		while(tries < 5){
 			print("Connecting to server, attempt number: "+tries);
 			try{
 				Socket socket = new Socket(serverData.ip, serverData.port);
