@@ -354,7 +354,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int updateItem(Item it){
-		return executeUpdate("UPDATE item set description='" + it.description + "' where iditem=" + it.iditem);
+		return executeUpdate("UPDATE item set title=" + it.title + ", description='" + it.description + "' where iditem=" + it.iditem);
 	}
 
 	public int deleteItem(int iditem){
