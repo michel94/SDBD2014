@@ -105,7 +105,7 @@ public class Server{
 			System.out.println("Server ready");
 
 			InetAddress IP=InetAddress.getLocalHost();
-			System.out.println("IP of this server is : "+IP.getHostAddress());
+			System.out.println("IP of this server is : "+ getIpAddress());
 
 			while(true){
 				clientSocket = listenSocket.accept();
@@ -138,6 +138,20 @@ public class Server{
 			/*cd = clients.get(key);
 			System.out.println(cd.userData.username);*/
 		}
+	}
+	
+	public static String getIpAddress() {
+		try {
+			for (Enumeration enumeration = NetworkInterface.getNetworkInterfaces(); enumeration.hasMoreElements();) {
+				NetworkInterface netinterface = (NetworkInterface) enumeration.nextElement();
+				for (Enumeration enumerationIpAddress = netinterface.getInetAddresses(); enumerationIpAddress.hasMoreElements();) {
+					InetAddress inetAddress = (InetAddress) enumerationIpAddress.nextElement();
+					if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address)
+						return inetAddress.getHostAddress().toString();
+				}
+			}
+		} catch (Exception e) { }
+		return null;
 	}
 
 	public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
