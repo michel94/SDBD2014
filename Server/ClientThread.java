@@ -292,6 +292,7 @@ public class ClientThread implements Runnable {
 	public void broadcastComment(Comment comment, Meeting meeting){
 		Iterator it = clients.keySet().iterator();
 		ClientData cd;
+		comment.meetingTitle = meeting.title;
 
 		System.out.println("Broadcast");
 		while(it.hasNext()){
