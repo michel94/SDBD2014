@@ -719,7 +719,7 @@ public class Client{
 						lt.oos.writeObject((Object)lt.auth);
 					}catch(IOException e){
 						clear();
-						System.out.println("IO Exception while sending authentication input.");
+						//System.out.println("IO Exception while sending authentication input.");
 					}
 					wait.waitAuth();
 
