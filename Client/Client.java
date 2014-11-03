@@ -72,9 +72,6 @@ public class Client{
 				lt.oos.writeObject(r);
 				return;
 			}catch(Exception e){
-				Notification error = new Notification("Socket error", "Broken pipe.", "error-information");
-				error.show();
-
 				wait.waitReconnect();
 				wait.waitAuth();
 			}

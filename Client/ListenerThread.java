@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.gnome.gtk.Gtk;
 import org.gnome.notify.Notify;
-import org.gnome.notify.Notification;
+import org.gnome.notify.Notification; 
 import java.util.Properties;
 
 public class ListenerThread implements Runnable{
@@ -25,7 +25,7 @@ public class ListenerThread implements Runnable{
 	public Groups groups;
 	public Group group;
 	public Users users;
-	public User user; 
+	public User user;
 	public KeyDecision keydecision;
 	public Confirmation confirmation = null;
 	public Actions actions;
