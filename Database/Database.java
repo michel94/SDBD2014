@@ -15,11 +15,11 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	public Statement stmt;
 	public String host;
 	public boolean banned;
-	
+
 	static int RMIPort;
 
 	protected Database() throws RemoteException, SQLException {
-		
+
 		super();
 		//initialize JDBC
 		setConfigs();
@@ -33,8 +33,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		connection = DriverManager.getConnection(url,"root","");
 		System.out.println("Connected");
 		stmt = connection.createStatement();
-		
-		
+
+
 
 		//addMeeting("asd", "asdad", "2014-03-03 00:00:00", "coimbra", 1);
 		/*Meeting meeting = getMeeting(1);
@@ -134,7 +134,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				meeting.created_datetime = rs.getString("created_datetime");
 
 				//--- Obter items ---
-				rs = executeQuery("SELECT iditem, title, description, user FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");	
+				rs = executeQuery("SELECT iditem, title, description, user FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");
 				while(rs.next())
 				{
 					user = getUser(rs.getInt("user"));
@@ -148,7 +148,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				}
 
 				//--- Obter actions ---
-				rs = executeQuery("SELECT * FROM action WHERE meeting="+meeting.idmeeting+" AND active=1;");	
+				rs = executeQuery("SELECT * FROM action WHERE meeting="+meeting.idmeeting+" AND active=1;");
 				while(rs.next())
 				{
 					System.out.println("OK");
@@ -178,7 +178,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return meeting;
 	}
 
@@ -203,7 +203,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return meetings;
 	}
 
@@ -227,7 +227,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return meetings;
 	}
 
@@ -300,7 +300,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return users;
 	}
 
@@ -318,14 +318,14 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return users;
 	}
 
 	public Item getItem(int iditem){
 		Item item = null;
 		User user = null;
-		
+
 		try{
 			ResultSet rs = executeQuery("SELECT * FROM item WHERE iditem="+iditem+" AND active = 1;");
 			if(rs.next())
@@ -346,7 +346,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 					item.keydecisions.add(new KeyDecision(srs.getInt("idkeydecision"), srs.getString("description"), srs.getInt("active"), iditem ));
 				}
 			}
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -395,25 +395,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		{
 			query = "INSERT IGNORE INTO meeting_user (meeting, user, group_def) VALUES((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT iduser FROM user WHERE  iduser = "+user.iduser+" AND active = 1), "+group.idgroup+");";
 		}
-		
+
 		return executeUpdate(query);
 	}
-
-	/*public int addGroupToMeeting(int idgroup, int idmeeting){
-		String query = "INSERT IGNORE INTO meeting_group (meeting, group_def) values((SELECT idmeeting FROM meeting WHERE idmeeting = "+meeting.idmeeting+" AND datetime > NOW() AND active = 1), (SELECT idgroup FROM group_def WHERE  idgroup = "+group.idgroup+" AND active = 1));";
-		int i = 0;
-
-		if(executeUpdate(query) >= 0)
-		{
-			for(i=0; i<group.users.size(); i++)
-			{
-				if(addUserToMeeting(group.users.get(i), meeting, null) < 1)
-					return -1;
-			}
-		}
-
-		return 1;
-	}*/
 
 
 	public int finishMeeting(Meeting meeting){
@@ -428,7 +412,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public int insertComment(Comment com, User u){
 		String query = "INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.iditem + ", " + u.iduser + ",  now() )";
-		
+
 		executeUpdate(query);
 
 		return 0;
@@ -444,7 +428,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public int updateAction(Action act){
 		return executeUpdate("UPDATE action SET description='" + act.description + "', due_to='" + act.due_to + "', assigned_user='" + act.assigned_user.iduser + "', done='"+act.done+"' WHERE idaction="+act.idaction);
-		
+
 	}
 
 	public int deleteAction(int idaction){
@@ -469,7 +453,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")";
 			if(i < iu.size() - 1) query += ", ";
 		}
-			
+
 		return executeUpdate(query);
 	}
 
@@ -477,33 +461,37 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	{
 		String query = "INSERT IGNORE INTO group_user(group_def, user) values ";
 		for(int i=0; i<iu.size(); i++){
-			query += "(" + iu.get(i).id + ", " + iu.get(i).user+ ")"; 
+			query += "(" + iu.get(i).id + ", " + iu.get(i).user+ ")";
 			if(i < iu.size() - 1) query += ", ";
 		}
 		if(executeUpdate(query) < 0)
 			return -1;
 
 		String query2;
-		try{
-			ResultSet rs = executeQuery("SELECT * FROM meeting_group WHERE group_def = "+iu.get(0).id+";");
-			if(rs.next())
-			{
-				query2 = "INSERT IGNORE INTO meeting_user(meeting, user, group_def) values ";
-				
-				do{
-					query2 += "(" + rs.getInt("meeting") + ", " + iu.get(0).user+ ", "+iu.get(0).id+")      , "; 
-				}
-				while((rs.next()));
+		//Actualiza os meetings que contêm este grupo com os novos users
 
-				query2 = query2.substring(0, query2.length()-4);
-				return executeUpdate(query2);
+		for(int i=0; i<iu.size(); i++){
+			try{
+				ResultSet rs = executeQuery("SELECT * FROM meeting_group WHERE group_def = "+iu.get(i).id+";");
+				if(rs.next())
+				{
+					query2 = "INSERT IGNORE INTO meeting_user(meeting, user, group_def) values ";
+
+					do{
+						query2 += "(" + rs.getInt("meeting") + ", " + iu.get(i).user+ ", "+iu.get(i).id+")      , ";
+					}
+					while((rs.next()));
+
+					query2 = query2.substring(0, query2.length()-4);
+					executeUpdate(query2);
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+				return -1;
 			}
-		}catch(SQLException e){
-			e.printStackTrace();
-			return -1;
 		}
 
-		return -1;
+		return 1;
 	}
 
 	public boolean stonith(){
@@ -513,7 +501,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	private User readUser(ResultSet rs){
 		User u = null;
-		
+
 		try{
 			u = new User(rs.getInt("iduser"), rs.getString("username"));
 			u.password = rs.getString("password");
@@ -549,10 +537,10 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		}catch(SQLException e){
 			return u;
 		}
-		
+
 		executeUpdate("INSERT INTO user(username, password,created_datetime) values('" + u.username + "', '" + u.password + "',now())" );
 		rs = executeQuery("SELECT iduser from user where username='" + u.username+"'");
-		
+
 		try{
 			if(rs.next()){
 				u.iduser = rs.getInt("iduser");
@@ -578,7 +566,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return groups;
 	}
 
@@ -591,7 +579,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			{
 				group.idgroup = rs.getInt("idgroup");
 				group.name = rs.getString("name");
-				rs = executeQuery("SELECT u.iduser, u.username, gu.user FROM user as u, group_user as gu WHERE gu.group_def="+idgroup+" AND gu.user = u.iduser AND u.active = 1;");	
+				rs = executeQuery("SELECT u.iduser, u.username, gu.user FROM user as u, group_user as gu WHERE gu.group_def="+idgroup+" AND gu.user = u.iduser AND u.active = 1;");
 				while(rs.next())
 				{
 					User user = new User(rs.getInt("iduser"), rs.getString("username"));
@@ -609,15 +597,15 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return group;
 	}
 
 	public int leaveMeeting(int idmeeting, int iduser)
 	{
-		return executeUpdate("DELETE FROM meeting_user WHERE meeting = "+idmeeting+" AND user = "+iduser+";");	
+		return executeUpdate("DELETE FROM meeting_user WHERE meeting = "+idmeeting+" AND user = "+iduser+";");
 	}
-	
+
 	public int removeUserFromGroup(RemoveUserFromGroup ru){
 		int idgroup = ru.idgroup;
 		int iduser = ru.iduser;
@@ -635,7 +623,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		Action action = null;
 		Actions actions = new Actions();
 		try{
-			ResultSet rs =executeQuery("SELECT * FROM action WHERE assigned_user = "+iduser+" AND active = 1;");	
+			ResultSet rs =executeQuery("SELECT * FROM action WHERE assigned_user = "+iduser+" AND active = 1;");
 			while(rs.next())
 			{
 				action = new Action(rs.getInt("idaction"), rs.getString("description"), rs.getString("due_to"), getUser(rs.getInt("assigned_user")), rs.getInt("done"), rs.getInt("meeting"), rs.getInt("active"));
@@ -655,10 +643,10 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		return actions;
 	}
-	
+
 
 	public int addGroupToMeeting(int idmeeting, int idgroup){
-		
+
 		if(executeUpdate("INSERT IGNORE INTO meeting_group(meeting, group_def) values(" + idmeeting + ", " + idgroup + ");" ) < 0)
 			return -1;
 
@@ -677,7 +665,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int createGroup(Group group){
-		
+
 		if(executeUpdate("INSERT INTO group_def(name, created_datetime, active) values('" + group.name + "', NOW(), 1);" ) < 1)
 			return -1;
 
@@ -687,12 +675,11 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			ResultSet rs = executeQuery("SELECT max(idgroup) as idgroup from group_def");
 			if(rs.next())
 			{
-				System.out.println("groupg ggggggggggggggggggggggg");
 				group.idgroup = rs.getInt("idgroup");
 
 				query = "INSERT IGNORE INTO group_user(group_def, user) values ";
 				for(i=0; i<group.users.size(); i++){
-					query += "(" + group.idgroup + ", " + group.users.get(i).iduser+ ")"; 
+					query += "(" + group.idgroup + ", " + group.users.get(i).iduser+ ")";
 					if(i < group.users.size() - 1) query += ", ";
 				}
 				return executeUpdate(query);
@@ -701,7 +688,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			{
 				return -1;
 			}
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			return -1;
@@ -714,7 +701,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		Action action = null;
 		Actions actions = new Actions();
 		try{
-			ResultSet rs =executeQuery("SELECT * FROM action WHERE assigned_user = "+iduser+" AND active = 1;");	
+			ResultSet rs =executeQuery("SELECT * FROM action WHERE assigned_user = "+iduser+" AND active = 1;");
 			while(rs.next())
 			{
 				action = new Action(rs.getInt("idaction"), rs.getString("description"), rs.getString("due_to"), getUser(rs.getInt("assigned_user")), rs.getInt("done"), rs.getInt("meeting"), rs.getInt("active"));
@@ -734,7 +721,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 		return actions;
 	}*/
-	
+
 	public static String getIpAddress() {
 		try {
 			for (Enumeration enumeration = NetworkInterface.getNetworkInterfaces(); enumeration.hasMoreElements();) {
@@ -763,7 +750,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		DatabaseInterface di = new Database();
 		Registry r = LocateRegistry.createRegistry(RMIPort);
 		r.rebind("database", di);
-		
+
 		System.out.println("Database ready...");
 	}
 
