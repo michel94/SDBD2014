@@ -3,6 +3,7 @@ package meeto.bean;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -15,6 +16,8 @@ public class ConnectionBean {
 	private Authentication auth;
 	private Meetings meetings;
 	private Meeting meeting;
+	private Map<String, Object> session;
+	
 	public ConnectionBean(){
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
@@ -29,19 +32,17 @@ public class ConnectionBean {
 	public DatabaseInterface getConnection(){
 		return database;
 	}
-	public int login(String username, String password){
+	public Authentication login(String username, String password){
+		Authentication auth = new Authentication(username, password); 
 		try {
-		  auth=database.login(new Authentication(username, password));
-		  return auth.confirmation;
-		  
+			auth = database.login(auth);
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			return 0;
 		}
+		return auth;
 	}
 	
 	private void rmiMeetings(){
-		System.out.println("rmi m");
 		Meetings mts=null;
 		try {
 			meetings = database.getMeetings(auth.clientID);
@@ -51,9 +52,10 @@ public class ConnectionBean {
 		}
 	}
 	
-	public ArrayList<String> getMeetings(){
+	public ArrayList<Meeting> getMeetings(){
 		rmiMeetings();
-		ArrayList<String> meetingsList = new ArrayList<String>();
+		return meetings;
+		/*ArrayList<String> meetingsList = new ArrayList<String>();
 		System.out.println("get m");
 		Iterator<Meeting> it = meetings.iterator();
 		while(it.hasNext())
@@ -63,11 +65,20 @@ public class ConnectionBean {
 		    
 		}
 		
-		return meetingsList;
+		return meetingsList;*/
 	}
 	
-	private void rmiMeeting(int listIndex){
-		
+	public Actions getUserActions(){
+		try {
+			return database.getUserActions(auth.userData.iduser);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	private void rmiMeeting(int listIndex){		
 		try {
 			meeting = database.getMeeting(meetings.get(listIndex).idmeeting);
 		} catch (RemoteException e) {
@@ -76,7 +87,8 @@ public class ConnectionBean {
 		}
 	}
 	
-	
-	
+	public void setSession(Map<String, Object> s){
+		session = s;
+	}
 		
 }
