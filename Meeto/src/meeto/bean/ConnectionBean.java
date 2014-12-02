@@ -18,7 +18,6 @@ public class ConnectionBean implements SessionAware {
 	private Authentication auth;
 	private Meetings meetings;
 	private Meeting meeting;
-	private String choice;
 	private Item item;
 	
 	//Selectors:
@@ -40,19 +39,17 @@ public class ConnectionBean implements SessionAware {
 	public DatabaseInterface getConnection(){
 		return database;
 	}
-	public int login(String username, String password){
+	public Authentication login(String username, String password){
+		Authentication auth = new Authentication(username, password); 
 		try {
-		  auth=database.login(new Authentication(username, password));
-		  return auth.confirmation;
-		  
+			this.auth = database.login(auth);
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			return 0;
 		}
+		return this.auth;
 	}
 	
 	private void rmiMeetings(){
-		
 		Meetings mts=null;
 		try {
 			meetings = database.getMeetings(auth.clientID);
@@ -73,28 +70,35 @@ public class ConnectionBean implements SessionAware {
 			int id = meetings.get(listIndex).idmeeting;
 			meeting = database.getMeeting(id);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
 	
 	public Meeting getMeeting(){
 		rmiMeeting(selectMeeting);
 		return meeting;
 	}
 
-	@Override
-	public void setSession(Map<String, Object> session) {
-		// TODO Auto-generated method stub
-		
-		this.session = session;
-		
-	}
 	
+
 	public Item getItem(){
 		rmiMeeting(selectMeeting);
 		return item;
 	}
+
+
+
+	public void setSession(Map<String, Object> s){
+		session = s;
+	}
 	
-		
+	public Actions getUserActions(){
+		try {
+			return database.getUserActions(auth.userData.iduser);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

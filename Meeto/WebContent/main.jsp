@@ -9,13 +9,24 @@
 <title>Main</title>
 </head>
 <body>
-Meeto Main<br>
-<br>
 
-Lista de Meetings:<br>
+Meeto Main
+
+<br>
 <c:forEach items="${connectionBean.meetings}" var="meeting">
-	<c:out value="${meeting.datetime}" /><br>
+	<c:out value="${meeting.title}" /><br>
 </c:forEach>
+
+<br>
+<c:forEach items="${connectionBean.meetings}" var="meeting">
+	<h2> <c:out value="${meeting.title}" /><br> </h2>
+	<c:forEach items="${meeting.items}" var="item">
+		<c:out value="${item.title}" /><br>
+	</c:forEach>
+</c:forEach>
+
+
+<button> ola </button>
 
 </body>
 </html>
