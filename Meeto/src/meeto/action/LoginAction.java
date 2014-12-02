@@ -32,6 +32,7 @@ public class LoginAction extends ActionSupport implements SessionAware {
 			if (auth.confirmation > 0) {
 				this.session.put("username", username);
 				this.session.put("iduser", auth.clientID);
+				connectionBean.setSession(session);
 				return SUCCESS;
 			}else{
 				return LOGIN;
