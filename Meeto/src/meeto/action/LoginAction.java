@@ -23,7 +23,6 @@ public class LoginAction extends ActionSupport implements SessionAware {
 		if(checkString(username) && checkString(password)) {
 			System.out.println("Logged In");
 			connectionBean = new ConnectionBean();
-
 			if (connectionBean.login(username, password) > 0) {
 				this.session.put("username", username);
 				return SUCCESS;
@@ -48,6 +47,9 @@ public class LoginAction extends ActionSupport implements SessionAware {
 	public void setPassword(String p){
 		password = p;
 	}
-
+	
+	public ConnectionBean getConnectionBean(){
+		return connectionBean;
+	}
 	
 }
