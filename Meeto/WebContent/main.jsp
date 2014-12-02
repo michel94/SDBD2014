@@ -24,11 +24,9 @@ Meeto Main
 	</c:forEach>
 </c:forEach>
 
-<c:forEach items="${connectionBean.meetings}" var="meeting">
-	<h2> <c:out value="${meeting.title}" /><br> </h2>
-	<c:forEach items="${meeting.items}" var="item">
-		<c:out value="${item.title}" /><br>
-	</c:forEach>
+<br>
+<c:forEach items="${connectionBean.userActions}" var="action">
+	<c:out value="${action.title}" /><br>
 </c:forEach>
 
 <button> ola </button>

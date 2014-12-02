@@ -39,4 +39,13 @@ public class Meeting implements Serializable{
 		items = new ArrayList<Item>();
 		actions = new ArrayList<Action>();
 	}
+	
+	public String getTitle(){
+		return title;
+	}
+	
+	public ArrayList<Item> getItems(){
+		return items;
+	}
+	
 }
