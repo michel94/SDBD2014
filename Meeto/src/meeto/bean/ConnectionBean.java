@@ -8,14 +8,21 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import org.apache.struts2.interceptor.SessionAware;
+
 import meeto.garbage.*;
-public class ConnectionBean {
+public class ConnectionBean implements SessionAware {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
 	private Authentication auth;
 	private Meetings meetings;
 	private Meeting meeting;
+	private Item item;
+	
+	//Selectors:
+	private int selectMeeting=0,selectAction=0,selectItem=0;
+	
 	private Map<String, Object> session;
 	
 	public ConnectionBean(){
@@ -35,11 +42,11 @@ public class ConnectionBean {
 	public Authentication login(String username, String password){
 		Authentication auth = new Authentication(username, password); 
 		try {
-			auth = database.login(auth);
+			this.auth = database.login(auth);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
-		return auth;
+		return this.auth;
 	}
 	
 	private void rmiMeetings(){
@@ -52,20 +59,38 @@ public class ConnectionBean {
 		}
 	}
 	
-	public ArrayList<Meeting> getMeetings(){
+	public Meetings getMeetings(){
 		rmiMeetings();
 		return meetings;
-		/*ArrayList<String> meetingsList = new ArrayList<String>();
-		System.out.println("get m");
-		Iterator<Meeting> it = meetings.iterator();
-		while(it.hasNext())
-		{
-		    Meeting mt = it.next();
-		    meetingsList.add(mt.title);
-		    
+	}
+	
+	private void rmiMeeting(int listIndex){
+		try {
+			System.out.println(meetings.size());
+			int id = meetings.get(listIndex).idmeeting;
+			meeting = database.getMeeting(id);
+		} catch (RemoteException e) {
+			e.printStackTrace();
 		}
-		
-		return meetingsList;*/
+	}
+	
+	
+	public Meeting getMeeting(){
+		rmiMeeting(selectMeeting);
+		return meeting;
+	}
+
+	
+
+	public Item getItem(){
+		rmiMeeting(selectMeeting);
+		return item;
+	}
+
+
+
+	public void setSession(Map<String, Object> s){
+		session = s;
 	}
 	
 	public Actions getUserActions(){
@@ -76,19 +101,4 @@ public class ConnectionBean {
 			return null;
 		}
 	}
-	
-	
-	private void rmiMeeting(int listIndex){		
-		try {
-			meeting = database.getMeeting(meetings.get(listIndex).idmeeting);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public void setSession(Map<String, Object> s){
-		session = s;
-	}
-		
 }

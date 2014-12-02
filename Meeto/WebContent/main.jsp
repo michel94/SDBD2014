@@ -9,6 +9,7 @@
 <title>Main</title>
 </head>
 <body>
+
 Meeto Main
 
 <br>
@@ -23,6 +24,7 @@ Meeto Main
 		<c:out value="${item.title}" /><br>
 	</c:forEach>
 </c:forEach>
+
 
 <br>
 <c:forEach items="${connectionBean.userActions}" var="action">
