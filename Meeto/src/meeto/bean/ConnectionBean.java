@@ -3,18 +3,29 @@ package meeto.bean;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import org.apache.struts2.interceptor.SessionAware;
+
 import meeto.garbage.*;
-public class ConnectionBean {
+public class ConnectionBean implements SessionAware {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
 	private Authentication auth;
 	private Meetings meetings;
 	private Meeting meeting;
+	private String choice;
+	private Item item;
+	
+	//Selectors:
+	private int selectMeeting=0,selectAction=0,selectItem=0;
+	
+	private Map<String, Object> session;
+	
 	public ConnectionBean(){
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
@@ -41,7 +52,7 @@ public class ConnectionBean {
 	}
 	
 	private void rmiMeetings(){
-		System.out.println("rmi m");
+		
 		Meetings mts=null;
 		try {
 			meetings = database.getMeetings(auth.clientID);
@@ -51,32 +62,39 @@ public class ConnectionBean {
 		}
 	}
 	
-	public ArrayList<String> getMeetings(){
+	public Meetings getMeetings(){
 		rmiMeetings();
-		ArrayList<String> meetingsList = new ArrayList<String>();
-		System.out.println("get m");
-		Iterator<Meeting> it = meetings.iterator();
-		while(it.hasNext())
-		{
-		    Meeting mt = it.next();
-		    meetingsList.add(mt.title);
-		    
-		}
-		
-		return meetingsList;
+		return meetings;
 	}
 	
 	private void rmiMeeting(int listIndex){
-		
 		try {
-			meeting = database.getMeeting(meetings.get(listIndex).idmeeting);
+			System.out.println(meetings.size());
+			int id = meetings.get(listIndex).idmeeting;
+			meeting = database.getMeeting(id);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+	public Meeting getMeeting(){
+		rmiMeeting(selectMeeting);
+		return meeting;
+	}
+
+	@Override
+	public void setSession(Map<String, Object> session) {
+		// TODO Auto-generated method stub
+		
+		this.session = session;
+		
+	}
 	
+	public Item getItem(){
+		rmiMeeting(selectMeeting);
+		return item;
+	}
 	
 		
 }

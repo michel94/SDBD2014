@@ -9,11 +9,12 @@
 <title>Main</title>
 </head>
 <body>
-Meeto Main
+Meeto Main<br>
+<br>
 
-
+Lista de Meetings:<br>
 <c:forEach items="${connectionBean.meetings}" var="meeting">
-	<c:out value="${meeting}" /><br>
+	<c:out value="${meeting.datetime}" /><br>
 </c:forEach>
 
 </body>
