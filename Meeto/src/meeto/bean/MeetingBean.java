@@ -3,12 +3,16 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import meeto.garbage.DatabaseInterface;
+import meeto.garbage.InviteUser;
+import meeto.garbage.InviteUsers;
 import meeto.garbage.Meeting;
 import meeto.garbage.Meetings;
 import meeto.garbage.User;
+import meeto.garbage.Users;
 
 public class MeetingBean {
 	private final String databaseIP = "localhost";
@@ -89,6 +93,71 @@ public class MeetingBean {
 	
 	public void setSession(Map<String, Object> s){
 		session = s;
+	}
+	
+	public Users getUsersFromMeeting(int idmeeting){
+		Users usrs=null;
+		Meeting mt=null;
+		try {
+			mt=database.getMeeting(idmeeting);
+			usrs = mt.users;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return usrs;
+	}
+	
+	
+	public int addUserToMeeting(int userid, int meetingid){
+		User usr = null;
+		Meeting mt = null;
+		
+		try {
+			usr = database.getUser(userid);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+		
+		try {
+			mt = database.getMeeting(meetingid);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+		
+		try {
+			database.addUserToMeeting(usr, mt, null);
+			return 0;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+		
+	}
+	
+	public int addUsersToMeeting(ArrayList<String> userids, int meetingid){
+		InviteUsers invus = new InviteUsers();
+		InviteUser invu = null;
+		
+		for(int i=0;i<userids.size();i++){
+			invu = new InviteUser(Integer.parseInt(userids.get(i)),meetingid);
+			invus.add(invu);
+		}
+		
+		try {
+			database.inviteUsersToMeeting(invus);
+			return 0;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+		
 	}
 	
 }
