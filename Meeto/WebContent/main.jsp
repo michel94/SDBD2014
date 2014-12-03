@@ -13,18 +13,20 @@
 Meeto Main
 
 <br>
-<c:forEach items="${connectionBean.meetings}" var="meeting">
-	<c:out value="${meeting.title}" /><br>
+Lista de meetings:<br>
+<c:forEach items="${connectionBean.meetings}" var="mt">
+	<c:out value="${mt.title}" /><br>
 </c:forEach>
 
 <br>
-<c:forEach items="${connectionBean.meetings}" var="meeting">
-	<h2> <c:out value="${meeting.title}" /><br> </h2>
-	<c:forEach items="${meeting.items}" var="item">
-		<c:out value="${item.title}" /><br>
-	</c:forEach>
-</c:forEach>
 
+Test meeting 1:<br>
+<c:set value="${connectionBean.meeting.title}" var= "meeting">
+	Titulo: <c:out value="${meeting.title}" /><br>
+	Descrição: <c:out value="${meeting.description}" /><br>
+	Localização: <c:out value="${meeting.location}" /><br>
+	Data: <c:out value="${meeting.datetime}" /><br>
+</c:set>
 
 <button> ola </button>
 
