@@ -36,10 +36,10 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
 		</result>
 	</action> -->
     
-	<action name="nextMeetings" class="meeto.action.NextMeetings" method="execute">
+	<!-- <action name="nextMeetings" class="meeto.action.NextMeetings" method="execute">
 		<result name="success">/main.jsp</result>
 		<result name="login">/login.jsp</result>
-	</action>
+	</action> -->
     
 	
   </package>
