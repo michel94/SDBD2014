@@ -1,5 +1,1 @@
-<<<<<<< HEAD
 java -cp ./:mysql-connector-java-5.1.33-bin.jar meeto.garbage.Database
-=======
-java -classpath ./:./mysql-connector-java-5.1.33-bin.jar meeto.garbage.Database
->>>>>>> fbc78801ec482ab68a0f5c84f8cc34a12a0cf395
