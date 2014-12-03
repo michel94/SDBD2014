@@ -69,8 +69,9 @@ public class ListenerThread implements Runnable{
 	public void reconnect(){
 		
 		int tries = 0;
+		int n_tries = 8;
 
-		while(tries < 8){
+		while(tries < n_tries){
 
 			try{
 				Socket socket = new Socket(serverData.ip, serverData.port);
