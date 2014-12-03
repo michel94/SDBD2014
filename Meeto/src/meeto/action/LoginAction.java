@@ -1,9 +1,13 @@
 package meeto.action;
 
 import java.util.Map;
+
 import com.opensymphony.xwork2.ActionSupport;
+
 import org.apache.struts2.interceptor.SessionAware;
+
 import meeto.bean.ConnectionBean;
+import meeto.garbage.Authentication;
 
 public class LoginAction extends ActionSupport implements SessionAware {
 	private static final long serialVersionUID = 4L;
@@ -23,9 +27,12 @@ public class LoginAction extends ActionSupport implements SessionAware {
 		if(checkString(username) && checkString(password)) {
 			System.out.println("Logged In");
 			connectionBean = new ConnectionBean();
-
-			if (connectionBean.login(username, password) > 0) {
+			
+			Authentication auth = connectionBean.login(username, password);
+			if (auth.confirmation > 0) {
 				this.session.put("username", username);
+				this.session.put("iduser", auth.clientID);
+				connectionBean.setSession(session);
 				return SUCCESS;
 			}else{
 				return LOGIN;
@@ -48,6 +55,9 @@ public class LoginAction extends ActionSupport implements SessionAware {
 	public void setPassword(String p){
 		password = p;
 	}
-
+	
+	public ConnectionBean getConnectionBean(){
+		return connectionBean;
+	}
 	
 }
