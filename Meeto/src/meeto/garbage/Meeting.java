@@ -1,7 +1,6 @@
 package meeto.garbage;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Meeting implements Serializable{
 	public String title, description, datetime, location, created_datetime;
@@ -12,6 +11,9 @@ public class Meeting implements Serializable{
 	public ArrayList<Item> items;
 	public ArrayList<Action> actions;
 	public Users users;
+	public User getLeader() {
+		return leader;
+	}
 	private static final long serialVersionUID = 1L;
 	
 	public Meeting(){
