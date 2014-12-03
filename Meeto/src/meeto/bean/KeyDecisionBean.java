@@ -1,4 +1,5 @@
 package meeto.bean;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -6,17 +7,15 @@ import java.rmi.RemoteException;
 import java.util.Map;
 
 import meeto.garbage.DatabaseInterface;
-import meeto.garbage.User;
-import meeto.garbage.Users;
+import meeto.garbage.KeyDecision;
 
-public class UserBean {
+public class KeyDecisionBean {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
-	
 	private DatabaseInterface database;
 	private Map<String, Object> session;
 	
-	public UserBean(){
+	public KeyDecisionBean(){
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
 			
@@ -26,37 +25,35 @@ public class UserBean {
 		}
 	}
 	
-	public User getUser(int iduser){
-		User usr=null;
+	public int addKeyDecisionToItem(int itemid, String description){
+		KeyDecision kd = new KeyDecision(-1, description, 1, itemid);
+		
 		try {
-			usr=database.getUser(iduser);
+			database.insertKeyDecision(kd);
+			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
+			return -1;
 		}
-		return usr;
 	}
 	
-	public Users getAllUsers(){
-		Users usrs = null;
+	public int editKeyDecision(int keydecisionid,String description, int item,int active){
+		KeyDecision kd= new KeyDecision(keydecisionid,description,item,active);
 		
 		try {
-			usrs=database.getAllUsers();
+			database.updateKeyDecision(kd);
+			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return -1;
 		}
-		
-		return usrs;
 	}
 	
-	
-	public int registerUser(String username, String password){
-		User usr=new User(username,password);
-		
+	public int deleteKeyDecision(int keydecisionid){
 		try {
-			database.createAccount(usr);
+			database.deleteKeyDecision(keydecisionid);
 			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

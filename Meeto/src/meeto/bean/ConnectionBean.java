@@ -1,14 +1,11 @@
 package meeto.bean;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-import org.apache.struts2.interceptor.SessionAware;
 
 import meeto.garbage.*;
 public class ConnectionBean {

@@ -7,4 +7,6 @@ public class RemoveUserFromGroup implements Serializable{
 		this.iduser = iduser;
 		this.idgroup = idgroup;
 	}
+	public RemoveUserFromGroup(){
+	}
 }

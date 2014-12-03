@@ -37,50 +37,6 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		stmt = connection.createStatement();
 		
 		
-
-		//addMeeting("asd", "asdad", "2014-03-03 00:00:00", "coimbra", 1);
-		/*Meeting meeting = getMeeting(1);
-		System.out.println(meeting.items.get(1).title);*/
-
-		//Meetings teste = getFinishedMeetings(3);
-		//System.out.println(teste.get(0).title);
-
-		/*User user = getUser(1);
-
-		Meeting meeting = new Meeting(5, "Reuniao y", "descricao da reuniao y", "2014-05-23 07:03:00", "DEI", user, 1);
-		updateMeeting(meeting);*/
-		/*Users users = new Users();
-		users = getAllUsersFromMeeting(1);
-		System.out.println(users.get(2).username);*/
-
-		/*Item item = getItem(1);
-		for(int i=0; i<item.comments.size(); i++){
-			System.out.println(item.comments.get(i).text);
-		}
-		for(int i=0; i<item.keydecisions.size(); i++){
-			System.out.println(item.keydecisions.get(i).description);
-		}*/
-
-		//System.out.println(item.user.username);
-
-		/*Item item = new Item(-1, "titulo item", "descricao", getUser(1), 1);
-		insertItem(item);*/
-
-		//addUserToMeeting(getUser(5), getMeeting(1));
-
-		//finishMeeting(getMeeting(5));
-		/*Groups groups = null;
-		groups = getGroupsOfUser(6);
-
-		System.out.println(groups.get(0).name);*/
-
-		//System.out.println(getGroup(1).users.get(1).username);
-
-		//addGroupToMeeting(getGroup(1), getMeeting(1));
-		//leaveMeeting(6, 7);
-		/*RemoveUserFromGroup ru = new RemoveUserFromGroup(7, 2);
-		removeUserFromGroup(ru);*/
-		//System.out.println(getUserActions(8).get(0).description);
 	}
 
 	public void setConfigs(){
