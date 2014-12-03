@@ -27,6 +27,21 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="success">/main.jsp</result>
       <result name="login">/index.jsp</result>
     </action>
+    
+    <!-- <action name="ajax" class="meeto.action.Ajax" method="test">
+		<result type="json">
+    		<param name="root">
+	        	output
+			</param>
+		</result>
+	</action> -->
+    
+	<action name="nextMeetings" class="meeto.action.NextMeetings" method="execute">
+		<result name="success">/main.jsp</result>
+		<result name="login">/login.jsp</result>
+	</action>
+    
+	
   </package>
 
 </struts>

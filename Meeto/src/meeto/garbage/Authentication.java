@@ -8,7 +8,7 @@ public class Authentication implements Serializable {
 	public int clientID = 0;
 	public User userData=null;
 	
-	public  Authentication(String usr, String pass){
+	public Authentication(String usr, String pass){
 		username = usr;
 		password = pass;
 	}

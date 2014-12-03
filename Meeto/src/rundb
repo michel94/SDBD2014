@@ -1,1 +1,1 @@
-java -classpath ./:./mysql-connector-java-5.1.33-bin.jar meeto.garbage.Database
+java -cp ./:mysql-connector-java-5.1.33-bin.jar meeto.garbage.Database

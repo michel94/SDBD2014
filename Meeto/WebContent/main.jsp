@@ -28,6 +28,13 @@ Test meeting 1:<br>
 	Data: <c:out value="${meeting.datetime}" /><br>
 </c:set>
 
+<br>
+<c:forEach items="${connectionBean.userActions}" var="action">
+	<c:out value="${action.title}" /><br>
+</c:forEach>
+
+
+
 <button> ola </button>
 
 </body>
