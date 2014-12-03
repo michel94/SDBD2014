@@ -6,17 +6,16 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Map;
 
-import meeto.garbage.Action;
 import meeto.garbage.DatabaseInterface;
-import meeto.garbage.User;
+import meeto.garbage.KeyDecision;
 
-public class ActionBean {
+public class KeyDecisionBean {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
 	private Map<String, Object> session;
 	
-	public ActionBean(){
+	public KeyDecisionBean(){
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
 			
@@ -26,50 +25,42 @@ public class ActionBean {
 		}
 	}
 	
-	public int insertAction(String description, String due_to, int userid, int meetingid){
-		Action act = new Action();
-		
-		act.description=description;
-		act.due_to=due_to;
-		
-		User usr;
-		try {
-			usr = database.getUser(userid);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
-		act.assigned_user= usr;
-		act.meeting= meetingid;
+	public int addKeyDecisionToItem(int itemid, String description){
+		KeyDecision kd = new KeyDecision(-1, description, 1, itemid);
 		
 		try {
-			database.insertAction(act);
+			database.insertKeyDecision(kd);
 			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -1;
 		}
-		
-	}
-
-	public int assignUserToAction(Action act){
-	}
-
-	public int updateAction(Action act){
-		
-	}
-
-	public int deleteAction(int idaction){
-		
 	}
 	
-	public int ConfirmAction(int idaction){
+	public int editKeyDecision(int keydecisionid,String description, int item,int active){
+		KeyDecision kd= new KeyDecision(keydecisionid,description,item,active);
 		
+		try {
+			database.updateKeyDecision(kd);
+			return 0;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
 	}
 	
-	public Actions getUserActions(){
-		
+	public int deleteKeyDecision(int keydecisionid){
+		try {
+			database.deleteKeyDecision(keydecisionid);
+			return 0;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
 	}
+	
+
 }

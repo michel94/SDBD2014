@@ -160,4 +160,15 @@ public class MeetingBean {
 		
 	}
 	
+	public int addGroupToMeeting(int idgroup, int idmeeting){
+		try {
+			database.addGroupToMeeting(idmeeting, idgroup);
+			return 0;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 1;
+		}
+	}
+	
 }
