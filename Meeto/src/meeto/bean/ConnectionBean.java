@@ -101,4 +101,6 @@ public class ConnectionBean implements SessionAware {
 			return null;
 		}
 	}
+	
+	
 }

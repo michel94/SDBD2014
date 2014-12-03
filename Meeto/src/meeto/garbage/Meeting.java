@@ -45,12 +45,6 @@ public class Meeting implements Serializable{
 		return title;
 	}
 	
-<<<<<<< HEAD
-	public ArrayList<Item> getItems(){
-		return items;
-	}
-	
-=======
 	public String getId(){
 		return Integer.toString(idmeeting);
 	}

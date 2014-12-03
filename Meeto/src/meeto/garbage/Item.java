@@ -40,4 +40,8 @@ public class Item implements Serializable{
 		this.comments = new Comments();
 		this.keydecisions = new KeyDecisions();
 	}
+	
+	public String getTitle(){
+		return title;
+	}
 }
