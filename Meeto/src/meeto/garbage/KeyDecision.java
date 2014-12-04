@@ -20,4 +20,20 @@ public class KeyDecision implements Serializable{
 		this.description = description;
 		this.item = item;
 	}
+	public int getIdkeydecision() {
+		return idkeydecision;
+	}
+	public int getActive() {
+		return active;
+	}
+	public int getItem() {
+		return item;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public String getDatetime() {
+		return datetime;
+	}
+
 }

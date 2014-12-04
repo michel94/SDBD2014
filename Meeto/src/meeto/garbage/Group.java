@@ -19,4 +19,17 @@ public class Group implements Serializable{
 		this.idgroup = idgroup;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public int getIdgroup() {
+		return idgroup;
+	}
+
+	public ArrayList<User> getUsers() {
+		return users;
+	}
+
+
 }

@@ -7,4 +7,11 @@ public class InviteGroup implements Serializable{
 		this.group = g;
 		this.meeting = m;
 	}
+
+	public int getGroup() {
+		return group;
+	}
+	public int getMeeting() {
+		return meeting;
+	}
 }
