@@ -18,8 +18,9 @@ public class ItemBean {
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
 	private Map<String, Object> session;
+	private int idmeeting, iduser;
 	
-	public ItemBean(){
+	public ItemBean(int iduser, int idmeeting){
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
 			
@@ -27,22 +28,6 @@ public class ItemBean {
 			System.out.println("Failed to connect to the rmi server");
 			e.printStackTrace();
 		}
-	}
-	
-	public ArrayList<Item> getItemsFromMeeting(int idmeeting){
-		Meeting mt = null;
-		ArrayList<Item> items = null;
-		try {
-			mt = database.getMeeting(idmeeting);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return items;
-		}
-		
-		items = mt.items;
-		
-		return items;
 	}
 	
 	public Item getItem(int itemid){

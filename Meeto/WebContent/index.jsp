@@ -140,13 +140,13 @@
                             <a href="#"><i class="fa fa-briefcase fa-fw"></i> Meetings<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a class="active" href="#"><i class="fa fa-forward fa-fw"></i> Next meetings</a>
+                                    <a class="active" href="menumeetings"><i class="fa fa-forward fa-fw"></i> Next meetings</a>
                                 </li>
                                 <li>
                                     <a href="#"><i class="fa fa-backward fa-fw"></i> Previous meetings</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-plus fa-fw"></i> Create meeting</a>
+                                    <a href="menucreatemeeting"><i class="fa fa-plus fa-fw"></i> Create meeting</a>
                                 </li>
                             </ul>
                         </li>
@@ -180,14 +180,12 @@
         </nav>
 
         <div id="page-wrapper">
-  
-        </div>
-        <!-- /#page-wrapper -->
+        	<jsp:include page="${view}.jsp"></jsp:include>
+    	</div>
 
+    
     </div>
-    <!-- /#wrapper -->
-
-
+        
 
 </body>
 
