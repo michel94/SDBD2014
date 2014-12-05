@@ -20,9 +20,15 @@ public class MeetingBean {
 	
 	private Meetings meetings;
 	private Meeting meeting;
+	private int iduser, idmeeting;
 	
 	private DatabaseInterface database;
-	public MeetingBean(){
+
+	private Map<String, Object> session;
+	
+	public MeetingBean(int iduser){
+		this.iduser = iduser;
+
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
 			
@@ -32,10 +38,27 @@ public class MeetingBean {
 		}
 	}
 	
+	private Boolean checkString(String field){
+		return field != null && !field.equals("");
+	}
 	
-	public Meetings getAllMeetings(int userid){
+	public boolean getDisplayMeeting(){
+		return idmeeting != 0;
+	}
+	
+	public void setUserId(int iduser){
+		this.iduser = iduser;
+	}
+	
+	public void setMeetingId(int idmeeting){
+		this.idmeeting = idmeeting;
+		System.out.println(idmeeting);
+	}
+	
+	public Meetings getAllMeetings(){
 		try {
-			meetings = database.getMeetings(userid);
+			meetings = database.getMeetings(iduser);
+
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -43,9 +66,9 @@ public class MeetingBean {
 	}
 
 	
-	public Meeting getMeeting(int meetingid){
+	public Meeting getMeeting(){
 		try {
-			meeting = database.getMeeting(meetingid);
+			meeting = database.getMeeting(idmeeting);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -54,6 +77,8 @@ public class MeetingBean {
 	
 	public int createMeeting(String title, String description, String datetime, String location, User leader){
 		Meeting mt = new Meeting(-1,title,description,datetime,location,leader,1);
+		mt.users = new Users();
+		
 		try {
 			database.insertMeeting(mt);
 			return 0;
@@ -64,10 +89,24 @@ public class MeetingBean {
 		}
 	}
 	
-	public int editMeeting(int idmeeting, String title, String description, String datetime, String location, User leader){
-		Meeting mt = new Meeting(idmeeting,title,description,datetime,location,leader,1);
+	public int editMeeting(String title, String description, String datetime, String location){
+		Meeting meeting = getMeeting();
+		
+		if(!checkString(title))
+			title = meeting.title;
+		else if(!checkString(description))
+			description = meeting.description;
+		else if(!checkString(datetime))
+			datetime = meeting.datetime;
+		else if(!checkString(location))
+			location = meeting.location;
+		
+		System.out.println(idmeeting);
+		Meeting mt = new Meeting(idmeeting, title,description,datetime,location, meeting.leader, 1);
+		
 		try {
 			database.updateMeeting(mt);
+			
 			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
@@ -90,7 +129,7 @@ public class MeetingBean {
 	}
 	
 	
-	public Users getUsersFromMeeting(int idmeeting){
+	public Users getUsersFromMeeting(){
 		Users usrs=null;
 		Meeting mt=null;
 		try {
@@ -104,43 +143,30 @@ public class MeetingBean {
 	}
 	
 	
-	public int addUserToMeeting(int userid, int meetingid){
+	public int addUserToMeeting(int iduser, int idmeeting){
 		User usr = null;
 		Meeting mt = null;
 		
 		try {
-			usr = database.getUser(userid);
+			usr = database.getUser(iduser);
+			mt = database.getMeeting(idmeeting);
+			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -1;
 		}
 		
-		try {
-			mt = database.getMeeting(meetingid);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
-		
-		try {
-			database.addUserToMeeting(usr, mt, null);
-			return 0;
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
+		return 0;
 		
 	}
 	
-	public int addUsersToMeeting(ArrayList<String> userids, int meetingid){
+	public int addUsersToMeeting(ArrayList<String> userids, int idmeeting){
 		InviteUsers invus = new InviteUsers();
 		InviteUser invu = null;
 		
 		for(int i=0;i<userids.size();i++){
-			invu = new InviteUser(Integer.parseInt(userids.get(i)),meetingid);
+			invu = new InviteUser(Integer.parseInt(userids.get(i)),idmeeting);
 			invus.add(invu);
 		}
 		

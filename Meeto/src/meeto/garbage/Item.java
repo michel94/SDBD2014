@@ -17,7 +17,16 @@ public class Item implements Serializable{
 		this.iditem = 0;
 	}
 
-
+	public Item(int iditem, String title, String description, User user, int meeting){
+		this.title = title;
+		this.iditem = iditem;
+		this.description = description;
+		this.user = user;
+		this.meeting = meeting;
+		this.comments = new Comments();
+		this.keydecisions = new KeyDecisions();
+	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -28,7 +37,7 @@ public class Item implements Serializable{
 	}
 
 
-	public int getIditem() {
+	public int getId() {
 		return iditem;
 	}
 
@@ -47,20 +56,8 @@ public class Item implements Serializable{
 		return comments;
 	}
 
-
 	public KeyDecisions getKeydecisions() {
 		return keydecisions;
-	}
-
-
-	public Item(int iditem, String title, String description, User user, int meeting){
-		this.title = title;
-		this.iditem = iditem;
-		this.description = description;
-		this.user = user;
-		this.meeting = meeting;
-		this.comments = new Comments();
-		this.keydecisions = new KeyDecisions();
 	}
 	
 }

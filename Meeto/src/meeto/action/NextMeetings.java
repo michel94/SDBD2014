@@ -24,8 +24,6 @@ public class NextMeetings extends ActionSupport implements SessionAware {
 		if(!session.containsKey(username))
 			return LOGIN;
 		
-		meetingBean = new MeetingBean();
-		
 		return SUCCESS;
 		
 	}
@@ -43,8 +41,6 @@ public class NextMeetings extends ActionSupport implements SessionAware {
 		password = p;
 	}
 	
-	public MeetingBean getMeetingBean(){
-		return meetingBean;
-	}
+	
 	
 }

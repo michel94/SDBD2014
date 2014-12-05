@@ -12,6 +12,7 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
   <!-- devMode equals debug information and reload everything for every request -->
   <constant name="struts.devMode" value="true" />
   <constant name="struts.ui.theme" value="simple" />
+  <constant name="struts.action.excludePattern" value="/ws" />
 
   <package name="hey" extends="struts-default">
 	
@@ -19,13 +20,53 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
 	
 	<!-- 'index' action leads to the view provided by index.jsp -->
     <action name="index">
-      <result>/index.jsp</result>
+      <result>/login.jsp</result>
     </action>
 
 	<!-- 'login' action calls 'execute' in 'LoginAction' -->
     <action name="login" class="meeto.action.LoginAction" method="execute">
-      <result name="success">/main.jsp</result>
-      <result name="login">/index.jsp</result>
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="selectMeeting" class="meeto.action.MeetingAction" method="selectMeeting">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="createMeeting" class="meeto.action.MeetingAction" method="createMeeting">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="editMeeting" class="meeto.action.MeetingAction" method="editMeeting">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="menumeetings" class="meeto.action.MeetingAction" method="menumeetings">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="menucreatemeeting" class="meeto.action.MeetingAction" method="menucreatemeeting">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="createItem" class="meeto.action.MeetingAction" method="createItem">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="selectItem" class="meeto.action.ItemAction" method="selectItem">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="editItem" class="meeto.action.ItemAction" method="editItem">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
     </action>
     
     <!-- <action name="ajax" class="meeto.action.Ajax" method="test">
@@ -35,11 +76,7 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
 			</param>
 		</result>
 	</action> -->
-    
-	<!-- <action name="nextMeetings" class="meeto.action.NextMeetings" method="execute">
-		<result name="success">/main.jsp</result>
-		<result name="login">/login.jsp</result>
-	</action> -->
+
     
 	
   </package>

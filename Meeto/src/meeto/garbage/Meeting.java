@@ -28,6 +28,7 @@ public class Meeting implements Serializable{
 		this.idmeeting = idmeeting;
 		items = new ArrayList<Item>();
 		actions = new ArrayList<Action>();
+		users = new Users();
 	}
 
 	public Meeting(int idmeeting, String title, String description, String datetime, String location, User leader, int active){ //construtor do Bhovan :)

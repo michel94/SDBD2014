@@ -13,6 +13,7 @@ public class UserBean {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	
+	private int iduser;
 	private DatabaseInterface database;
 
 	
@@ -28,10 +29,10 @@ public class UserBean {
 		}
 	}
 	
-	public void setUserid(int userid) {
-		this.userid = userid;
+	public void setUserId(int iduser){
+		this.iduser = iduser;
 	}
-
+	
 	public User getUser(){
 		User usr=null;
 		try {
