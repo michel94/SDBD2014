@@ -17,10 +17,17 @@ public class ItemBean {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
+
 	private Map<String, Object> session;
-	private int idmeeting, iduser;
+	private int idmeeting, iduser, iditem;
 	
+	public void setIditem(int iditem) {
+		this.iditem = iditem;
+	}
+
+
 	public ItemBean(int iduser, int idmeeting){
+
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
 			
@@ -30,11 +37,29 @@ public class ItemBean {
 		}
 	}
 	
-	public Item getItem(int itemid){
+
+	public ArrayList<Item> getItemsFromMeeting(){
+		Meeting mt = null;
+		ArrayList<Item> items = null;
+		try {
+			mt = database.getMeeting(idmeeting);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return items;
+		}
+		
+		items = mt.items;
+		
+		return items;
+	}
+	
+	public Item getItem(){
+
 		Item it= null;
 		
 		try {
-			it= database.getItem(itemid);
+			it= database.getItem(iditem);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,75 +68,56 @@ public class ItemBean {
 		return it;
 	}
 	
-	public int createItem(String title, String description, int userid, int meetingid){
+	public int createItem(String title, String description, int iduser, int idmeeting){
 		
 		User user;
 		try {
-			user = database.getUser(userid);
-		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return -1;
-		}
-		
-		Item it = new Item(-1, title,  description,  user,  meetingid);
-		
-		try {
+			user = database.getUser(iduser);
+			Item it = new Item(-1, title,  description,  user,  idmeeting);
 			database.insertItem(it);
 			return 0;
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
-	}
-	
-	public int editItem(int itemid, String title, String description, int userid, int meetingid){
-		User user;
-		try {
-			user = database.getUser(userid);
+			
 		} catch (RemoteException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return -1;
 		}
 		
-		Item it = new Item(itemid,title,description,user,meetingid);
-		
-		try {
-			database.updateItem(it);
-			return 0;
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
+
 	}
 	
-	public int commentOnItem(String text, int userid, int itemid){
+	public int editItem(int iditem, String title, String description, int iduser, int idmeeting){
+		User user;
+		try {
+			user = database.getUser(iduser);
+			Item it = new Item(iditem,title,description,user,idmeeting);
+			database.updateItem(it);
+			return 0;
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
+		
+	}
+	
+	public int commentOnItem(String text, int iduser, int iditem){
 		Item item = null;
 		
-		item = getItem(itemid);
+		item = getItem();
 		
 		Comment cmt = new Comment(text, item);
 		
 		User usr;
 		try {
-			usr = database.getUser(userid);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
-		
-		try {
+			usr = database.getUser(iduser);
 			database.insertComment(cmt, usr);
 			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -1;
-		}
+		}	
 	
 	}
 	

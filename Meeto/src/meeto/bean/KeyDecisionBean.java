@@ -25,8 +25,8 @@ public class KeyDecisionBean {
 		}
 	}
 	
-	public int addKeyDecisionToItem(int itemid, String description){
-		KeyDecision kd = new KeyDecision(-1, description, 1, itemid);
+	public int addKeyDecisionToItem(int iditem, String description){
+		KeyDecision kd = new KeyDecision(-1, description, 1, iditem);
 		
 		try {
 			database.insertKeyDecision(kd);
@@ -38,8 +38,8 @@ public class KeyDecisionBean {
 		}
 	}
 	
-	public int editKeyDecision(int keydecisionid,String description, int item,int active){
-		KeyDecision kd= new KeyDecision(keydecisionid,description,item,active);
+	public int editKeyDecision(int idkeydecision,String description, int item,int active){
+		KeyDecision kd= new KeyDecision(idkeydecision,description,item,active);
 		
 		try {
 			database.updateKeyDecision(kd);
@@ -51,9 +51,9 @@ public class KeyDecisionBean {
 		}
 	}
 	
-	public int deleteKeyDecision(int keydecisionid){
+	public int deleteKeyDecision(int idkeydecision){
 		try {
-			database.deleteKeyDecision(keydecisionid);
+			database.deleteKeyDecision(idkeydecision);
 			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

@@ -14,7 +14,9 @@ public class UserBean {
 	private final int databasePort = 1200;
 	
 	private DatabaseInterface database;
-	private Map<String, Object> session;
+
+	
+	private int userid;
 	
 	public UserBean(){
 		try {
@@ -26,10 +28,14 @@ public class UserBean {
 		}
 	}
 	
-	public User getUser(int iduser){
+	public void setUserid(int userid) {
+		this.userid = userid;
+	}
+
+	public User getUser(){
 		User usr=null;
 		try {
-			usr=database.getUser(iduser);
+			usr=database.getUser(userid);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

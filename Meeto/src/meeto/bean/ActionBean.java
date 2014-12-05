@@ -15,7 +15,7 @@ public class ActionBean {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
-	private Map<String, Object> session;
+	private int iduser, idaction;
 	
 	public ActionBean(){
 		try {
@@ -27,7 +27,15 @@ public class ActionBean {
 		}
 	}
 	
-	public int insertAction(String description, String due_to, int userid, int meetingid){
+	public void setIduser(int iduser) {
+		this.iduser = iduser;
+	}
+
+	public void setIdaction(int idaction) {
+		this.idaction = idaction;
+	}
+
+	public int insertAction(String description, String due_to, int iduser, int meetingid){
 		Action act = new Action();
 		
 		act.description=description;
@@ -35,7 +43,7 @@ public class ActionBean {
 		
 		User usr;
 		try {
-			usr = database.getUser(userid);
+			usr = database.getUser(iduser);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,10 +63,10 @@ public class ActionBean {
 		
 	}
 
-	public int assignUserToAction(int userid, int actionid){
+	public int assignUserToAction(int iduser, int idaction){
 		User usr;
 		try {
-			usr = database.getUser(userid);
+			usr = database.getUser(iduser);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,7 +74,7 @@ public class ActionBean {
 		}
 		Action act;
 		try {
-			act = database.getAction(actionid);
+			act = database.getAction(idaction);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,15 +92,15 @@ public class ActionBean {
 		
 	}
 
-	public int updateAction(int actionid,String description, String due_to, int userid, int meetingid){
+	public int updateAction(int idaction,String description, String due_to, int iduser, int meetingid){
 		Action act = new Action();
-		act.idaction = actionid;
+		act.idaction = idaction;
 		act.description=description;
 		act.due_to=due_to;
 		
 		User usr;
 		try {
-			usr = database.getUser(userid);
+			usr = database.getUser(iduser);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,9 +120,9 @@ public class ActionBean {
 	}
 
 	
-	public int confirmAction(int actionid){
+	public int confirmAction(){
 		Action act = new Action();
-		act.idaction = actionid;
+		act.idaction = idaction;
 		try {
 			database.confirmAction(act);
 			return 0;
@@ -125,10 +133,10 @@ public class ActionBean {
 		}
 	}
 	
-	public Actions getUserActions(int userid){
+	public Actions getUserActions(){
 		Actions acts;
 		try {
-			acts=database.getUserActions(userid);
+			acts=database.getUserActions(iduser);
 			return acts;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

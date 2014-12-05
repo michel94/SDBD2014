@@ -23,10 +23,12 @@ public class MeetingBean {
 	private int iduser, idmeeting;
 	
 	private DatabaseInterface database;
+
 	private Map<String, Object> session;
 	
 	public MeetingBean(int iduser){
 		this.iduser = iduser;
+
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
 			
@@ -56,6 +58,7 @@ public class MeetingBean {
 	public Meetings getAllMeetings(){
 		try {
 			meetings = database.getMeetings(iduser);
+
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -125,9 +128,6 @@ public class MeetingBean {
 		}
 	}
 	
-	public void setSession(Map<String, Object> s){
-		session = s;
-	}
 	
 	public Users getUsersFromMeeting(){
 		Users usrs=null;

@@ -22,6 +22,7 @@ public class Meeting implements Serializable{
 		idmeeting = 0;
 	}
 
+
 	public Meeting(String title, int idmeeting){
 		this.title = title;
 		this.idmeeting = idmeeting;

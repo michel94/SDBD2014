@@ -13,9 +13,6 @@ public class ConnectionBean {
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
 
-	private Item item;
-	//selectors
-	private int selectMeeting=0, selectItem=0, selectAction=0;
 	
 	private Map<String, Object> session;
 	
