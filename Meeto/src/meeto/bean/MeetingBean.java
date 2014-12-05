@@ -214,12 +214,12 @@ public class MeetingBean {
 		
 	}
 	
-	public int addUsersToMeeting(ArrayList<String> userids, int idmeeting){
+	public int addUsersToMeeting(ArrayList<Integer> userids){
 		InviteUsers invus = new InviteUsers();
 		InviteUser invu = null;
 		
 		for(int i=0;i<userids.size();i++){
-			invu = new InviteUser(Integer.parseInt(userids.get(i)),idmeeting);
+			invu = new InviteUser(userids.get(i), idmeeting);
 			invus.add(invu);
 		}
 		

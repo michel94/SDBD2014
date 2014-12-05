@@ -74,6 +74,11 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="login">/login.jsp</result>
     </action>
     
+    <action name="inviteUsers" class="meeto.action.MeetingAction" method="inviteUsers">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
     <!-- <action name="ajax" class="meeto.action.Ajax" method="test">
 		<result type="json">
     		<param name="root">
