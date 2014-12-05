@@ -24,4 +24,14 @@ public class User implements Serializable{
 		username = "";
 		password = "";
 	}
+	public int getIduser() {
+		return iduser;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	
 }

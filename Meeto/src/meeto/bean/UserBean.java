@@ -15,7 +15,9 @@ public class UserBean {
 	
 	private int iduser;
 	private DatabaseInterface database;
-	private Map<String, Object> session;
+
+	
+	private int userid;
 	
 	public UserBean(){
 		try {
@@ -34,7 +36,7 @@ public class UserBean {
 	public User getUser(){
 		User usr=null;
 		try {
-			usr=database.getUser(iduser);
+			usr=database.getUser(userid);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
