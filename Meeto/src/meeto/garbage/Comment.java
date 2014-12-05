@@ -57,10 +57,6 @@ public class Comment implements Serializable{
 		return user.username;
 	}
 	
-	public String getText(){
-		return text;
-	}
-	
 	public String getDate(){
 		return datetime;
 	}
