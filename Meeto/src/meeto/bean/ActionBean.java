@@ -35,34 +35,6 @@ public class ActionBean {
 		this.idaction = idaction;
 	}
 
-	public int insertAction(String description, String due_to, int iduser, int meetingid){
-		Action act = new Action();
-		
-		act.description=description;
-		act.due_to=due_to;
-		
-		User usr;
-		try {
-			usr = database.getUser(iduser);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
-		act.assigned_user= usr;
-		act.meeting= meetingid;
-		
-		try {
-			database.insertAction(act);
-			return 0;
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
-		
-	}
-
 	public int assignUserToAction(int iduser, int idaction){
 		User usr;
 		try {

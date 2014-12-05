@@ -65,8 +65,7 @@ public class Meeting implements Serializable{
 		
 		return items;
 	}
-	public ArrayList<Action> getAction(){
-		
+	public ArrayList<Action> getActions(){
 		return actions;
 	}
 	

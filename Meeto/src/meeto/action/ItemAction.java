@@ -46,7 +46,8 @@ public class ItemAction extends ActionSupport implements SessionAware {
 		System.out.println(iditem);
 		int iduser = (int) session.get("iduser");
 		itemBean = new ItemBean(iduser, iditem);
-		
+		userBean = new UserBean();
+		userBean.setUserId((int)session.get("iduser"));
 		
 		itemBean.editItem(title, description, iduser);
 		view = "item";

@@ -45,29 +45,6 @@ public class ItemBean {
 		return it;
 	}
 	
-	public int createItem(String title, String description, int userid){
-		
-		User user;
-		try {
-			user = database.getUser(userid);
-		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return -1;
-		}
-		
-		Item it = new Item(-1, title,  description,  user, userid);
-		
-		try {
-			database.insertItem(it);
-			return 0;
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
-	}
-	
 	public int editItem(String title, String description, int userid){
 		User user;
 		
@@ -79,7 +56,7 @@ public class ItemBean {
 			return -1;
 		}
 		
-		Item it = new Item(iditem,title,description,user, iditem);
+		Item it = new Item(iditem,title,description,user, getItem().meeting);
 		
 		try {
 			database.updateItem(it);

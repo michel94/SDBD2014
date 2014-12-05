@@ -5,11 +5,12 @@ public class Action implements Serializable{
 
 	public String due_to, description, created_datetime;
 	public int done,idaction, active; // 1-done, 0-not done
-	public String getDue_to() {
+	
+	public String getDueTo() {
 		return due_to;
 	}
 
-	public void setDue_to(String due_to) {
+	public void setDueTo(String due_to) {
 		this.due_to = due_to;
 	}
 
@@ -37,11 +38,11 @@ public class Action implements Serializable{
 		this.done = done;
 	}
 
-	public int getIdaction() {
+	public int getId() {
 		return idaction;
 	}
 
-	public void setIdaction(int idaction) {
+	public void setId(int idaction) {
 		this.idaction = idaction;
 	}
 

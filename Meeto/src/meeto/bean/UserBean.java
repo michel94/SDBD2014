@@ -15,9 +15,6 @@ public class UserBean {
 	
 	private int iduser;
 	private DatabaseInterface database;
-
-	
-	private int userid;
 	
 	public UserBean(){
 		try {
@@ -36,7 +33,7 @@ public class UserBean {
 	public User getUser(){
 		User usr=null;
 		try {
-			usr=database.getUser(userid);
+			usr=database.getUser(iduser);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

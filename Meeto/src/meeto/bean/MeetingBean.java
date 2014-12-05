@@ -6,9 +6,11 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import meeto.garbage.Action;
 import meeto.garbage.DatabaseInterface;
 import meeto.garbage.InviteUser;
 import meeto.garbage.InviteUsers;
+import meeto.garbage.Item;
 import meeto.garbage.Meeting;
 import meeto.garbage.Meetings;
 import meeto.garbage.User;
@@ -89,6 +91,34 @@ public class MeetingBean {
 		}
 	}
 	
+	public int createAction(String description, String due_to){
+		Action act = new Action();
+		
+		act.description=description;
+		act.due_to=due_to;
+		
+		User usr;
+		try {
+			usr = database.getUser(iduser);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+		act.assigned_user = usr;
+		act.meeting = idmeeting;
+		
+		try {
+			database.insertAction(act);
+			return 0;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+		
+	}
+	
 	public int editMeeting(String title, String description, String datetime, String location){
 		Meeting meeting = getMeeting();
 		
@@ -107,6 +137,29 @@ public class MeetingBean {
 		try {
 			database.updateMeeting(mt);
 			
+			return 0;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
+	public int createItem(String title, String description){
+		
+		User user;
+		try {
+			user = database.getUser(iduser);
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
+		
+		Item it = new Item(-1, title,  description,  user, idmeeting);
+		
+		try {
+			database.insertItem(it);
 			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
