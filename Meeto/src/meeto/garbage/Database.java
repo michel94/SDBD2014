@@ -79,7 +79,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		Meeting meeting = null;
 		User user = null;
 		try
-		{
+{
 			ResultSet rs = executeQuery("SELECT * FROM meeting WHERE idmeeting="+idmeeting+" AND active=1;");
 			if(rs.next())
 			{

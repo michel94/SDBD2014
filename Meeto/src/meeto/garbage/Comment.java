@@ -24,4 +24,16 @@ public class Comment implements Serializable{
 		this.datetime = date;
 		this.item = item;
 	}
+	
+	public String getUsername(){
+		return user.username;
+	}
+	
+	public String getText(){
+		return text;
+	}
+	
+	public String getDate(){
+		return datetime;
+	}
 }

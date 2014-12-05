@@ -1,19 +1,15 @@
 package meeto.action;
 
+import com.opensymphony.xwork2.ActionSupport;
+import org.apache.struts2.interceptor.SessionAware;
+
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.opensymphony.xwork2.ActionSupport;
-
-import org.apache.struts2.interceptor.SessionAware;
-
 import meeto.bean.ConnectionBean;
 import meeto.bean.ItemBean;
 import meeto.bean.MeetingBean;
-import meeto.garbage.Authentication;
-import meeto.garbage.Item;
-import meeto.garbage.Meeting;
 import meeto.garbage.User;
 
 public class MeetingAction extends ActionSupport implements SessionAware {
@@ -53,7 +49,6 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		if( !(checkString(title) && checkString(description) && checkString(datetime) && checkString(location)) )
 			return SUCCESS;
 		
-		System.out.println("Create Meeting");
 		
 		meetingBean = new MeetingBean((int)session.get("iduser"));
 		
@@ -118,11 +113,9 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		meetingBean.setMeetingId(idmeeting);
 		itemBean = new ItemBean(iduser, idmeeting);
 		System.out.println(iduser + " " + idmeeting);
-		itemBean.createItem(title, description, iduser, idmeeting);
-		
+		itemBean.createItem(title, description, iduser);
 		
 		view = "meeting";
-		
 		return SUCCESS;
 	}
 	
