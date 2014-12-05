@@ -9,6 +9,7 @@ import java.util.Map;
 
 import meeto.garbage.DatabaseInterface;
 import meeto.garbage.Group;
+import meeto.garbage.Groups;
 import meeto.garbage.InviteUser;
 import meeto.garbage.InviteUsers;
 import meeto.garbage.RemoveUserFromGroup;
@@ -18,8 +19,12 @@ public class GroupBean {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
-	private Map<String, Object> session;
+	int iduser;
 	
+	public void setIduser(int iduser) {
+		this.iduser = iduser;
+	}
+
 	public GroupBean(){
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
@@ -44,12 +49,12 @@ public class GroupBean {
 		}
 	}
 	
-	public int addUsersToGroup(ArrayList<String> userids, int groupid){
+	public int addUsersToGroup(ArrayList<String> idusers, int idgroup){
 		InviteUsers invus = new InviteUsers();
 		InviteUser invu = null;
 		
-		for(int i=0;i<userids.size();i++){
-			invu = new InviteUser(Integer.parseInt(userids.get(i)),groupid);
+		for(int i=0;i<idusers.size();i++){
+			invu = new InviteUser(Integer.parseInt(idusers.get(i)),idgroup);
 			invus.add(invu);
 		}
 		
@@ -64,13 +69,13 @@ public class GroupBean {
 		
 	}
 	
-	public int removeUsersFromGroup(ArrayList<String> userids, int groupid){
+	public int removeUsersFromGroup(ArrayList<String> idusers, int idgroup){
 		RemoveUserFromGroup ru= new RemoveUserFromGroup();
 		
-		ru.idgroup = groupid;
+		ru.idgroup = idgroup;
 		
-		for(int i=0;i<userids.size();i++){
-			ru.iduser = Integer.parseInt(userids.get(i));
+		for(int i=0;i<idusers.size();i++){
+			ru.iduser = Integer.parseInt(idusers.get(i));
 			try {
 				database.removeUserFromGroup(ru);
 				return 1;
@@ -81,6 +86,19 @@ public class GroupBean {
 			}
 		}
 		return 1;
+	}
+	
+	public Groups getGroupsFromUser(){
+		Groups grps = null;
+		try {
+			grps = database.getGroupsOfUser(iduser);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return grps;
+		
 	}
 	
 	

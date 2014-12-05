@@ -42,6 +42,7 @@ public interface DatabaseInterface extends Remote{
 	public Actions getUserActions(int iduser) throws RemoteException;
 	public int addGroupToMeeting(int idmeeting, int idgroup) throws RemoteException;
 	public int createGroup(Group group) throws RemoteException;
+	public int confirmAction(Action a) throws RemoteException;
 	
 
 }

@@ -22,11 +22,13 @@ public class Meeting implements Serializable{
 		idmeeting = 0;
 	}
 
+
 	public Meeting(String title, int idmeeting){
 		this.title = title;
 		this.idmeeting = idmeeting;
 		items = new ArrayList<Item>();
 		actions = new ArrayList<Action>();
+		users = new Users();
 	}
 
 	public Meeting(int idmeeting, String title, String description, String datetime, String location, User leader, int active){ //construtor do Bhovan :)
@@ -63,8 +65,7 @@ public class Meeting implements Serializable{
 		
 		return items;
 	}
-	public ArrayList<Action> getAction(){
-		
+	public ArrayList<Action> getActions(){
 		return actions;
 	}
 	

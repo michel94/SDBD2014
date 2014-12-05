@@ -27,4 +27,37 @@ public class Item implements Serializable{
 		this.keydecisions = new KeyDecisions();
 	}
 	
+	public String getTitle() {
+		return title;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public int getId() {
+		return iditem;
+	}
+
+
+	public int getMeeting() {
+		return meeting;
+	}
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+	public Comments getComments() {
+		return comments;
+	}
+
+	public KeyDecisions getKeydecisions() {
+		return keydecisions;
+	}
+	
 }

@@ -7,6 +7,7 @@ import java.rmi.RemoteException;
 import java.util.Map;
 
 import meeto.garbage.Action;
+import meeto.garbage.Actions;
 import meeto.garbage.DatabaseInterface;
 import meeto.garbage.User;
 
@@ -14,7 +15,7 @@ public class ActionBean {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
-	private Map<String, Object> session;
+	private int iduser, idaction;
 	
 	public ActionBean(){
 		try {
@@ -26,15 +27,52 @@ public class ActionBean {
 		}
 	}
 	
-	public int insertAction(String description, String due_to, int userid, int meetingid){
-		Action act = new Action();
+	public void setIduser(int iduser) {
+		this.iduser = iduser;
+	}
+
+	public void setIdaction(int idaction) {
+		this.idaction = idaction;
+	}
+
+	public int assignUserToAction(int iduser, int idaction){
+		User usr;
+		try {
+			usr = database.getUser(iduser);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+		Action act;
+		try {
+			act = database.getAction(idaction);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+		act.assigned_user=usr;
+		try {
+			database.assignUserToAction(act);
+			return 1;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
 		
+	}
+
+	public int updateAction(int idaction,String description, String due_to, int iduser, int meetingid){
+		Action act = new Action();
+		act.idaction = idaction;
 		act.description=description;
 		act.due_to=due_to;
 		
 		User usr;
 		try {
-			usr = database.getUser(userid);
+			usr = database.getUser(iduser);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,32 +82,38 @@ public class ActionBean {
 		act.meeting= meetingid;
 		
 		try {
-			database.insertAction(act);
+			database.updateAction(act);
 			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -1;
 		}
-		
 	}
 
-	public int assignUserToAction(Action act){
-	}
-
-	public int updateAction(Action act){
-		
-	}
-
-	public int deleteAction(int idaction){
-		
-	}
 	
-	public int ConfirmAction(int idaction){
-		
+	public int confirmAction(){
+		Action act = new Action();
+		act.idaction = idaction;
+		try {
+			database.confirmAction(act);
+			return 0;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
 	}
 	
 	public Actions getUserActions(){
-		
+		Actions acts;
+		try {
+			acts=database.getUserActions(iduser);
+			return acts;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

@@ -1,3 +1,5 @@
-*.java~
+*~
 *.class
 *.properties
+
+dir_to_ignore/.settings

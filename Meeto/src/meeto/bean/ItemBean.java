@@ -18,10 +18,13 @@ public class ItemBean {
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
 	private Map<String, Object> session;
+	private int iditem, iduser;
 	
-	public ItemBean(){
+	public ItemBean(int iduser, int iditem){
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
+			this.iditem = iditem;
+			this.iduser = iduser;
 			
 		} catch (NotBoundException|MalformedURLException|RemoteException e) {
 			System.out.println("Failed to connect to the rmi server");
@@ -29,27 +32,11 @@ public class ItemBean {
 		}
 	}
 	
-	public ArrayList<Item> getItemsFromMeeting(int idmeeting){
-		Meeting mt = null;
-		ArrayList<Item> items = null;
-		try {
-			mt = database.getMeeting(idmeeting);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return items;
-		}
-		
-		items = mt.items;
-		
-		return items;
-	}
-	
-	public Item getItem(int itemid){
+	public Item getItem(){
 		Item it= null;
 		
 		try {
-			it= database.getItem(itemid);
+			it = database.getItem(iditem);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -58,9 +45,9 @@ public class ItemBean {
 		return it;
 	}
 	
-	public int createItem(String title, String description, int userid, int meetingid){
-		
+	public int editItem(String title, String description, int userid){
 		User user;
+		
 		try {
 			user = database.getUser(userid);
 		} catch (RemoteException e1) {
@@ -69,29 +56,7 @@ public class ItemBean {
 			return -1;
 		}
 		
-		Item it = new Item(-1, title,  description,  user,  meetingid);
-		
-		try {
-			database.insertItem(it);
-			return 0;
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
-	}
-	
-	public int editItem(int itemid, String title, String description, int userid, int meetingid){
-		User user;
-		try {
-			user = database.getUser(userid);
-		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return -1;
-		}
-		
-		Item it = new Item(itemid,title,description,user,meetingid);
+		Item it = new Item(iditem,title,description,user, getItem().meeting);
 		
 		try {
 			database.updateItem(it);
@@ -103,10 +68,9 @@ public class ItemBean {
 		}
 	}
 	
-	public int commentOnItem(String text, int userid, int itemid){
+	public int commentOnItem(String text, int userid){
 		Item item = null;
-		
-		item = getItem(itemid);
+		item = getItem();
 		
 		Comment cmt = new Comment(text, item);
 		

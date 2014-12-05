@@ -15,4 +15,11 @@ public class Request implements Serializable{
 		this.type = type;
 		this.id = id;	
 	}
+	public String getType() {
+		return type;
+	}
+	public int getId() {
+		return id;
+	}
+	
 }
