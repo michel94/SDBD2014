@@ -86,5 +86,16 @@
 		</form>
 	</div>
 	
+	<div>
+	<h3>Add group to this meeting</h3>
+		<form action="addGroupToMeeting?IdMeeting=${meetingBean.meeting.id}" method="post">
+			<select name="idgroup" single>
+				<c:forEach items="${groupBean.groupsFromUser}" var="group">
+					<option value="${group.idgroup}">${group.name}</option>
+				</c:forEach>
+			</select>
+			<input type="submit" value="Invite group"><br>
+		</form>
+	</div>
 	
  </div>

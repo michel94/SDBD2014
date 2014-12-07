@@ -21,11 +21,10 @@ public class GroupBean {
 	private DatabaseInterface database;
 	int iduser;
 	
-	public void setIduser(int iduser) {
-		this.iduser = iduser;
-	}
 
-	public GroupBean(){
+	public GroupBean(int idUser){
+		
+		this.iduser=idUser;
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
 			
@@ -90,6 +89,7 @@ public class GroupBean {
 	
 	public Groups getGroupsFromUser(){
 		Groups grps = null;
+		System.out.println("Im here and you?");
 		try {
 			grps = database.getGroupsOfUser(iduser);
 		} catch (RemoteException e) {

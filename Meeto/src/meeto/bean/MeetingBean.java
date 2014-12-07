@@ -245,6 +245,7 @@ public class MeetingBean {
 		
 	}
 	
+	
 	public int addGroupToMeeting(int idgroup, int idmeeting){
 		try {
 			database.addGroupToMeeting(idmeeting, idgroup);

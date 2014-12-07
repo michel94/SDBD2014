@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import meeto.bean.ConnectionBean;
+import meeto.bean.GroupBean;
 import meeto.bean.ItemBean;
 import meeto.bean.MeetingBean;
 import meeto.bean.UserBean;
@@ -20,7 +21,7 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 	private ConnectionBean connectionBean;
 	private MeetingBean meetingBean;
 	private UserBean userBean;
-	private int iduser, idmeeting=0;
+	private int iduser, idmeeting=0, idgroup;
 	private String title, description, datetime, location;
 	private int assigned_user;
 	private User leader;
@@ -28,6 +29,7 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 	private int done;
 	private String dueto;
 	private ArrayList<String> userList;
+	private GroupBean groupBean;
 	
 	private Boolean checkString(String field){
 		return field != null && !field.equals("");
@@ -40,7 +42,11 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 	public void setUserList(ArrayList<String> userList) {
 		this.userList = userList;
 	}
-
+	
+	public void setIdgroup(int idgroup) {
+		this.idgroup = idgroup;
+	}
+	
 	public String selectMeeting() {
 		
 		if(!session.containsKey("iduser"))
@@ -49,7 +55,9 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		meetingBean = new MeetingBean((int)session.get("iduser"));
 		meetingBean.setMeetingId(idmeeting);
 		userBean = new UserBean();
+		groupBean = new GroupBean((int)session.get("iduser"));
 		
+		session.put("groupBean", groupBean);
 		view = "meeting";
 		
 		return SUCCESS;
@@ -179,6 +187,22 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		
 		System.out.println(iduser + " " + idmeeting);
 		meetingBean.addUsersToMeeting(userList, idmeeting);
+		selectMeeting();
+		view = "meeting";
+		return SUCCESS;
+	}
+	
+	public String addGroupToMeeting(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		iduser = (int) session.get("iduser");
+		
+		meetingBean = new MeetingBean(iduser);
+		meetingBean.setMeetingId(idmeeting);
+		
+		System.out.println(iduser + " " + idmeeting);
+		meetingBean.addGroupToMeeting(idgroup, idmeeting);
 		selectMeeting();
 		view = "meeting";
 		return SUCCESS;
