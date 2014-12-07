@@ -10,6 +10,7 @@ import java.util.Map;
 import meeto.garbage.Comment;
 import meeto.garbage.DatabaseInterface;
 import meeto.garbage.Item;
+import meeto.garbage.KeyDecisions;
 import meeto.garbage.Meeting;
 import meeto.garbage.User;
 
@@ -19,6 +20,7 @@ public class ItemBean {
 	private DatabaseInterface database;
 	private Map<String, Object> session;
 	private int iditem, iduser;
+	
 	
 	public ItemBean(int iduser, int iditem){
 		try {
@@ -50,22 +52,14 @@ public class ItemBean {
 		
 		try {
 			user = database.getUser(userid);
+			Item it = new Item(iditem,title,description,user, getItem().meeting);
+			database.updateItem(it);
+			return 0;
 		} catch (RemoteException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return -1;
-		}
-		
-		Item it = new Item(iditem,title,description,user, getItem().meeting);
-		
-		try {
-			database.updateItem(it);
-			return 0;
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
+		}		
 	}
 	
 	public int commentOnItem(String text, int userid){
@@ -93,5 +87,6 @@ public class ItemBean {
 		}
 	
 	}
+	
 	
 }

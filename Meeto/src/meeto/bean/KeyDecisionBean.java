@@ -14,8 +14,10 @@ public class KeyDecisionBean {
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
 	private Map<String, Object> session;
+	private int idkeydecision;
 	
-	public KeyDecisionBean(){
+	public KeyDecisionBean(int idkeydecision){
+		this.idkeydecision = idkeydecision;
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
 			
@@ -38,8 +40,8 @@ public class KeyDecisionBean {
 		}
 	}
 	
-	public int editKeyDecision(int idkeydecision,String description, int item,int active){
-		KeyDecision kd= new KeyDecision(idkeydecision,description,item,active);
+	public int editKeyDecision(int idkeydecision,String description, int item){
+		KeyDecision kd= new KeyDecision(idkeydecision,description,item,1);
 		
 		try {
 			database.updateKeyDecision(kd);
