@@ -46,7 +46,7 @@
 		</c:forEach>
 		
 		<h3> New Action </h3>
-		<form action="createAction?idMeeting=${meetingBean.meeting.id}" method="post">
+		<form action="createAction?IdMeeting=${meetingBean.meeting.id}" method="post">
 			<input name="description" type="text" placeholder="Description"/>
 			<select name="assigneduser" single>
 				<c:forEach items="${userBean.allUsers}" var="user">
@@ -58,7 +58,12 @@
 			<input type="submit" value="Add Action">
 		</form>
 	</div>
-	
+	<br>
+	<div>
+		<form action="leaveMeeting?IdMeeting=${meetingBean.meeting.id}" method="post">
+			<input type="submit" value="Leave meeting">
+		</form>
+	</div>
 	
 	
  </div>

@@ -181,6 +181,17 @@ public class MeetingBean {
 		}
 	}
 	
+	public int leaveMeeting(int idmeeting,int iduser){
+		try {
+			database.leaveMeeting(idmeeting, iduser);
+			return 0;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
 	
 	public Users getUsersFromMeeting(){
 		Users usrs=null;

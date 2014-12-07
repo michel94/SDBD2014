@@ -143,6 +143,22 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		return SUCCESS;
 	}
 	
+	public String leaveMeeting(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		iduser = (int) session.get("iduser");
+		
+		meetingBean = new MeetingBean(iduser);
+		meetingBean.setMeetingId(idmeeting);
+		
+		System.out.println(iduser + " " + idmeeting);
+		meetingBean.leaveMeeting(idmeeting,iduser);
+	
+		view = "meetings";
+		return SUCCESS;
+	}
+	
 	public void setIdMeeting(int idmeeting){
 		System.out.println(idmeeting);
 		this.idmeeting = idmeeting;
