@@ -17,7 +17,9 @@ public class ActionBean {
 	private DatabaseInterface database;
 	private int iduser, idaction;
 	
-	public ActionBean(){
+	public ActionBean(int iduser, int idaction){
+		this.iduser=iduser;
+		this.idaction=idaction;
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
 			
