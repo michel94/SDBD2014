@@ -8,6 +8,7 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import meeto.bean.ConnectionBean;
 import meeto.bean.MeetingBean;
+import meeto.bean.UserBean;
 import meeto.garbage.Authentication;
 
 public class LoginAction extends ActionSupport implements SessionAware {
@@ -54,6 +55,13 @@ public class LoginAction extends ActionSupport implements SessionAware {
 			return LOGIN;
 	}
 	
+	public String register(){
+		UserBean userBean = new UserBean();
+		if(userBean.registerUser(username, password)==-1){
+			return LOGIN;
+		}else return execute();
+		
+	}
 	@Override
 	public void setSession(Map<String, Object> session) {
 		// TODO Auto-generated method stub

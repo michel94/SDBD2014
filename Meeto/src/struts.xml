@@ -29,6 +29,11 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="login">/login.jsp</result>
     </action>
     
+    <action name="register" class="meeto.action.LoginAction" method="register">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
     <action name="selectMeeting" class="meeto.action.MeetingAction" method="selectMeeting">
       <result name="success">/index.jsp</result>
       <result name="login">/login.jsp</result>

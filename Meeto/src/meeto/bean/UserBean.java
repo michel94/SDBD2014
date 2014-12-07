@@ -58,6 +58,7 @@ public class UserBean {
 	
 	public int registerUser(String username, String password){
 		User usr=new User(username,password);
+		System.out.println("registing user");
 		
 		try {
 			database.createAccount(usr);
