@@ -17,6 +17,13 @@
 	</form>
 	
 	<div>
+	<h3>Users in this meeting:</h3>
+		<c:forEach items="${meetingBean.usersFromMeeting}" var="user">
+			${user.username}<br>
+		</c:forEach>
+	</div>
+	
+	<div>
 		<h3> Items </h3>
 		
 		<c:forEach items="${meetingBean.meeting.items}" var="it">
@@ -35,7 +42,7 @@
 	<div>
 		<h3>Actions</h3>
 		<c:forEach items="${meetingBean.meeting.actions}" var= "act">
-			<a href="selectAction?idAction=${act.id}">${act.description}</a> Assigned user: ${act.assigned_user.username} Due-date: ${act.dueTo} Status: 
+			<a href="selectAction?idAction=${act.id}">${act.description}</a> <!--  Assigned user: ${act.assigned_user.username} Due-date: ${act.dueTo} -->Status: 
 			<c:if test="${act.done eq '1'}">
 				Done
 			</c:if>
@@ -59,9 +66,23 @@
 		</form>
 	</div>
 	<br>
+	
 	<div>
 		<form action="leaveMeeting?IdMeeting=${meetingBean.meeting.id}" method="post">
 			<input type="submit" value="Leave meeting">
+		</form>
+	</div>
+	
+	<div>
+	<h3>Add users to this meeting</h3>
+		<form action="addUsersToMeeting?IdMeeting=${meetingBean.meeting.id}" method="post">
+			<select name="UserList" multiple>
+				<c:forEach items="${userBean.allUsers}" var="user">
+					<option value="${user.id}">${user.username}</option>
+				</c:forEach>
+			</select>
+			<input type="submit" value="Invite Users"><br>
+			Ctrl+click to select multiple users<br>
 		</form>
 	</div>
 	

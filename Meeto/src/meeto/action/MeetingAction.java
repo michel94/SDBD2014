@@ -27,11 +27,20 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 	private String view;
 	private int done;
 	private String dueto;
+	private ArrayList<String> userList;
 	
 	private Boolean checkString(String field){
 		return field != null && !field.equals("");
 	}
 	
+	public ArrayList<String> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(ArrayList<String> userList) {
+		this.userList = userList;
+	}
+
 	public String selectMeeting() {
 		
 		if(!session.containsKey("iduser"))
@@ -159,6 +168,21 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		return SUCCESS;
 	}
 	
+	public String addUsersToMeeting(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		iduser = (int) session.get("iduser");
+		
+		meetingBean = new MeetingBean(iduser);
+		meetingBean.setMeetingId(idmeeting);
+		
+		System.out.println(iduser + " " + idmeeting);
+		meetingBean.addUsersToMeeting(userList, idmeeting);
+		selectMeeting();
+		view = "meeting";
+		return SUCCESS;
+	}
 	public void setIdMeeting(int idmeeting){
 		System.out.println(idmeeting);
 		this.idmeeting = idmeeting;
