@@ -119,6 +119,7 @@ public class MeetingBean {
 		Meeting mt = new Meeting(-1,title,description,datetime,location,leader,1);
 		mt.users = new Users();
 		
+		createGoogleMeeting(mt);
 		try {
 			database.insertMeeting(mt);
 			return 0;
@@ -300,6 +301,10 @@ public class MeetingBean {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String formattedDate = df.format(d1);
 		return formattedDate;
+	}
+	
+	public void createGoogleMeeting(Meeting m){
+		
 	}
 	
 }

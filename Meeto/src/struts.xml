@@ -169,6 +169,14 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="login">/login.jsp</result>
     </action>
     
+    <action name="googleAction" class="meeto.action.GoogleAction" method="connect">
+    	<result name="success">/login.jsp</result>
+    </action>
+    
+    <action name="googlecallback" class="meeto.action.GoogleCallback" method="receive">
+    	<result name="success">/login.jsp</result>
+    </action>
+    
     <!-- <action name="ajax" class="meeto.action.Ajax" method="test">
 		<result type="json">
     		<param name="root">
