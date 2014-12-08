@@ -160,6 +160,15 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="login">/login.jsp</result>
     </action>
     
+     <action name="actionsnotdone" class="meeto.action.TodoAction" method="actionsnotdone">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="actionsdone" class="meeto.action.TodoAction" method="actionsdone">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
     
     
     

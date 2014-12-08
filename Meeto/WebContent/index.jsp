@@ -154,10 +154,10 @@
                             <a href="#"><i class="fa fa-tasks fa-fw"></i> ToDo's<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#"><i class="fa fa-square fa-fw"></i> Not done yet</a>
+                                    <a href="actionsnotdone"><i class="fa fa-square fa-fw"></i> Not done yet</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-check-square fa-fw"></i> Done</a>
+                                    <a href="actionsdone"><i class="fa fa-check-square fa-fw"></i> Done</a>
                                 </li>
                             </ul>
                         </li>
