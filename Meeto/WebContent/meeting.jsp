@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div id="meeting">
-	<h3> Current Meeting:</h3>
+	<h3>Meeting: ${meetingBean.meeting.title}</h3>
 	
 	<form action="editMeeting?idMeeting=${meetingBean.meeting.id}" method="post">
 		Title:

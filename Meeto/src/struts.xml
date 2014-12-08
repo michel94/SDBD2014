@@ -129,6 +129,40 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
 	    <result name="success">/index.jsp</result>
 	    <result name="login">/login.jsp</result>
     </action>
+    
+    <action name="groups" class="meeto.action.GroupAction" method="menugroups">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="menucreategroup" class="meeto.action.GroupAction" method="menucreategroup">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+   	 </action>
+    
+    <action name="createGroup" class="meeto.action.GroupAction" method="createGroup">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="selectGroup" class="meeto.action.GroupAction" method="selectGroup">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="addUsersToGroup" class="meeto.action.GroupAction" method="addUsersToGroup">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="removeUsersFromGroup" class="meeto.action.GroupAction" method="removeUsersFromGroup">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    
+    
+    
     <!-- <action name="ajax" class="meeto.action.Ajax" method="test">
 		<result type="json">
     		<param name="root">

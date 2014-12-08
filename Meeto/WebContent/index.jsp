@@ -165,10 +165,10 @@
                             <a href="#"><i class="fa fa-group fa-fw"></i> Groups<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a class="active" href="#"><i class="fa fa-bullseye fa-fw"></i> My Groups</a>
+                                    <a class="active" href="groups"><i class="fa fa-bullseye fa-fw"></i> My Groups</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-plus fa-fw"></i> Create Group</a>
+                                    <a href="menucreategroup"><i class="fa fa-plus fa-fw"></i> Create Group</a>
                                 </li>
                             </ul>
                         </li>

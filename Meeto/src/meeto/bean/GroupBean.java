@@ -19,12 +19,12 @@ public class GroupBean {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
-	int iduser;
-	
+	private int iduser,idgroup;
 
-	public GroupBean(int idUser){
+	public GroupBean(int idUser,int idgroup){
 		
 		this.iduser=idUser;
+		this.idgroup=idgroup;
 		try {
 			database = (DatabaseInterface) Naming.lookup("//" + databaseIP + ":" + databasePort + "/database");
 			
@@ -34,11 +34,14 @@ public class GroupBean {
 		}
 	}
 	
-	public int createGroup(String groupname){
+	public int createGroup(String groupname, ArrayList<String> userList){
 		 Group grp= new Group();
 		 grp.name = groupname;
-		 
+		  
 		 try {
+			for(int i=0;i<userList.size();i++){
+				grp.users.add(database.getUser(Integer.parseInt(userList.get(i))));
+			}
 			database.createGroup(grp);
 			return 0;
 		} catch (RemoteException e) {
@@ -77,7 +80,6 @@ public class GroupBean {
 			ru.iduser = Integer.parseInt(idusers.get(i));
 			try {
 				database.removeUserFromGroup(ru);
-				return 1;
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -89,7 +91,7 @@ public class GroupBean {
 	
 	public Groups getGroupsFromUser(){
 		Groups grps = null;
-		System.out.println("Im here and you?");
+		
 		try {
 			grps = database.getGroupsOfUser(iduser);
 		} catch (RemoteException e) {
@@ -98,6 +100,20 @@ public class GroupBean {
 		}
 		
 		return grps;
+		
+	}
+	
+	public Group getGroup(){
+		Group grp = null;
+		
+		try {
+			grp = database.getGroup(idgroup);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return grp;
 		
 	}
 	

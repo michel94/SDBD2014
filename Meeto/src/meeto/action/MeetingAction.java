@@ -11,7 +11,6 @@ import java.util.Map;
 import meeto.bean.ActionBean;
 import meeto.bean.ConnectionBean;
 import meeto.bean.GroupBean;
-import meeto.bean.ItemBean;
 import meeto.bean.MeetingBean;
 import meeto.bean.UserBean;
 import meeto.garbage.User;
@@ -62,9 +61,6 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		meetingBean = new MeetingBean((int)session.get("iduser"));
 		meetingBean.setMeetingId(idmeeting);
 		userBean = new UserBean();
-		groupBean = new GroupBean((int)session.get("iduser"));
-		
-		session.put("groupBean", groupBean);
 		view = "meeting";
 		
 		return SUCCESS;
