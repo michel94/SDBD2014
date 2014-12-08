@@ -3,7 +3,9 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import meeto.garbage.Action;
@@ -20,7 +22,7 @@ public class MeetingBean {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	
-	private Meetings meetings;
+	private Meetings meetings,previousmeetings,nextmeetings;
 	private Meeting meeting;
 	private int iduser, idmeeting;
 	
@@ -66,8 +68,44 @@ public class MeetingBean {
 		}
 		return meetings;
 	}
-
 	
+	public Meetings getPreviousMeetings(){
+		previousmeetings=new Meetings();
+		try {
+			meetings = database.getMeetings(iduser);
+
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+		String currentDate = getCurrentDate();
+		for(int i=0;i<meetings.size();i++){
+			if(currentDate.compareTo(meetings.get(i).datetime)>0){
+				previousmeetings.add(meetings.get(i));
+			}
+		}
+		
+		return previousmeetings;
+	}
+	
+	public Meetings getNextMeetings(){
+		nextmeetings=new Meetings();
+		try {
+			meetings = database.getMeetings(iduser);
+
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+		String currentDate = getCurrentDate();
+		for(int i=0;i<meetings.size();i++){
+			if(currentDate.compareTo(meetings.get(i).datetime)<=0){
+				nextmeetings.add(meetings.get(i));
+			}
+		}
+		
+		return nextmeetings;
+	}
 	public Meeting getMeeting(){
 		try {
 			meeting = database.getMeeting(idmeeting);
@@ -255,6 +293,13 @@ public class MeetingBean {
 			e.printStackTrace();
 			return 1;
 		}
+	}
+	
+	public String getCurrentDate(){
+		Date d1 = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String formattedDate = df.format(d1);
+		return formattedDate;
 	}
 	
 }

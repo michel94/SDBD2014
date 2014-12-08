@@ -54,6 +54,16 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="login">/login.jsp</result>
     </action>
     
+     <action name="menumeetingsnext" class="meeto.action.MeetingAction" method="menumeetingsnext">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="menumeetingsprevious" class="meeto.action.MeetingAction" method="menumeetingsprevious">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
     <action name="menucreatemeeting" class="meeto.action.MeetingAction" method="menucreatemeeting">
       <result name="success">/index.jsp</result>
       <result name="login">/login.jsp</result>

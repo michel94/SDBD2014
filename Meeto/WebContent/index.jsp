@@ -140,10 +140,10 @@
                             <a href="#"><i class="fa fa-briefcase fa-fw"></i> Meetings<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a class="active" href="menumeetings"><i class="fa fa-forward fa-fw"></i> Next meetings</a>
+                                    <a class="active" href="menumeetingsnext"><i class="fa fa-forward fa-fw"></i> Upcoming meetings</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-backward fa-fw"></i> Previous meetings</a>
+                                    <a class="active" href="menumeetingsprevious"><i class="fa fa-backward fa-fw"></i> Previous meetings</a>
                                 </li>
                                 <li>
                                     <a href="menucreatemeeting"><i class="fa fa-plus fa-fw"></i> Create meeting</a>

@@ -116,6 +116,27 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		return SUCCESS;
 	}
 	
+	public String menumeetingsnext(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		meetingBean = new MeetingBean((int)session.get("iduser"));
+		view = "meetingsnext";
+		
+		return SUCCESS;
+	}
+	
+	public String menumeetingsprevious(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		meetingBean = new MeetingBean((int)session.get("iduser"));
+		view = "meetingsprevious";
+		
+		return SUCCESS;
+	}
+	
+	
 	public String menucreatemeeting(){
 		if(!session.containsKey("iduser"))
 			return LOGIN;
