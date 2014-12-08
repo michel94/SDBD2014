@@ -92,7 +92,7 @@ z
     <div class="col-lg-12">
         <h1 class="page-header">
 	        Item: ${itemBean.item.title}
-      		<button onclick="location.href='####################'" type="button" class="btn btn-danger pull-right">Delete this item</button>
+      		<button onclick="location.href='deleteItem?IdItem=${itemBean.item.id}&idMeeting=${itemBean.item.meeting}'" type="button" class="btn btn-danger pull-right">Delete this item</button>
 	        
         </h1>
     </div>

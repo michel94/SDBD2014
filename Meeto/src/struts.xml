@@ -170,6 +170,11 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="login">/login.jsp</result>
     </action>
     
+     <action name="deleteItem" class="meeto.action.MeetingAction" method="deleteItemFromMeeting">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
     
     
     <!-- <action name="ajax" class="meeto.action.Ajax" method="test">
