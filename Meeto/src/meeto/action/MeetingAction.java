@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import meeto.bean.ActionBean;
 import meeto.bean.ConnectionBean;
 import meeto.bean.GroupBean;
 import meeto.bean.ItemBean;
@@ -23,13 +24,19 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 	private UserBean userBean;
 	private int iduser, idmeeting=0, idgroup;
 	private String title, description, datetime, location;
-	private int assigned_user;
+	private int assigneduser;
 	private User leader;
 	private String view;
-	private int done;
+	private int done, idaction;
+	
+	public void setIdAction(int idaction) {
+		this.idaction = idaction;
+	}
+
 	private String dueto;
 	private ArrayList<String> userList;
 	private GroupBean groupBean;
+	private ActionBean actionBean;
 	
 	private Boolean checkString(String field){
 		return field != null && !field.equals("");
@@ -228,6 +235,53 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		view = "meeting";
 		return SUCCESS;
 	}
+	
+	public String selectAction() {
+		
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		actionBean = new ActionBean((int)session.get("iduser"), idaction, done);
+		userBean = new UserBean();
+		userBean.setUserId((int)session.get("iduser"));
+		session.put("actionBean", actionBean);
+		session.put("userBean", userBean);
+		System.out.println(idaction);
+		view = "action";
+		
+		return SUCCESS;
+		
+	}
+	public String editAction() {
+		
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		actionBean = new ActionBean(assigneduser, idaction,done);
+		userBean = new UserBean();
+		userBean.setUserId((int)session.get("iduser"));
+		
+		actionBean.updateAction(description, dueto);
+		session.put("actionBean", actionBean);
+		session.put("userBean", userBean);
+		System.out.println(idaction);
+		view = "action";
+		
+		return SUCCESS;
+		
+	}
+	
+public String confirmAction() {
+		
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		actionBean = new ActionBean(iduser, idaction,1);
+		actionBean.confirmAction();
+		view = "action";
+		return SUCCESS;
+		
+	}
 	public void setIdMeeting(int idmeeting){
 		System.out.println(idmeeting);
 		this.idmeeting = idmeeting;
@@ -261,7 +315,7 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 	}
 	public void setAssigneduser(int u){
 		System.out.println("Imhere");
-		assigned_user = u;
+		assigneduser = u;
 	}
 	public void setDone(int done){
 		this.done = done;

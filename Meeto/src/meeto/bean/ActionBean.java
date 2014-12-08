@@ -15,9 +15,17 @@ public class ActionBean {
 	private final String databaseIP = "localhost";
 	private final int databasePort = 1200;
 	private DatabaseInterface database;
-	private int iduser, idaction;
+	private int iduser, idaction,done;
 	
-	public ActionBean(int iduser, int idaction){
+	public int getIduser() {
+		return iduser;
+	}
+
+	public int getIdAction() {
+		return idaction;
+	}
+
+	public ActionBean(int iduser, int idaction,int done){
 		this.iduser=iduser;
 		this.idaction=idaction;
 		try {
@@ -66,11 +74,12 @@ public class ActionBean {
 		
 	}
 
-	public int updateAction(int idaction,String description, String due_to, int iduser, int meetingid){
+	public int updateAction(String description, String due_to){
 		Action act = new Action();
 		act.idaction = idaction;
 		act.description=description;
 		act.due_to=due_to;
+		act.done=done;
 		
 		User usr;
 		try {
@@ -81,7 +90,6 @@ public class ActionBean {
 			return -1;
 		}
 		act.assigned_user= usr;
-		act.meeting= meetingid;
 		
 		try {
 			database.updateAction(act);
@@ -112,6 +120,18 @@ public class ActionBean {
 		try {
 			acts=database.getUserActions(iduser);
 			return acts;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Action getAction(){
+		Action act;
+		try {
+			act=database.getAction(idaction);
+			return act;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
