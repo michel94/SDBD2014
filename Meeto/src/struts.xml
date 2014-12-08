@@ -17,10 +17,10 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
   <package name="hey" extends="struts-default">
 	
 	<default-action-ref name="index" />
-	
+
 	<!-- 'index' action leads to the view provided by index.jsp -->
     <action name="index">
-      <result>/login.jsp</result>
+        <result>/login.jsp</result>
     </action>
 
 	<!-- 'login' action calls 'execute' in 'LoginAction' -->
@@ -93,7 +93,8 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="success">/index.jsp</result>
       <result name="login">/login.jsp</result>
     </action>
-        
+    
+    
     <action name="addUsersToMeeting" class="meeto.action.MeetingAction" method="addUsersToMeeting">
       <result name="success">/index.jsp</result>
       <result name="login">/login.jsp</result>
@@ -168,6 +169,8 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="success">/index.jsp</result>
       <result name="login">/login.jsp</result>
     </action>
+    
+    
     
     <!-- <action name="ajax" class="meeto.action.Ajax" method="test">
 		<result type="json">

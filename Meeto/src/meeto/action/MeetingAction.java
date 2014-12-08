@@ -82,7 +82,7 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		leader.iduser = (int)session.get("iduser");
 		meetingBean.createMeeting(title, description, datetime, location, leader);
 		
-		view = "createmeeting";
+		view = "menucreatemeeting";
 		
 		return SUCCESS;
 		
@@ -196,7 +196,7 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		System.out.println(iduser + " " + idmeeting);
 		meetingBean.leaveMeeting(idmeeting,iduser);
 	
-		view = "meetings";
+		view = "meetingsnext";
 		return SUCCESS;
 	}
 	
