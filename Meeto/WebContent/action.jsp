@@ -8,7 +8,7 @@
         <h1 class="page-header">
 	        Action
 	        <c:if test="${actionBean.action.done eq '0'}">
-	        	<button onclick="location.href='confirmAction?idAction=${actionBean.idAction}'" type="button" class="btn disabled btn-success pull-right">Mark this action as Done</button>
+	        	<button onclick="location.href='confirmAction?idAction=${actionBean.idAction}'" type="button" class="btn enabled btn-success pull-right">Mark this action as Done</button>
         	</c:if>
         	<c:if test="${actionBean.action.done eq '1'}">
 	        	<button onclick="location.href='confirmAction?idAction=${actionBean.idAction}'" type="button" class="btn disabled btn-primary pull-right">This actions was already marked as Done</button>
