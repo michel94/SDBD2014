@@ -5,7 +5,7 @@
     var iditem = ${itemBean.item.id};
     var username = "${userBean.user.username}";
 
-    window.onload = function() { // URI = ws://10.16.0.165:8080/WebSocket/ws
+    window.onload = function() {
         connect('ws://' + window.location.host + '/Meeto/ws');
         document.getElementById("chat").focus();
     }
@@ -53,7 +53,7 @@
     function doSend() {
         var message = document.getElementById('chat').value;
         if (message != '')
-            websocket.send(username + ": " + message); // send the message
+            websocket.send(message); // send the message
         document.getElementById('chat').value = '';
     }
 
@@ -80,9 +80,6 @@
 	</form>
 	
 	<h3> Comments </h3>
-	<c:forEach items="${itemBean.item.comments}" var="com">
-		${com.username}: ${com.text} <br>
-	</c:forEach>
 	
 	<div>
 	    <div id="container"><div id="history"></div></div>
