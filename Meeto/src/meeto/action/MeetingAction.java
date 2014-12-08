@@ -8,8 +8,9 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import meeto.bean.ActionBean;
 import meeto.bean.ConnectionBean;
-import meeto.bean.ItemBean;
+import meeto.bean.GroupBean;
 import meeto.bean.MeetingBean;
 import meeto.bean.UserBean;
 import meeto.garbage.User;
@@ -20,17 +21,36 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 	private ConnectionBean connectionBean;
 	private MeetingBean meetingBean;
 	private UserBean userBean;
-	private int iduser, idmeeting=0;
+	private int iduser, idmeeting=0, idgroup;
 	private String title, description, datetime, location;
-	private int assigned_user;
+	private int assigneduser;
 	private User leader;
 	private String view;
-	private int done;
-	private String dueTo;
-	private ArrayList<Integer> iUsers;
+	private int done, idaction;
+	
+	public void setIdAction(int idaction) {
+		this.idaction = idaction;
+	}
+
+	private String dueto;
+	private ArrayList<String> userList;
+	private GroupBean groupBean;
+	private ActionBean actionBean;
 	
 	private Boolean checkString(String field){
 		return field != null && !field.equals("");
+	}
+	
+	public ArrayList<String> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(ArrayList<String> userList) {
+		this.userList = userList;
+	}
+	
+	public void setIdgroup(int idgroup) {
+		this.idgroup = idgroup;
 	}
 	
 	public String selectMeeting() {
@@ -41,7 +61,6 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		meetingBean = new MeetingBean((int)session.get("iduser"));
 		meetingBean.setMeetingId(idmeeting);
 		userBean = new UserBean();
-		
 		view = "meeting";
 		
 		return SUCCESS;
@@ -100,6 +119,27 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		return SUCCESS;
 	}
 	
+	public String menumeetingsnext(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		meetingBean = new MeetingBean((int)session.get("iduser"));
+		view = "meetingsnext";
+		
+		return SUCCESS;
+	}
+	
+	public String menumeetingsprevious(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		meetingBean = new MeetingBean((int)session.get("iduser"));
+		view = "meetingsprevious";
+		
+		return SUCCESS;
+	}
+	
+	
 	public String menucreatemeeting(){
 		if(!session.containsKey("iduser"))
 			return LOGIN;
@@ -122,6 +162,7 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		System.out.println(iduser + " " + idmeeting);
 		meetingBean.createItem(title, description);
 		
+		selectMeeting();
 		view = "meeting";
 		return SUCCESS;
 	}
@@ -136,15 +177,14 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		meetingBean.setMeetingId(idmeeting);
 		
 		System.out.println(iduser + " " + idmeeting);
-		meetingBean.createAction(description, dueTo);
+		meetingBean.createAction(description, dueto);
 		
+		selectMeeting();
 		view = "meeting";
 		return SUCCESS;
 	}
 	
-	public String inviteUsers(){
-		System.out.println("Invite Users");
-		
+	public String leaveMeeting(){
 		if(!session.containsKey("iduser"))
 			return LOGIN;
 		
@@ -154,13 +194,90 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		meetingBean.setMeetingId(idmeeting);
 		
 		System.out.println(iduser + " " + idmeeting);
-		meetingBean.addUsersToMeeting(iUsers);
+		meetingBean.leaveMeeting(idmeeting,iduser);
+	
+		view = "meetings";
+		return SUCCESS;
+	}
+	
+	public String addUsersToMeeting(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
 		
+		iduser = (int) session.get("iduser");
 		
+		meetingBean = new MeetingBean(iduser);
+		meetingBean.setMeetingId(idmeeting);
+		
+		System.out.println(iduser + " " + idmeeting);
+		meetingBean.addUsersToMeeting(userList, idmeeting);
+		selectMeeting();
 		view = "meeting";
 		return SUCCESS;
 	}
 	
+	public String addGroupToMeeting(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		iduser = (int) session.get("iduser");
+		
+		meetingBean = new MeetingBean(iduser);
+		meetingBean.setMeetingId(idmeeting);
+		
+		System.out.println(iduser + " " + idmeeting);
+		meetingBean.addGroupToMeeting(idgroup, idmeeting);
+		selectMeeting();
+		view = "meeting";
+		return SUCCESS;
+	}
+	
+	public String selectAction() {
+		
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		actionBean = new ActionBean((int)session.get("iduser"), idaction, done);
+		userBean = new UserBean();
+		userBean.setUserId((int)session.get("iduser"));
+		session.put("actionBean", actionBean);
+		session.put("userBean", userBean);
+		System.out.println(idaction);
+		view = "action";
+		
+		return SUCCESS;
+		
+	}
+	public String editAction() {
+		
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		actionBean = new ActionBean(assigneduser, idaction,done);
+		userBean = new UserBean();
+		userBean.setUserId((int)session.get("iduser"));
+		
+		actionBean.updateAction(description, dueto);
+		session.put("actionBean", actionBean);
+		session.put("userBean", userBean);
+		System.out.println(idaction);
+		view = "action";
+		
+		return SUCCESS;
+		
+	}
+	
+public String confirmAction() {
+		
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		actionBean = new ActionBean(iduser, idaction,1);
+		actionBean.confirmAction();
+		view = "action";
+		return SUCCESS;
+		
+	}
 	public void setIdMeeting(int idmeeting){
 		System.out.println(idmeeting);
 		this.idmeeting = idmeeting;
@@ -192,22 +309,16 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 	public void setLocation(String l){
 		location = l;
 	}
-	public void setAssignedUser(int u){
-		assigned_user = u;
+	public void setAssigneduser(int u){
+		System.out.println("Imhere");
+		assigneduser = u;
 	}
 	public void setDone(int done){
 		this.done = done;
 	}
-	public void setDueTo(String dueTo){
-		this.dueTo = dueTo;
-	}
-	public void setInvUsers(int[] iu){
-		iUsers = new ArrayList<Integer>();
-		System.out.println("Set invite users");
-		for(int u : iu){
-			System.out.println(u);
-			iUsers.add(u);
-		}
+	public void setDueto(String dueto){
+		System.out.println("Imhere2");
+		this.dueto = dueto;
 	}
 	
 	public String getView(){

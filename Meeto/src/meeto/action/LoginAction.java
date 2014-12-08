@@ -7,7 +7,9 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.interceptor.SessionAware;
 
 import meeto.bean.ConnectionBean;
+import meeto.bean.GroupBean;
 import meeto.bean.MeetingBean;
+import meeto.bean.UserBean;
 import meeto.garbage.Authentication;
 
 public class LoginAction extends ActionSupport implements SessionAware {
@@ -18,6 +20,7 @@ public class LoginAction extends ActionSupport implements SessionAware {
 	private MeetingBean meetingBean;
 	private int iduser;
 	private String view;
+	private GroupBean groupBean;
 	
 	private Boolean checkString(String field){
 		return field != null && !field.equals("");
@@ -41,7 +44,8 @@ public class LoginAction extends ActionSupport implements SessionAware {
 				meetingBean = new MeetingBean(iduser);
 				connectionBean.setSession(session);
 				meetingBean.setUserId(iduser);
-				
+				groupBean = new GroupBean(iduser,-1);
+				session.put("groupBean",groupBean);
 				view = "meetings";
 				
 				return SUCCESS;
@@ -54,6 +58,13 @@ public class LoginAction extends ActionSupport implements SessionAware {
 			return LOGIN;
 	}
 	
+	public String register(){
+		UserBean userBean = new UserBean();
+		if(userBean.registerUser(username, password)==-1){
+			return LOGIN;
+		}else return execute();
+		
+	}
 	@Override
 	public void setSession(Map<String, Object> session) {
 		// TODO Auto-generated method stub

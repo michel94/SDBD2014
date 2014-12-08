@@ -29,6 +29,11 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="login">/login.jsp</result>
     </action>
     
+    <action name="register" class="meeto.action.LoginAction" method="register">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
     <action name="selectMeeting" class="meeto.action.MeetingAction" method="selectMeeting">
       <result name="success">/index.jsp</result>
       <result name="login">/login.jsp</result>
@@ -45,6 +50,16 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     </action>
     
     <action name="menumeetings" class="meeto.action.MeetingAction" method="menumeetings">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="menumeetingsnext" class="meeto.action.MeetingAction" method="menumeetingsnext">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="menumeetingsprevious" class="meeto.action.MeetingAction" method="menumeetingsprevious">
       <result name="success">/index.jsp</result>
       <result name="login">/login.jsp</result>
     </action>
@@ -74,7 +89,82 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="login">/login.jsp</result>
     </action>
     
-    <action name="inviteUsers" class="meeto.action.MeetingAction" method="inviteUsers">
+    <action name="leaveMeeting" class="meeto.action.MeetingAction" method="leaveMeeting">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+        
+    <action name="addUsersToMeeting" class="meeto.action.MeetingAction" method="addUsersToMeeting">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="addGroupToMeeting" class="meeto.action.MeetingAction" method="addGroupToMeeting">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    <action name="editKeyDecision" class="meeto.action.ItemAction" method="editKeyDecision">
+	    <result name="success">/index.jsp</result>
+	    <result name="login">/login.jsp</result>
+    </action>
+  
+    <action name="createKeyDecision" class="meeto.action.ItemAction" method="createKeyDecision">
+	    <result name="success">/index.jsp</result>
+	    <result name="login">/login.jsp</result>
+    </action>
+    
+    
+    <action name="selectAction" class="meeto.action.MeetingAction" method="selectAction">
+	    <result name="success">/index.jsp</result>
+	    <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="editAction" class="meeto.action.MeetingAction" method="editAction">
+	    <result name="success">/index.jsp</result>
+	    <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="confirmAction" class="meeto.action.MeetingAction" method="confirmAction">
+	    <result name="success">/index.jsp</result>
+	    <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="groups" class="meeto.action.GroupAction" method="menugroups">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="menucreategroup" class="meeto.action.GroupAction" method="menucreategroup">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+   	 </action>
+    
+    <action name="createGroup" class="meeto.action.GroupAction" method="createGroup">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+    <action name="selectGroup" class="meeto.action.GroupAction" method="selectGroup">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="addUsersToGroup" class="meeto.action.GroupAction" method="addUsersToGroup">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="removeUsersFromGroup" class="meeto.action.GroupAction" method="removeUsersFromGroup">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="actionsnotdone" class="meeto.action.TodoAction" method="actionsnotdone">
+      <result name="success">/index.jsp</result>
+      <result name="login">/login.jsp</result>
+    </action>
+    
+     <action name="actionsdone" class="meeto.action.TodoAction" method="actionsdone">
       <result name="success">/index.jsp</result>
       <result name="login">/login.jsp</result>
     </action>

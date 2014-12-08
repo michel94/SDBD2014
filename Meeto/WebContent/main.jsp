@@ -140,13 +140,13 @@
                             <a href="#"><i class="fa fa-briefcase fa-fw"></i> Meetings<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a class="active" href="menumeetingsnext"><i class="fa fa-forward fa-fw"></i> Upcoming meetings</a>
+                                    <a class="active" href="#"><i class="fa fa-forward fa-fw"></i> Next meetings</a>
                                 </li>
                                 <li>
-                                    <a class="active" href="menumeetingsprevious"><i class="fa fa-backward fa-fw"></i> Previous meetings</a>
+                                    <a href="#"><i class="fa fa-backward fa-fw"></i> Previous meetings</a>
                                 </li>
                                 <li>
-                                    <a href="menucreatemeeting"><i class="fa fa-plus fa-fw"></i> Create meeting</a>
+                                    <a href="#"><i class="fa fa-plus fa-fw"></i> Create meeting</a>
                                 </li>
                             </ul>
                         </li>
@@ -154,10 +154,10 @@
                             <a href="#"><i class="fa fa-tasks fa-fw"></i> ToDo's<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="actionsnotdone"><i class="fa fa-square fa-fw"></i> Not done yet</a>
+                                    <a href="#"><i class="fa fa-square fa-fw"></i> Not done yet</a>
                                 </li>
                                 <li>
-                                    <a href="actionsdone"><i class="fa fa-check-square fa-fw"></i> Done</a>
+                                    <a href="#"><i class="fa fa-check-square fa-fw"></i> Done</a>
                                 </li>
                             </ul>
                         </li>
@@ -165,10 +165,10 @@
                             <a href="#"><i class="fa fa-group fa-fw"></i> Groups<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a class="active" href="groups"><i class="fa fa-bullseye fa-fw"></i> My Groups</a>
+                                    <a class="active" href="#"><i class="fa fa-bullseye fa-fw"></i> My Groups</a>
                                 </li>
                                 <li>
-                                    <a href="menucreategroup"><i class="fa fa-plus fa-fw"></i> Create Group</a>
+                                    <a href="#"><i class="fa fa-plus fa-fw"></i> Create Group</a>
                                 </li>
                             </ul>
                         </li>
@@ -180,12 +180,69 @@
         </nav>
 
         <div id="page-wrapper">
-            <jsp:include page="${view}.jsp"></jsp:include>
-        </div>
+            
+            <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Next Meetings</h1>
+            </div>
+            <!-- /.col-lg-12 -->
 
-    
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>Rendering engine</th>
+                                    <th>Browser</th>
+                                    <th>Platform(s)</th>
+                                    <th>Engine version</th>
+                                    <th>CSS grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="odd gradeX">
+                                    <td>Trident</td>
+                                    <td>Internet Explorer 4.0</td>
+                                    <td>Win 95+</td>
+                                    <td class="center">4</td>
+                                    <td class="center">X</td>
+                                </tr>
+                                <tr class="even gradeC">
+                                    <td>Trident</td>
+                                    <td>Internet Explorer 5.0</td>
+                                    <td>Win 95+</td>
+                                    <td class="center">5</td>
+                                    <td class="center">C</td>
+                                </tr>
+                                <tr class="gradeC">
+                                    <td>Misc</td>
+                                    <td>PSP browser</td>
+                                    <td>PSP</td>
+                                    <td class="center">-</td>
+                                    <td class="center">C</td>
+                                </tr>
+                                <tr class="gradeU">
+                                    <td>Other browsers</td>
+                                    <td>All others</td>
+                                    <td>-</td>
+                                    <td class="center">-</td>
+                                    <td class="center">U</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+            </div>
+
+        </div>
+        <!-- /#page-wrapper -->
+
     </div>
-        
+    <!-- /#wrapper -->
+
+
 
 </body>
 

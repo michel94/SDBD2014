@@ -4,6 +4,7 @@ import java.util.Map;
 
 import meeto.bean.ConnectionBean;
 import meeto.bean.ItemBean;
+import meeto.bean.KeyDecisionBean;
 import meeto.bean.MeetingBean;
 import meeto.bean.UserBean;
 import meeto.garbage.User;
@@ -16,10 +17,15 @@ public class ItemAction extends ActionSupport implements SessionAware {
 	private String title, description;
 	private ItemBean itemBean;
 	private UserBean userBean;
+	private KeyDecisionBean keyDecisionBean;
 	private Map<String, Object> session;
 	private String view;
-	private int iditem;
+	private int iditem ,idkeydecision;
 	
+	public void setIdkeydecision(int idkeydecision) {
+		this.idkeydecision = idkeydecision;
+	}
+
 	private Boolean checkString(String field){
 		return field != null && !field.equals("");
 	}
@@ -55,6 +61,31 @@ public class ItemAction extends ActionSupport implements SessionAware {
 		return SUCCESS;
 	}
 	
+	public String editKeyDecision(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		System.out.println(idkeydecision);
+		int iduser = (int) session.get("iduser");
+		keyDecisionBean = new KeyDecisionBean(idkeydecision);
+		keyDecisionBean.editKeyDecision(idkeydecision,description,iditem);
+		selectItem();
+		view = "item";
+		
+		return SUCCESS;
+	}
+	
+	public String createKeyDecision(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		System.out.println(idkeydecision);
+		keyDecisionBean = new KeyDecisionBean(idkeydecision);
+		keyDecisionBean.addKeyDecisionToItem(iditem, description);
+		selectItem();
+		view = "item";
+		return SUCCESS;
+	}
 	public void setIdItem(int iditem){
 		this.iditem = iditem;
 	}

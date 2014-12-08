@@ -79,6 +79,19 @@
 		<input type="submit" value="Edit Item">
 	</form>
 	
+	<h3> Key Decisions </h3>
+		<c:forEach items="${itemBean.item.keydecisions}" var="kd">
+		<form action="editKeyDecision?idkeydecision=${kd.idkeydecision}&idItem=${kd.item}" method="post">
+			<input name="description" type="text" value="${kd.description}" placeholder="Description"/><input type="submit" value="Edit">
+		</form>
+	</c:forEach>
+	<br>
+	<h3> New Key Decision </h3>
+		<form action="createKeyDecision?idItem=${itemBean.item.id}" method="post">
+			<input name="description" type="text" placeholder="Description"/>
+			<input type="submit" value="Add Key Decision">
+		</form>
+	
 	<h3> Comments </h3>
 	
 	<div>
