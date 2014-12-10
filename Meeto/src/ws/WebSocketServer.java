@@ -131,10 +131,4 @@ public class WebSocketServer {
 		}
     }
     
-    public String getCurrentDate(){
-		Date d1 = new Date();
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String formattedDate = df.format(d1);
-		return formattedDate;
-	}
 }
