@@ -8,6 +8,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Token;
+import org.scribe.model.Verb;
+import org.scribe.oauth.OAuthService;
+
 import meeto.garbage.Action;
 import meeto.garbage.DatabaseInterface;
 import meeto.garbage.InviteUser;
@@ -119,7 +128,7 @@ public class MeetingBean {
 		Meeting mt = new Meeting(-1,title,description,datetime,location,leader,1);
 		mt.users = new Users();
 		
-		createGoogleMeeting(mt);
+		//createGoogleMeeting(mt);
 		try {
 			database.insertMeeting(mt);
 			return 0;
@@ -304,7 +313,61 @@ public class MeetingBean {
 	}
 	
 	public void createGoogleMeeting(Meeting m){
+		OAuthService service = (OAuthService) session.get("serviceBean");
+		Token token = (Token) session.get("accessToken");
 		
+		String calendarId = getCalendarId(service, token);
+		
+		
+		OAuthRequest request = new OAuthRequest(Verb.POST, "https://www.googleapis.com/calendar/v3/calendars/" + calendarId + "/events");
+		request.addQuerystringParameter("access_token", token.getToken());
+		JSONObject jBody = new JSONObject();
+		
+		/*JSONObject jStart = new JSONObject();
+		jStart.put("dateTime", m.datetime);
+		jStart.put("timeZone", "Europe/Lisbon");
+		JSONObject jEnd = new JSONObject();
+		jEnd.put("dateTime", m.datetime);
+		jEnd.put("timeZone", "Europe/Lisbon");
+		
+		jBody.put( "start", jStart);
+		jBody.put( "end", jEnd);
+		jBody.put( "summary", title);
+		jBody.put( "description", description);
+		jBody.put( "location", location);
+
+		request.addPayload(jBody.toString());
+		request.addHeader("Content-Type", "application/json; charset=UTF-8");
+		Response response = request.send();
+		System.out.println(response.getBody());*/
+		
+		
+	}
+	
+	private String getCalendarId(OAuthService service, Token token){
+		
+		String CALENDAR_LIST_URL = "https://www.googleapis.com/calendar/v3/users/me/calendarList/";
+		String calendarId = "";
+
+		try {
+			if (!session.containsKey("calendarID")) {
+				//get Calendar ID
+				OAuthRequest request = new OAuthRequest(Verb.GET, CALENDAR_LIST_URL);
+				service.signRequest(token, request);
+				Response response = request.send();
+				JSONObject jBody = new JSONObject(response.getBody());
+				JSONArray jItems = jBody.getJSONArray("items");
+				JSONObject jItem = (JSONObject) jItems.get(0);
+				calendarId = jItem.getString("id");
+				session.put("calendarID", calendarId);
+			}else{
+				calendarId = (String) session.get("calendarID");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return calendarId;
 	}
 	
 }
