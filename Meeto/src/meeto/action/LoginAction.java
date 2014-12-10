@@ -46,7 +46,7 @@ public class LoginAction extends ActionSupport implements SessionAware {
 				meetingBean.setUserId(iduser);
 				groupBean = new GroupBean(iduser,-1);
 				session.put("groupBean",groupBean);
-				view = "meetings";
+				view = "meetingsnext";
 				
 				return SUCCESS;
 			}else{

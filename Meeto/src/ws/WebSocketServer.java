@@ -1,7 +1,9 @@
 package ws;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -106,9 +108,7 @@ public class WebSocketServer {
 		itemBean = new ItemBean(iduser, iditem);
         
         Item item = itemBean.getItem();
-        for(Comment comment : item.comments){
-        	sendMessage(comment.user.username + ": " + comment.text);
-        }
+
         
         String message = username + " entered the chat.";
         sendMessage(message);
@@ -130,4 +130,11 @@ public class WebSocketServer {
 			}
 		}
     }
+    
+    public String getCurrentDate(){
+		Date d1 = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String formattedDate = df.format(d1);
+		return formattedDate;
+	}
 }

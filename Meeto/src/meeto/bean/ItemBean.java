@@ -61,6 +61,17 @@ public class ItemBean {
 			return -1;
 		}		
 	}
+	public int deleteItem(){
+		try {
+			
+			database.deleteItem(iditem);
+			return 0;
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}		
+	}
 	
 	public int commentOnItem(String text, int userid){
 		Item item = null;

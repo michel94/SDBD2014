@@ -11,6 +11,7 @@ import java.util.Map;
 import meeto.bean.ActionBean;
 import meeto.bean.ConnectionBean;
 import meeto.bean.GroupBean;
+import meeto.bean.ItemBean;
 import meeto.bean.MeetingBean;
 import meeto.bean.UserBean;
 import meeto.garbage.User;
@@ -21,7 +22,11 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 	private ConnectionBean connectionBean;
 	private MeetingBean meetingBean;
 	private UserBean userBean;
-	private int iduser, idmeeting=0, idgroup;
+	public void setIdItem(int idItem) {
+		this.idItem = idItem;
+	}
+
+	private int iduser, idmeeting=0, idgroup,idItem;
 	private String title, description, datetime, location;
 	private int assigneduser;
 	private User leader;
@@ -53,6 +58,17 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		this.idgroup = idgroup;
 	}
 	
+	public String deleteItemFromMeeting(){
+		if(!session.containsKey("iduser"))
+			return LOGIN;
+		
+		ItemBean itemBean = new ItemBean((int)session.get("iduser"), idItem);
+		itemBean.deleteItem();
+		selectMeeting();
+		view = "meeting";
+		return SUCCESS;
+	}
+	
 	public String selectMeeting() {
 		
 		if(!session.containsKey("iduser"))
@@ -82,7 +98,7 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		leader.iduser = (int)session.get("iduser");
 		meetingBean.createMeeting(title, description, datetime, location, leader);
 		
-		view = "createmeeting";
+		view = "menucreatemeeting";
 		
 		return SUCCESS;
 		
@@ -196,7 +212,7 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		System.out.println(iduser + " " + idmeeting);
 		meetingBean.leaveMeeting(idmeeting,iduser);
 	
-		view = "meetings";
+		view = "meetingsnext";
 		return SUCCESS;
 	}
 	

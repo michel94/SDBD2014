@@ -23,6 +23,9 @@
 
     <!-- Timeline CSS -->
     <link href="css/plugins/timeline.css" rel="stylesheet">
+    
+    <!-- DataTables CSS -->
+    <link href="css/plugins/dataTables.bootstrap.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="css/sb-admin-2.css" rel="stylesheet">
@@ -53,8 +56,10 @@
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="js/plugins/metisMenu/metisMenu.min.js"></script>
-
-
+    
+    <!-- DataTables JavaScript -->
+    <script src="js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="js/sb-admin-2.js"></script>
@@ -122,10 +127,10 @@
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Diogo Bhovan <i class="fa fa-caret-down"></i>
+                        ${username} <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+                        <li><a href="index"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
@@ -140,10 +145,10 @@
                             <a href="#"><i class="fa fa-briefcase fa-fw"></i> Meetings<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a class="active" href="menumeetingsnext"><i class="fa fa-forward fa-fw"></i> Upcoming meetings</a>
+                                    <a href="menumeetingsnext"><i class="fa fa-forward fa-fw"></i> Upcoming meetings</a>
                                 </li>
                                 <li>
-                                    <a class="active" href="menumeetingsprevious"><i class="fa fa-backward fa-fw"></i> Previous meetings</a>
+                                    <a href="menumeetingsprevious"><i class="fa fa-backward fa-fw"></i> Previous meetings</a>
                                 </li>
                                 <li>
                                     <a href="menucreatemeeting"><i class="fa fa-plus fa-fw"></i> Create meeting</a>
@@ -165,7 +170,7 @@
                             <a href="#"><i class="fa fa-group fa-fw"></i> Groups<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a class="active" href="groups"><i class="fa fa-bullseye fa-fw"></i> My Groups</a>
+                                    <a href="groups"><i class="fa fa-bullseye fa-fw"></i> My Groups</a>
                                 </li>
                                 <li>
                                     <a href="menucreategroup"><i class="fa fa-plus fa-fw"></i> Create Group</a>

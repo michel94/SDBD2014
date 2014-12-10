@@ -86,6 +86,7 @@ public class ItemAction extends ActionSupport implements SessionAware {
 		view = "item";
 		return SUCCESS;
 	}
+	
 	public void setIdItem(int iditem){
 		this.iditem = iditem;
 	}
