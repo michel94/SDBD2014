@@ -128,7 +128,7 @@ public class MeetingBean {
 		Meeting mt = new Meeting(-1,title,description,datetime,location,leader,1);
 		mt.users = new Users();
 		
-		createGoogleMeeting(mt);
+		//createGoogleMeeting(mt);
 		try {
 			database.insertMeeting(mt);
 			return 0;

@@ -5,7 +5,6 @@ import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-
 import java.util.ArrayList;
 import java.sql.*;
 import java.net.*;
@@ -78,9 +77,10 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	public Meeting getMeeting(int idmeeting){
 		Meeting meeting = null;
 		User user = null;
-		try
-{
-			ResultSet rs = executeQuery("SELECT * FROM meeting WHERE idmeeting="+idmeeting+" AND active=1;");
+		try{
+			Statement st = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			ResultSet rs = st.executeQuery("SELECT * FROM meeting WHERE idmeeting="+idmeeting+" AND active=1;");
 			if(rs.next())
 			{
 				user = getUser(rs.getInt("leader"));
@@ -92,7 +92,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				meeting.created_datetime = rs.getString("created_datetime");
 
 				//--- Obter items ---
-				rs = executeQuery("SELECT iditem, title, description, user FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");	
+				rs = st.executeQuery("SELECT iditem, title, description, user FROM item WHERE meeting="+meeting.idmeeting+" AND active=1;");	
 				while(rs.next())
 				{
 					user = getUser(rs.getInt("user"));
@@ -106,20 +106,18 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				}
 
 				//--- Obter actions ---
-				rs = executeQuery("SELECT * FROM action WHERE meeting="+meeting.idmeeting+" AND active=1;");	
+				rs = st.executeQuery("SELECT * FROM action WHERE meeting="+meeting.idmeeting+" AND active=1;");	
 				while(rs.next())
 				{
 					System.out.println("OK");
 					Action action = new Action(rs.getInt("idaction"), rs.getString("description"), rs.getString("due_to"), null, rs.getInt("done"), meeting.idmeeting, rs.getInt("active"));
 
 					ResultSet subrs = executeQuery("SELECT iduser, username FROM user WHERE iduser="+rs.getInt("assigned_user")+" AND active=1;");
-					System.out.println("OK1");
 					if(subrs.next())
 					{
 						User user_of_action = new User(subrs.getInt("iduser"), subrs.getString("username"));
 						action.assigned_user = user_of_action;
 					}
-					System.out.println("OK2");
 
 					meeting.actions.add(action);
 				}
@@ -207,28 +205,35 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public int insertMeeting(Meeting meeting) {
 		try{
+			Statement st = connection.createStatement();
 			String query = "INSERT INTO meeting(title, description, datetime, location, leader, created_datetime) values('" + meeting.title + "', '" + meeting.description + "', '" + meeting.datetime + "', '" + meeting.location + "', '" + meeting.leader.iduser + "', " + "NOW()" + ");";
-			if(executeUpdate(query) == -1) return -1;
-
-			ResultSet rs = executeQuery("SELECT max(idmeeting) AS m from meeting"); rs.next();
-			query = "INSERT INTO meeting_user(meeting, user) values(" + rs.getInt("m") + ", " + meeting.leader.iduser + ")";
-			if(executeUpdate(query) == -1) return -1;
-
-			rs = executeQuery("select max(idmeeting) as mid from meeting;");
-			if(!rs.next()) return -1;
-			int mid = rs.getInt("mid");
-
+			st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			connection.commit();
+			ResultSet rsId = st.getGeneratedKeys();
+			rsId.next();
+			int mid = rsId.getInt(1);
+			System.out.println("Meeting id: " + mid);
+			
+			query = "INSERT INTO meeting_user(meeting, user) values(" + mid + ", " + meeting.leader.iduser + ")";
+			st.executeUpdate(query);
+			connection.commit();
+			
 			Users users = meeting.users;
 			query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
 			for(int i=0; i<users.size(); i++){
 				query += "(" + users.get(i).iduser + ", " + mid + ")";
 				if(i < users.size() - 1) query += ", ";
 			}
-			return executeUpdate(query);
+			st.executeUpdate(query);
+			connection.commit();
+			return 1;
 
 		}catch(SQLException e){
-			return -1;
+			try{
+				connection.rollback();
+			}catch(SQLException e1){}
 		}
+		return -1;
 	}
 
 	public int updateMeeting(Meeting meeting){
@@ -285,7 +290,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		User user = null;
 		
 		try{
-			ResultSet rs = executeQuery("SELECT * FROM item WHERE iditem="+iditem+" AND active = 1;");
+			Statement st = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			ResultSet rs = st.executeQuery("SELECT * FROM item WHERE iditem="+iditem+" AND active = 1;");
 			if(rs.next())
 			{
 				item = new Item(rs.getInt("iditem"), rs.getString("title"), rs.getString("description"), user, rs.getInt("meeting"));
@@ -294,12 +301,12 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 				if(user == null)
 					return null;
 
-				ResultSet srs = executeQuery("SELECT com.*, u.username, u.iduser FROM comment as com, user as u WHERE com.user=u.iduser and item=" + iditem);
+				ResultSet srs = st.executeQuery("SELECT com.*, u.username, u.iduser FROM comment as com, user as u WHERE com.user=u.iduser and item=" + iditem);
 				while(srs.next()){
 					Comment c = new Comment(srs.getInt("idcomment"), srs.getString("comment"), new User(srs.getInt("iduser"), srs.getString("username")), item, srs.getTimestamp("created_datetime").toString() );
 					item.comments.add(c);
 				}
-				srs = executeQuery("SELECT * FROM keydecision WHERE item=" + iditem);
+				srs = st.executeQuery("SELECT * FROM keydecision WHERE item=" + iditem);
 				while(srs.next()){
 					item.keydecisions.add(new KeyDecision(srs.getInt("idkeydecision"), srs.getString("description"), srs.getInt("active"), iditem ));
 				}
@@ -385,8 +392,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int insertComment(Comment com, User u){
-		String query = "INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.iditem + ", " + u.iduser + ",  now() )";
-		
+		String query = "INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.iditem + ", " + u.iduser + ",  now() )";		
 		executeUpdate(query);
 
 		return 0;
@@ -427,7 +433,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")";
 			if(i < iu.size() - 1) query += ", ";
 		}
-			
+		
 		return executeUpdate(query);
 	}
 
@@ -484,41 +490,55 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public Authentication login(Authentication aut){
 		String query = "select * from user where username='" + aut.username + "' and password='" + aut.password + "'";
-
-		ResultSet rs = executeQuery(query);
-
-		try{
+		
+		try {
+			Statement st = connection.createStatement();
+			ResultSet rs = st.executeQuery(query);
 			if(rs.next()){
-				aut.userData = readUser(rs);
-				System.out.println(aut.userData.username);
+				aut.userData = new User(rs.getInt("iduser"), rs.getString("username"));
 				aut.confirm(aut.userData.iduser);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-
 		return aut;
 	}
 
 	public User createAccount(User u){
-		ResultSet rs = executeQuery("SELECT * from user where username='" + u.username+"'");
-		try{
-			if(rs.next()) return u;
-		}catch(SQLException e){
-			return u;
-		}
-		
-		executeUpdate("INSERT INTO user(username, password,created_datetime) values('" + u.username + "', '" + u.password + "',now())" );
-		rs = executeQuery("SELECT iduser from user where username='" + u.username+"'");
-		
-		try{
+		Statement st;
+		try {
+			connection.setAutoCommit(false);
+			st = connection.createStatement();
+			st.execute("lock table user write");
+			ResultSet rs = st.executeQuery("SELECT * from user where username='" + u.username+"'");
+			if(rs.next()){
+				st.execute("unlock tables");
+				return u;
+			}
+			st.executeUpdate("INSERT INTO user(username, password,created_datetime) values('" + u.username + "', '" + u.password + "',now())" );
+			connection.commit();
+			stmt.execute("unlock tables");
+			
+			rs = executeQuery("SELECT iduser from user where username='" + u.username+"'");
 			if(rs.next()){
 				u.iduser = rs.getInt("iduser");
 			}
-		}catch(SQLException e){
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			try{
+				connection.rollback();
+				e.printStackTrace();
+			}catch(SQLException e1){
+				e.printStackTrace();
+			}
+		}
+		
+		try {
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return u;
 	}
 
