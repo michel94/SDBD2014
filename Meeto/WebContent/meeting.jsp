@@ -109,6 +109,8 @@
 	</div>					
 </div>	
 
+<h2> Items </h2>
+
 <div class="row">
 	<div class="col-lg-5">
 		<div class="panel panel-default">
@@ -158,6 +160,8 @@
        	</div>
    	</div>
 </div>
+
+<h2> Actions </h2>
 
 <div class="row">
 	<div class="col-lg-5">
