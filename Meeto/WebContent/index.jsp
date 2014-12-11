@@ -85,42 +85,8 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-messages">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
+                    <ul class="dropdown-menu dropdown-messages" id="notification">
+                        
                     </ul>
                     <!-- /.dropdown-alerts -->
                 </li>
@@ -195,3 +161,69 @@
 </body>
 
 </html>
+
+<script type="text/javascript">
+    var websocket = null;
+	var iduser = "${iduser}"
+    window.onload = function() { // URI = ws://10.16.0.165:8080/WebSocket/ws
+        connect('ws://' + window.location.host + '/Meeto/wsnot');
+    }
+
+    function connect(host) { // connect to the host websocket
+        if ('WebSocket' in window)
+            websocket = new WebSocket(host);
+        else if ('MozWebSocket' in window)
+            websocket = new MozWebSocket(host);
+        else {
+            writeToHistory('Get a real browser which supports WebSocket.');
+            return;
+        }
+
+        websocket.onopen    = onOpen; // set the event listeners below
+        websocket.onclose   = onClose;
+        websocket.onmessage = onMessage;
+        websocket.onerror   = onError;
+        
+    }
+
+    function onOpen(event) {
+        websocket.send("/s " + iduser);
+    }
+    
+    function onClose(event) {
+        writeToHistory('WebSocket closed.');
+    }
+    
+    function onMessage(message) { // print the received message
+    	console.log("message");
+        writeToHistory(message.data);
+    }
+    
+    function onError(event) {
+    }
+    
+    function writeToHistory(text) {
+    	var history = $('#notification');
+    	history.append(  '<li class="divider"></li> \
+    			<li><div> \
+				<strong>Invite</strong> \
+				<span class="pull-right text-muted"> \
+				<em>'+getCurrentDate()+'</em> \
+				</span> \
+			</div> \
+			<div>'+text+'</div> \
+			</li> '
+);
+    }
+    
+    $(document).ready(function(){
+    });
+ 
+ 	
+    function getCurrentDate(){
+		var d1 = new Date();
+		var s1 = d1.getFullYear().toString()+"-"+(d1.getMonth()+1).toString()+"-"+d1.getDate().toString()+" "+d1.getHours().toString()+":"+d1.getMinutes().toString()+":"+d1.getSeconds().toString();
+		
+		return s1;
+	}
+</script>

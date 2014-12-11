@@ -56,7 +56,6 @@
             websocket.send(message); // send the message
         document.getElementById('chat').value = '';
     }
-z
     function writeToHistory(text) {
     	var history = $('#chat');
     	history.append(

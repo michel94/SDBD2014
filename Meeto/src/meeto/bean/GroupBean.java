@@ -1,5 +1,6 @@
 package meeto.bean;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -7,6 +8,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import ws.WebSocketNotifications;
 import meeto.garbage.DatabaseInterface;
 import meeto.garbage.Group;
 import meeto.garbage.Groups;
@@ -43,6 +45,15 @@ public class GroupBean {
 				grp.users.add(database.getUser(Integer.parseInt(userList.get(i))));
 			}
 			database.createGroup(grp);
+			for(int i=0;i<userList.size();i++){
+				try {
+					WebSocketNotifications.broadcastGroup(Integer.parseInt(userList.get(i)), groupname);
+				} catch (NumberFormatException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
 			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
@@ -59,9 +70,19 @@ public class GroupBean {
 			invu = new InviteUser(Integer.parseInt(idusers.get(i)),idgroup);
 			invus.add(invu);
 		}
-		
+		this.idgroup=idgroup;
+		Group gp = getGroup();
 		try {
 			database.inviteUsersToGroup(invus);
+			for(int i=0;i<idusers.size();i++){
+				try {
+					WebSocketNotifications.broadcastGroup(Integer.parseInt(idusers.get(i)), gp.name);
+				} catch (NumberFormatException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
 			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
@@ -115,6 +136,14 @@ public class GroupBean {
 		
 		return grp;
 		
+	}
+
+	public int getIdgroup() {
+		return idgroup;
+	}
+
+	public void setIdgroup(int idgroup) {
+		this.idgroup = idgroup;
 	}
 	
 	
