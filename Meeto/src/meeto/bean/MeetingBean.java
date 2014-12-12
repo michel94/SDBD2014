@@ -127,6 +127,7 @@ public class MeetingBean {
 	public int createMeeting(String title, String description, String datetime, String location, User leader){
 		Meeting mt = new Meeting(-1,title,description,datetime,location,leader,1);
 		mt.users = new Users();
+		mt.users.add(leader);
 		
 		//createGoogleMeeting(mt);
 		try {
