@@ -56,7 +56,6 @@
             websocket.send(message); // send the message
         document.getElementById('chat').value = '';
     }
-z
     function writeToHistory(text) {
     	var history = $('#chat');
     	history.append(
@@ -67,6 +66,9 @@ z
                 <div class="chat-body clearfix"> \
                     <div class="header"> \
                         <strong class="primary-font">'+ username +'</strong>  \
+                        <small class="pull-right text-muted"> \
+                        	<i class="fa fa-clock-o fa-fw"></i> ' + getCurrentDate() +'\
+                   		 </small> \
                     </div> \
                     <p>' + text +
                     '</p> \
@@ -85,7 +87,13 @@ z
     $(document).ready(function() {
 	    $('#keydecisions-table').dataTable();
 	});
-    	
+ 	
+    function getCurrentDate(){
+		var d1 = new Date();
+		var s1 = d1.getFullYear().toString()+"-"+(d1.getMonth()+1).toString()+"-"+d1.getDate().toString()+" "+d1.getHours().toString()+":"+d1.getMinutes().toString()+":"+d1.getSeconds().toString();
+		
+		return s1;
+	}
 </script>
 
 <div class="row">

@@ -1,4 +1,5 @@
 package meeto.bean;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -17,6 +18,7 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
+import ws.WebSocketNotifications;
 import meeto.garbage.Action;
 import meeto.garbage.DatabaseInterface;
 import meeto.garbage.InviteUser;
@@ -256,27 +258,13 @@ public class MeetingBean {
 	}
 	
 	
-	public int addUserToMeeting(int iduser, int idmeeting){
-		User usr = null;
-		Meeting mt = null;
-		
-		try {
-			usr = database.getUser(iduser);
-			mt = database.getMeeting(idmeeting);
-			
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
-		
-		return 0;
-		
-	}
-	
 	public int addUsersToMeeting(ArrayList<String> userids, int idmeeting){
 		InviteUsers invus = new InviteUsers();
 		InviteUser invu = null;
+		String message = "";
+		
+		this.idmeeting=idmeeting;
+		Meeting mt=getMeeting();
 		
 		for(int i=0;i<userids.size();i++){
 			invu = new InviteUser(Integer.parseInt(userids.get(i)),idmeeting);
@@ -285,6 +273,15 @@ public class MeetingBean {
 		
 		try {
 			database.inviteUsersToMeeting(invus);
+			for(int i=0;i<userids.size();i++){
+				try {
+					WebSocketNotifications.broadcastMeeting(Integer.parseInt(userids.get(i)), mt.title);
+				} catch (NumberFormatException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
 			return 0;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

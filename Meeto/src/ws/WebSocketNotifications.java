@@ -18,19 +18,21 @@ import javax.websocket.RemoteEndpoint;
 import javax.websocket.Session;
 
 import meeto.bean.ClientData;
+import meeto.bean.GroupBean;
 import meeto.bean.ItemBean;
+import meeto.bean.MeetingBean;
 import meeto.bean.UserBean;
 import meeto.garbage.Item;
 import meeto.garbage.Comment;
 import meeto.garbage.User;
 
-@ServerEndpoint(value = "/ws", configurator = GetHttpSessionConfigurator.class)
+@ServerEndpoint(value = "/wsnot", configurator = GetHttpSessionConfigurator.class)
 
-public class WebSocketServer {
+public class WebSocketNotifications {
     private static final AtomicInteger sequence = new AtomicInteger(1);
-    private static final HashMap<Integer, ArrayList<ClientData> > itemRooms = new HashMap<Integer, ArrayList<ClientData> >();
+    private static final ArrayList<ClientData> clientsonline = new ArrayList<ClientData>();
     private int iditem;
-    private int iduser;
+    private int iduser,idinviteduser;
     
     private String username;
     private Session session;
@@ -40,9 +42,10 @@ public class WebSocketServer {
 	private ItemBean itemBean;
 	private Item item;
 	private User user;
+	private MeetingBean meetingBean;
+	private  GroupBean groupBean;
 	
-	
-	public WebSocketServer() {
+	public WebSocketNotifications() {
         UserBean userBean = new UserBean();
 	}
     
@@ -56,16 +59,18 @@ public class WebSocketServer {
         userBean = new UserBean();
         userBean.setUserId(iduser);
         user = userBean.getUser();
+        meetingBean = new MeetingBean(iduser);
+        groupBean = new GroupBean(iduser,-1);
         
     }
 
     @OnClose
     public void end() {
     	// clean up once the WebSocket connection is closed
-    	ArrayList<ClientData> endpoints = itemRooms.get(iditem);
-    	for(int i=0; i<endpoints.size(); i++){
-    		if(endpoints.get(i).conn == session.getBasicRemote()){
-    			endpoints.remove(i);
+    	
+    	for(int i=0; i<clientsonline.size(); i++){
+    		if(clientsonline.get(i).conn == session.getBasicRemote()){
+    			clientsonline.remove(i);
     			return;
     		}
     		
@@ -79,57 +84,35 @@ public class WebSocketServer {
     	
     	if(message.startsWith("/s")){
     		message = message.substring(3);
-    		iditem = Integer.parseInt(message);
+    		iduser = Integer.parseInt(message);
+    		clientsonline.add(new ClientData(session.getBasicRemote(), user) );
     		
-    		if(!itemRooms.containsKey(iditem))
-    			itemRooms.put(iditem, new ArrayList<ClientData>());
-    		
-    		itemRooms.get(iditem).add(new ClientData(session.getBasicRemote(), user) );
-    		
-    		enterChat();
-    	}else{
-    		try{
-    			itemBean.commentOnItem(message, iduser);
-    			broadcast(message);
-    		}catch(IOException e){}
     	}
     }
     
-	private void broadcast(String message) throws IOException{
-		if(!itemRooms.containsKey(iditem))
-			return;
-		
-		for(ClientData client : itemRooms.get(iditem)){
-			client.conn.sendText(user.username + ": " + message);
+	public static void broadcastMeeting(int iduser, String mname) throws IOException{
+		for(int i=0;i<clientsonline.size();i++){
+			
+			if(clientsonline.get(i).user.iduser==iduser){
+				clientsonline.get(i).conn.sendText("You were invited to meeting "+mname);
+				break;
+			}
 		}
 	}
 	
-	private void enterChat(){
-		itemBean = new ItemBean(iduser, iditem);
-        
-        Item item = itemBean.getItem();
-
-        
-        String message = username + " entered the chat.";
-        sendMessage(message);
+	public static void broadcastGroup(int iduser, String gname) throws IOException{
+		for(int i=0;i<clientsonline.size();i++){
+			
+			if(clientsonline.get(i).user.iduser==iduser){
+				clientsonline.get(i).conn.sendText("You were invited to group "+gname);
+				break;
+			}
+		}
 	}
    
     @OnError
     public void handleError(Throwable t) {
     	t.printStackTrace();
     }
-
-    private void sendMessage(String text) {
-    	try {
-			this.session.getBasicRemote().sendText(text);
-		} catch (IOException e) {
-			try {
-				this.session.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-    }
     
-
 }
