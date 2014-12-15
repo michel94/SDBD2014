@@ -636,11 +636,9 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		int idgroup = ru.idgroup;
 		int iduser = ru.iduser;
 
-		if(executeUpdate("DELETE FROM meeting_user WHERE user = "+iduser+" AND group_def = "+idgroup+";" ) < 0)
+		if(executeUpdate("DELETE FROM group_user WHERE user = "+iduser+" AND group_def = "+idgroup+";" ) < 0)
 			return -1;
 
-		if(executeUpdate("DELETE FROM group_user WHERE user = "+iduser+";" ) < 0)
-			return -1;
 
 		return 1;
 	}
