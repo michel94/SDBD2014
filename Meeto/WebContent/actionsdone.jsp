@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-	        Actions that i had already done
+	        Actions I have already done
        	</h1>
     </div>
     <!-- /.col-lg-12 -->
