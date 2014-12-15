@@ -164,7 +164,7 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 			return LOGIN;
 		
 		meetingBean = new MeetingBean((int)session.get("iduser"));
-		view = "menucreatemeeting";
+		view = "meetingsnext";
 		
 		return SUCCESS;
 	}

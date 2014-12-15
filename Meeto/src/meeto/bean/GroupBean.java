@@ -99,7 +99,9 @@ public class GroupBean {
 		
 		for(int i=0;i<idusers.size();i++){
 			ru.iduser = Integer.parseInt(idusers.get(i));
+			
 			try {
+				System.out.println("Entered to remove user "+ru.iduser+"from"+ru.idgroup);
 				database.removeUserFromGroup(ru);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
