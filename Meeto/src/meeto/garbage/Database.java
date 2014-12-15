@@ -205,6 +205,8 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 	public int insertMeeting(Meeting meeting) {
 		try{
+			connection.setAutoCommit(false);
+			System.out.println("insert meeting");
 			Statement st = connection.createStatement();
 			String query = "INSERT INTO meeting(title, description, datetime, location, leader, created_datetime) values('" + meeting.title + "', '" + meeting.description + "', '" + meeting.datetime + "', '" + meeting.location + "', '" + meeting.leader.iduser + "', " + "NOW()" + ");";
 			st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
@@ -215,31 +217,53 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			System.out.println("Meeting id: " + mid);
 			
 			query = "INSERT INTO meeting_user(meeting, user) values(" + mid + ", " + meeting.leader.iduser + ")";
+			System.out.println(query);
 			st.executeUpdate(query);
 			connection.commit();
 			
 			Users users = meeting.users;
 			query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
 			for(int i=0; i<users.size(); i++){
+				System.out.println("create meeting");
 				query += "(" + users.get(i).iduser + ", " + mid + ")";
 				if(i < users.size() - 1) query += ", ";
 			}
+			System.out.println(query);
 			st.executeUpdate(query);
 			connection.commit();
+			connection.setAutoCommit(true);
 			return 1;
 
 		}catch(SQLException e){
 			try{
+				e.printStackTrace();
 				connection.rollback();
+				connection.setAutoCommit(true);
 			}catch(SQLException e1){}
 		}
+		
 		return -1;
 	}
 
 	public int updateMeeting(Meeting meeting){
-
-		String query = "UPDATE meeting SET title='" + meeting.title + "', description='" + meeting.description + "', datetime='" + meeting.datetime + "', location='" + meeting.location + "', leader='" + meeting.leader.iduser + "', finished='"+meeting.finished+"', active='" + meeting.active + "' WHERE idmeeting="+meeting.idmeeting+" AND datetime > NOW() AND active=1;";
-		return executeUpdate(query);
+		try {
+			connection.setAutoCommit(false);
+			Statement st = connection.createStatement();
+			String query1 = "SELECT idmeeting from meeting where idmeeting=" + meeting.idmeeting + " for update;";
+			ResultSet rs = st.executeQuery(query1);
+			if(rs.next()){
+				String query2 = "UPDATE meeting SET title='" + meeting.title + "', description='" + meeting.description + "', datetime='" + meeting.datetime + "', location='" + meeting.location + "', leader='" + meeting.leader.iduser + "', finished='"+meeting.finished+"', active='" + meeting.active + "' WHERE idmeeting="+meeting.idmeeting+" AND datetime > NOW() AND active=1;";
+				st.executeUpdate(query2);
+				connection.commit();
+				connection.setAutoCommit(true);
+				return 1;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+		return -1;
+		
 	}
 
 	/* int deleteMeeting(int idmeeting){ INACABADO****************
@@ -428,13 +452,25 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int inviteUsersToMeeting(InviteUsers iu){
-		String query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
-		for(int i=0; i<iu.size(); i++){
-			query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")";
-			if(i < iu.size() - 1) query += ", ";
+		String query = "SELECT idmeeting from meeting where idmeeting=" + iu.get(0).id + "FOR UPDATE";
+		Statement st;
+		try {
+			st = connection.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next()){
+				query = "INSERT IGNORE INTO meeting_user(user, meeting) values ";
+				for(int i=0; i<iu.size(); i++){
+					query += "(" + iu.get(i).user + ", " + iu.get(i).id + ")";
+					if(i < iu.size() - 1) query += ", ";
+				}
+				st.executeUpdate(query);
+			}
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
 		}
-		
-		return executeUpdate(query);
+		 
 	}
 
 	public int inviteUsersToGroup(InviteUsers iu)

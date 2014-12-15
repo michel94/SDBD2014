@@ -100,6 +100,8 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		
 		view = "menucreatemeeting";
 		
+		System.out.println("create meeting");
+		
 		return SUCCESS;
 		
 	}
