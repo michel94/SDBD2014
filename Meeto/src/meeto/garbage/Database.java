@@ -81,6 +81,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			Statement st = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
 			ResultSet rs = st.executeQuery("SELECT * FROM meeting WHERE idmeeting="+idmeeting+" AND active=1;");
+			
 			if(rs.next())
 			{
 				user = getUser(rs.getInt("leader"));
@@ -344,20 +345,93 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int updateItem(Item it){
-		return executeUpdate("UPDATE item set title='" + it.title + "', description='" + it.description + "' where iditem=" + it.iditem);
+		try {
+			connection.setAutoCommit(false);
+			Statement st = connection.createStatement();
+			ResultSet rs =  st.executeQuery("select iditem from item where iditem=" + it.iditem + " for update");
+			if(rs.next()){
+				st.executeUpdate("UPDATE item set title='" + it.title + "', description='" + it.description + "' where iditem=" + it.iditem);
+				connection.commit();
+				connection.setAutoCommit(false);
+				return 1;
+			}
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {}
+		}
+		try {
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {}
+		return -1;
 	}
 
 	public int deleteItem(int iditem){
-		return executeUpdate("UPDATE item set active=0 where iditem=" + iditem);
+		try {
+			connection.setAutoCommit(false);
+			Statement st = connection.createStatement();
+			ResultSet rs =  st.executeQuery("select iditem from item where iditem=" + iditem + " for update");
+			if(rs.next()){
+				st.executeUpdate("UPDATE item set active=0 where iditem=" + iditem);
+				connection.commit();
+				connection.setAutoCommit(false);
+				return 1;
+			}
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {}
+		}
+		try {
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {}
+		return -1;
 	}
 
 	public int insertItem(Item item){
-		String query = "INSERT INTO item(title, description, user, meeting, created_datetime) values('" + item.title + "', '" + item.description + "', '" + item.user.iduser + "', '" + item.meeting + "', NOW())";
-		return executeUpdate(query);
+		try {
+			connection.setAutoCommit(false);
+			Statement st = connection.createStatement();
+			ResultSet rs =  st.executeQuery("select idmeeting from meeting where idmeeting=" + item.meeting + " for update");
+			if(rs.next()){
+				st.executeUpdate("INSERT INTO item(title, description, user, meeting, created_datetime) values('" + item.title + "', '" + item.description + "', '" + item.user.iduser + "', '" + item.meeting + "', NOW())");
+				connection.commit();
+				connection.setAutoCommit(false);
+				return 1;
+			}
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {}
+		}
+		try {
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {}
+		return -1;
+		
 	}
 
 	public int confirmAction(Action a){
-		return executeUpdate("UPDATE action set done=1 where idaction=" + a.idaction);
+		try {
+			connection.setAutoCommit(false);
+			Statement st = connection.createStatement();
+			ResultSet rs =  st.executeQuery("select idaction from action where idaction=" + a.idaction + " for update");
+			if(rs.next()){
+				st.executeUpdate("UPDATE action set done=1 where idaction=" + a.idaction);
+				connection.commit();
+				connection.setAutoCommit(false);
+				return 1;
+			}
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {}
+		}
+		try {
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {}
+		return -1;
+		
 	}
 
 	public User getUser(int iduser){
@@ -406,20 +480,49 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 
 
 	public int finishMeeting(Meeting meeting){
-		meeting.finished = 1;
-		return updateMeeting(meeting);
-	}
-
-	public int updateItem(Item it, User u){
-
-		return 0;
+		try {
+			connection.setAutoCommit(false);
+			Statement st = connection.createStatement();
+			ResultSet rs =  st.executeQuery("select idmeeting from meeting where idmeeting=" + meeting.idmeeting + " for update");
+			if(rs.next()){
+				connection.commit();
+				connection.setAutoCommit(false);
+				meeting.finished = 1;
+				return updateMeeting(meeting);
+			}
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {}
+		}
+		try {
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {}
+		return -1;
+		
 	}
 
 	public int insertComment(Comment com, User u){
-		String query = "INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.iditem + ", " + u.iduser + ",  now() )";		
-		executeUpdate(query);
-
-		return 0;
+		try {
+			connection.setAutoCommit(false);
+			Statement st = connection.createStatement();
+			ResultSet rs =  st.executeQuery("select iditem from item where iditem=" + com.item + " for update");
+			if(rs.next()){
+				st.executeUpdate("INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.iditem + ", " + u.iduser + ",  now() )");
+				connection.commit();
+				connection.setAutoCommit(false);
+				return 1;
+			}
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {}
+		}
+		try {
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {}
+		return -1;
+		
 	}
 
 	public int insertAction(Action act){

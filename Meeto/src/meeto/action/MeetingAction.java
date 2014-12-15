@@ -96,6 +96,7 @@ public class MeetingAction extends ActionSupport implements SessionAware {
 		
 		User leader = new User();
 		leader.iduser = (int)session.get("iduser");
+		meetingBean.setSession(session);
 		meetingBean.createMeeting(title, description, datetime, location, leader);
 		
 		view = "menucreatemeeting";

@@ -21,7 +21,7 @@ public class GoogleCallback extends ActionSupport implements SessionAware {
 		OAuthService service = (OAuthService)session.get("googleService");
 		Verifier verifier = new Verifier(code);
 		Token accessToken = service.getAccessToken(EMPTY_TOKEN, verifier);
-		System.out.println(accessToken.getToken());
+		System.out.println("access token: " + accessToken.getToken());
 		session.put("accessToken", accessToken);
 		
 		return SUCCESS;

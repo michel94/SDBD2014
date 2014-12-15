@@ -6,11 +6,11 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
@@ -131,7 +131,7 @@ public class MeetingBean {
 		mt.users = new Users();
 		mt.users.add(leader);
 		
-		//createGoogleMeeting(mt);
+		createGoogleMeeting(mt);
 		try {
 			database.insertMeeting(mt);
 			return 0;
@@ -311,33 +311,44 @@ public class MeetingBean {
 	}
 	
 	public void createGoogleMeeting(Meeting m){
-		OAuthService service = (OAuthService) session.get("serviceBean");
+		System.out.println(session.containsKey("googleService"));
+		OAuthService service = (OAuthService) session.get("googleService");
 		Token token = (Token) session.get("accessToken");
+		System.out.println(token.getToken());
 		
-		String calendarId = getCalendarId(service, token);
-		
+		String calendarId = "0tnndk73nv1valu0ctdgamu8fo@group.calendar.google.com"; //getCalendarId(service, token);
 		
 		OAuthRequest request = new OAuthRequest(Verb.POST, "https://www.googleapis.com/calendar/v3/calendars/" + calendarId + "/events");
 		request.addQuerystringParameter("access_token", token.getToken());
 		JSONObject jBody = new JSONObject();
 		
-		/*JSONObject jStart = new JSONObject();
-		jStart.put("dateTime", m.datetime);
-		jStart.put("timeZone", "Europe/Lisbon");
-		JSONObject jEnd = new JSONObject();
-		jEnd.put("dateTime", m.datetime);
-		jEnd.put("timeZone", "Europe/Lisbon");
-		
-		jBody.put( "start", jStart);
-		jBody.put( "end", jEnd);
-		jBody.put( "summary", title);
-		jBody.put( "description", description);
-		jBody.put( "location", location);
+		JSONObject jStart = new JSONObject();
+		try {
+			jStart.put("dateTime", m.datetime);
+			jStart.put("timeZone", "Europe/Lisbon");
+			JSONObject jEnd = new JSONObject();
+			
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+			cal.setTime(sdf.parse(m.datetime));
+			cal.add(Calendar.HOUR, 3);
+			jEnd.put("dateTime", sdf.format(cal.getTime()) );
+			jEnd.put("timeZone", "Europe/Lisbon");
+			
+			jBody.put( "start", jStart);
+			jBody.put( "end", jEnd);
+			jBody.put( "summary", m.title);
+			jBody.put( "description", m.description);
+			jBody.put( "location", m.location);
 
-		request.addPayload(jBody.toString());
-		request.addHeader("Content-Type", "application/json; charset=UTF-8");
-		Response response = request.send();
-		System.out.println(response.getBody());*/
+			request.addPayload(jBody.toString());
+			request.addHeader("Content-Type", "application/json; charset=UTF-8");
+			Response response = request.send();
+			System.out.println(response.getBody());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		
 	}
@@ -353,7 +364,12 @@ public class MeetingBean {
 				OAuthRequest request = new OAuthRequest(Verb.GET, CALENDAR_LIST_URL);
 				service.signRequest(token, request);
 				Response response = request.send();
+				System.out.println(response.getMessage() + "\n" + response.toString());
 				JSONObject jBody = new JSONObject(response.getBody());
+				String[] names = jBody.getNames(jBody);
+				for(String s: names){
+					System.out.println(s);
+				}
 				JSONArray jItems = jBody.getJSONArray("items");
 				JSONObject jItem = (JSONObject) jItems.get(0);
 				calendarId = jItem.getString("id");
@@ -366,6 +382,10 @@ public class MeetingBean {
 		}
 		
 		return calendarId;
+	}
+	
+	public void setSession(Map<String, Object> s){
+		session = s;
 	}
 	
 }

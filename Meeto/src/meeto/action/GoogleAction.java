@@ -13,11 +13,9 @@ import com.opensymphony.xwork2.ActionSupport;
 public class GoogleAction  extends ActionSupport implements SessionAware{
   private static final String NETWORK_NAME = "Google";
   private static final String AUTHORIZE_URL = "https://www.google.com/accounts/OAuthAuthorizeToken?oauth_token=";
-  private static final String PROTECTED_RESOURCE_URL = "https://docs.google.com/feeds/default/private/full/";
-  private static final String SCOPE = "https://docs.google.com/feeds/"; 
+  private static final String SCOPE = "https://www.googleapis.com/auth/calendar"; 
   private static final Token EMPTY_TOKEN = null;
   private Map<String, Object> session;
-  
   
   public String connect(){
 		OAuthService service = new ServiceBuilder()
