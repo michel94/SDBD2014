@@ -4,7 +4,6 @@
     <div class="col-lg-12">
         <h1 class="page-header">
 	        Group ${groupBean.group.name}
-	        <button onclick="location.href='#########'" type="button" class="btn btn-danger pull-right">Leave group</button>
         </h1>
     </div>
     <!-- /.col-lg-12 -->

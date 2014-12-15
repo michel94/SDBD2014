@@ -42,7 +42,72 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+	
+	<script type="text/javascript">
+    var websocket2 = null;
+	var iduser = "${iduser}"
+    window.onload = function() { // URI = ws://10.16.0.165:8080/WebSocket/ws
+        connect('ws://' + window.location.host + '/Meeto/wsnot');
+    }
 
+    function connect(host) { // connect to the host websocket
+        if ('WebSocket' in window)
+            websocket2 = new WebSocket(host);
+        else if ('MozWebSocket' in window)
+            websocket2 = new MozWebSocket(host);
+        else {
+            writeToHistory('Get a real browser which supports WebSocket.');
+            return;
+        }
+
+        websocket2.onopen    = onOpen; // set the event listeners below
+        websocket2.onclose   = onClose;
+        websocket2.onmessage = onMessage;
+        websocket2.onerror   = onError;
+        
+    }
+
+    function onOpen(event) {
+        websocket2.send("/s " + iduser);
+    }
+    
+    function onClose(event) {
+        writeToHistory('WebSocket closed.');
+    }
+    
+    function onMessage(message) { // print the received message
+    	console.log("message");
+        writeToHistory(message.data);
+    }
+    
+    function onError(event) {
+    }
+    
+    function writeToHistory(text) {
+    	var history = $('#notification');
+    	history.append(  '<li class="divider"></li> \
+    			<li><div> \
+				<strong>Invite</strong> \
+				<span class="pull-right text-muted"> \
+				<em>'+getCurrentDate()+'</em> \
+				</span> \
+			</div> \
+			<div>'+text+'</div> \
+			</li> '
+);
+    }
+    
+    $(document).ready(function(){
+    });
+ 
+ 	
+    function getCurrentDate(){
+		var d1 = new Date();
+		var s1 = d1.getFullYear().toString()+"-"+(d1.getMonth()+1).toString()+"-"+d1.getDate().toString()+" "+d1.getHours().toString()+":"+d1.getMinutes().toString()+":"+d1.getSeconds().toString();
+		
+		return s1;
+	}
+	</script>
 </head>
 
 <body>
@@ -156,74 +221,8 @@
 
     
     </div>
-        
+    
 
 </body>
 
 </html>
-
-<script type="text/javascript">
-    var websocket = null;
-	var iduser = "${iduser}"
-    window.onload = function() { // URI = ws://10.16.0.165:8080/WebSocket/ws
-        connect('ws://' + window.location.host + '/Meeto/wsnot');
-    }
-
-    function connect(host) { // connect to the host websocket
-        if ('WebSocket' in window)
-            websocket = new WebSocket(host);
-        else if ('MozWebSocket' in window)
-            websocket = new MozWebSocket(host);
-        else {
-            writeToHistory('Get a real browser which supports WebSocket.');
-            return;
-        }
-
-        websocket.onopen    = onOpen; // set the event listeners below
-        websocket.onclose   = onClose;
-        websocket.onmessage = onMessage;
-        websocket.onerror   = onError;
-        
-    }
-
-    function onOpen(event) {
-        websocket.send("/s " + iduser);
-    }
-    
-    function onClose(event) {
-        writeToHistory('WebSocket closed.');
-    }
-    
-    function onMessage(message) { // print the received message
-    	console.log("message");
-        writeToHistory(message.data);
-    }
-    
-    function onError(event) {
-    }
-    
-    function writeToHistory(text) {
-    	var history = $('#notification');
-    	history.append(  '<li class="divider"></li> \
-    			<li><div> \
-				<strong>Invite</strong> \
-				<span class="pull-right text-muted"> \
-				<em>'+getCurrentDate()+'</em> \
-				</span> \
-			</div> \
-			<div>'+text+'</div> \
-			</li> '
-);
-    }
-    
-    $(document).ready(function(){
-    });
- 
- 	
-    function getCurrentDate(){
-		var d1 = new Date();
-		var s1 = d1.getFullYear().toString()+"-"+(d1.getMonth()+1).toString()+"-"+d1.getDate().toString()+" "+d1.getHours().toString()+":"+d1.getMinutes().toString()+":"+d1.getSeconds().toString();
-		
-		return s1;
-	}
-</script>

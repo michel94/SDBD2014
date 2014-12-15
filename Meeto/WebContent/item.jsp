@@ -4,11 +4,9 @@
     var websocket = null;
     var iditem = ${itemBean.item.id};
     var username = "${userBean.user.username}";
-
     window.onload = function() { // URI = ws://10.16.0.165:8080/WebSocket/ws
         connect('ws://' + window.location.host + '/Meeto/ws');
     }
-
     function connect(host) { // connect to the host websocket
         if ('WebSocket' in window)
             websocket = new WebSocket(host);
@@ -18,14 +16,12 @@
             writeToHistory('Get a real browser which supports WebSocket.');
             return;
         }
-
         websocket.onopen    = onOpen; // set the event listeners below
         websocket.onclose   = onClose;
         websocket.onmessage = onMessage;
         websocket.onerror   = onError;
         
     }
-
     function onOpen(event) {
         writeToHistory('Connected to ' + window.location.host + '.');
         websocket.send("/s " + iditem);
@@ -56,6 +52,7 @@
             websocket.send(message); // send the message
         document.getElementById('chat').value = '';
     }
+    
     function writeToHistory(text) {
     	var history = $('#chat');
     	history.append(
