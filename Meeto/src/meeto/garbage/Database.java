@@ -352,7 +352,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			if(rs.next()){
 				st.executeUpdate("UPDATE item set title='" + it.title + "', description='" + it.description + "' where iditem=" + it.iditem);
 				connection.commit();
-				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
 				return 1;
 			}
 		} catch (SQLException e) {
@@ -374,7 +374,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			if(rs.next()){
 				st.executeUpdate("UPDATE item set active=0 where iditem=" + iditem);
 				connection.commit();
-				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
 				return 1;
 			}
 		} catch (SQLException e) {
@@ -396,7 +396,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			if(rs.next()){
 				st.executeUpdate("INSERT INTO item(title, description, user, meeting, created_datetime) values('" + item.title + "', '" + item.description + "', '" + item.user.iduser + "', '" + item.meeting + "', NOW())");
 				connection.commit();
-				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
 				return 1;
 			}
 		} catch (SQLException e) {
@@ -419,7 +419,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			if(rs.next()){
 				st.executeUpdate("UPDATE action set done=1 where idaction=" + a.idaction);
 				connection.commit();
-				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
 				return 1;
 			}
 		} catch (SQLException e) {
@@ -486,7 +486,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 			ResultSet rs =  st.executeQuery("select idmeeting from meeting where idmeeting=" + meeting.idmeeting + " for update");
 			if(rs.next()){
 				connection.commit();
-				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
 				meeting.finished = 1;
 				return updateMeeting(meeting);
 			}
@@ -506,13 +506,11 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 		try {
 			connection.setAutoCommit(false);
 			Statement st = connection.createStatement();
-			ResultSet rs =  st.executeQuery("select iditem from item where iditem=" + com.item + " for update");
-			if(rs.next()){
+
 				st.executeUpdate("INSERT INTO comment(comment, item, user, created_datetime) values('" + com.text + "', " + com.item.iditem + ", " + u.iduser + ",  now() )");
 				connection.commit();
-				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
 				return 1;
-			}
 		} catch (SQLException e) {
 			try {
 				connection.rollback();
@@ -555,7 +553,7 @@ public class Database extends UnicastRemoteObject implements DatabaseInterface{
 	}
 
 	public int inviteUsersToMeeting(InviteUsers iu){
-		String query = "SELECT idmeeting from meeting where idmeeting=" + iu.get(0).id + "FOR UPDATE";
+		String query = "SELECT idmeeting from meeting where idmeeting=" + iu.get(0).id + " FOR UPDATE";
 		Statement st;
 		try {
 			st = connection.createStatement();
