@@ -1,10 +1,15 @@
 package meeto.action;
 
 import java.util.Map;
+import java.util.Scanner;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import org.apache.struts2.interceptor.SessionAware;
+import org.scribe.builder.ServiceBuilder;
+import org.scribe.builder.api.GoogleApi;
+import org.scribe.model.Token;
+import org.scribe.oauth.OAuthService;
 
 import meeto.bean.ConnectionBean;
 import meeto.bean.GroupBean;
@@ -21,6 +26,10 @@ public class LoginAction extends ActionSupport implements SessionAware {
 	private int iduser;
 	private String view;
 	private GroupBean groupBean;
+	private static final String NETWORK_NAME = "Google";
+	private static final String AUTHORIZE_URL = "https://www.google.com/accounts/OAuthAuthorizeToken?oauth_token=";
+	private static final String SCOPE = "https://www.googleapis.com/auth/calendar"; 
+	private static final Token EMPTY_TOKEN = null;
 	
 	private Boolean checkString(String field){
 		return field != null && !field.equals("");
@@ -47,6 +56,26 @@ public class LoginAction extends ActionSupport implements SessionAware {
 				groupBean = new GroupBean(iduser,-1);
 				session.put("groupBean",groupBean);
 				view = "meetingsnext";
+				  
+				OAuthService service = new ServiceBuilder()
+				      .provider(GoogleApi.class)
+				      .apiKey("1071197260604-nseqc1eioq74g9pbf0t2tg497cgoo5mj.apps.googleusercontent.com")
+				      .apiSecret("bUb2vEiLOGTz9kembph6ozjl")
+				      .scope(SCOPE)
+				      .callback("http://localhost:8080/Meeto/googlecallback")
+				      .build();
+				Scanner in = new Scanner(System.in);
+				
+				System.out.println("=== " + NETWORK_NAME + "'s OAuth Workflow ===");
+				System.out.println();
+				
+				// Obtain the Request Token
+				System.out.println("AAA...");
+				String authorizationUrl = service.getAuthorizationUrl(EMPTY_TOKEN);
+				System.out.println(authorizationUrl);	
+				session.put("googleService", service);
+				session.put("authorizationUrl", authorizationUrl);
+				
 				
 				return SUCCESS;
 			}else{

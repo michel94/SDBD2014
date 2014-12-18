@@ -131,7 +131,10 @@ public class MeetingBean {
 		mt.users = new Users();
 		mt.users.add(leader);
 		
-		//createGoogleMeeting(mt);
+		if(session.containsKey("accessToken")){
+			createGoogleMeeting(mt);
+		}
+		
 		try {
 			database.insertMeeting(mt);
 			return 0;
@@ -324,15 +327,16 @@ public class MeetingBean {
 		
 		JSONObject jStart = new JSONObject();
 		try {
-			jStart.put("dateTime", m.datetime);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000+00:00");
+			// '2011-06-03T10:00:00.000-07:00'
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(sdf.parse(m.datetime));
+			jStart.put("dateTime", sdf2.format(cal.getTime()));
 			jStart.put("timeZone", "Europe/Lisbon");
 			JSONObject jEnd = new JSONObject();
-			
-			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-			cal.setTime(sdf.parse(m.datetime));
 			cal.add(Calendar.HOUR, 3);
-			jEnd.put("dateTime", sdf.format(cal.getTime()) );
+			jEnd.put("dateTime", sdf2.format(cal.getTime()));
 			jEnd.put("timeZone", "Europe/Lisbon");
 			
 			jBody.put( "start", jStart);

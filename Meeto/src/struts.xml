@@ -180,7 +180,7 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     </action>
     
     <action name="googlecallback" class="meeto.action.GoogleCallback" method="receive">
-    	<result name="success">/login.jsp</result>
+    	<result name="success">/index.jsp</result>
     </action>
 
     
